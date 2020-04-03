@@ -1,0 +1,6 @@
+---
+name: RPGLike
+version: 0.0.1
+main: TheClimbing\RPGlike\Main
+api: 3.11.6
+...
