@@ -11,6 +11,7 @@
     use function array_merge;
     use function array_key_exists;
     use function str_replace;
+    use TheClimbing\RPGLike\Skills\Init;
     use function trim;
     
     use pocketmine\Player;
@@ -180,10 +181,7 @@
         
         public function getSkills() : void
         {
-            $this->skills['Tank'] = new Tank($this);
-            $this->skills['Fortress'] = new Fortress($this);
-            $this->skills['Coinflip'] = new Coinflip($this);
-            $this->skills['DoubleStrike'] = new DoubleStrike($this);
+            $this->skills = (new Init($this))->getSkills();
         }
         
         public function parseMessages(Player $player, int $spleft, bool $stats = false) : array
