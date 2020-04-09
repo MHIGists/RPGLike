@@ -1,2 +1,2 @@
-# Base
+# RPGLike plugin for pmmp [WIP]
  
