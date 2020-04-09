@@ -27,13 +27,10 @@
         public $rpg;
         
         public $players;
-        public $className;
         
         
-        public function __construct(string $name, string $type, string $description, int $cooldown, int $range,string $attribute, RPGLike $rpg)
+        public function __construct(string $name, string $type, string $description, int $cooldown, int $range, string $attribute, RPGLike $rpg)
         {
-            $this->className = Utils::get_class_name(get_class($this));
-            
             $this->name = $name;
             $this->type = $type;
             $this->description = $description;
@@ -42,7 +39,7 @@
             $this->attribute = $attribute;
             $this->rpg = $rpg;
             
-            $this->players[$this->className] = [];
+            $this->players = [];
            
             
         }
@@ -90,8 +87,15 @@
         public function setPlayer(string $playerName) : void
         {
             if($this->playerHasSkill($playerName) == false){
-                $this->players[$this->className][] = $playerName;
+                $this->players[] = $playerName;
             }
+        }
+        public function setPlayers(array $players){
+            $this->players = $players;
+        }
+        public function getPlayers() : array
+        {
+            return $this->players;
         }
         public function getAttribute() : string
         {
@@ -99,7 +103,7 @@
         }
         public function playerHasSkill(string $playerName) : bool
         {
-            return in_array($playerName, $this->players[$this->className]);
+            return in_array($playerName, $this->players);
         }
         public function isSkillUnlocked(string $playerName) : bool
         {
@@ -110,9 +114,6 @@
                 return false;
             }
         }
-        public function getPlayers() : array
-        {
-            return $this->players;
-        }
+        
         
     }

@@ -11,24 +11,22 @@
     use function array_merge;
     use function array_key_exists;
     use function str_replace;
-    use TheClimbing\RPGLike\Skills\Init;
+    use function array_flip;
     use function trim;
     
     use pocketmine\Player;
     
     use pocketmine\entity\Attribute;
     use pocketmine\entity\Entity;
+
+    use TheClimbing\RPGLike\Skills\Init;
     
-    
-    use TheClimbing\RPGLike\Skills\Coinflip;
-    use TheClimbing\RPGLike\Skills\DoubleStrike;
-    use TheClimbing\RPGLike\Skills\Fortress;
-    use TheClimbing\RPGLike\Skills\Tank;
     
     use jojoe77777\FormAPI\SimpleForm;
     
     class RPGLike
     {
+        private static $instance;
         public $main;
         public $players = [];
         public $skills = [];
@@ -40,11 +38,12 @@
         
         public function __construct(Main $main)
         {
+            self::$instance = $this;
             $this->main = $main;
             $this->config = $main->getConfig();
             $this->setConf();
             $this->setModifiers();
-            $this->getSkills();
+            $this->loadSkills();
             
         }
         
@@ -169,6 +168,7 @@
         public function checkForSkills(Player $player)
         {
             $playerName = $player->getName();
+            
             foreach($this->skills as $skill) {
                 
                 if($skill->isSkillUnlocked($playerName) && $skill->playerHasSkill($playerName) == false) {
@@ -179,9 +179,18 @@
             }
         }
         
-        public function getSkills() : void
+        public function loadSkills() : void
         {
             $this->skills = (new Init($this))->getSkills();
+            $playerSkills = $this->main->getConfig()->getNested('PlayerSkills');
+            if($playerSkills != null){
+                foreach($this->skills as $skill) {
+                    $skill->setPlayers($playerSkills[$skill->getName()]);
+        
+                }
+            }
+            
+            $this->main->getLogger()->notice("Skills loaded");
         }
         
         public function parseMessages(Player $player, int $spleft, bool $stats = false) : array
@@ -319,11 +328,14 @@
             
             $skills = [];
             foreach($this->skills as $skill) {
-                $skills[] = $skill->getPlayers();
+                $skills[$skill->getName()] = $skill->getPlayers();
             }
             $this->main->getConfig()->setNested('PlayerSkills', $skills);
             $conf->save();
         }
         
-        
+        public static function getInstance() : RPGLike
+        {
+            return self::$instance;
+        }
     }

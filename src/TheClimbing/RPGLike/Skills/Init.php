@@ -8,6 +8,7 @@
     
     namespace TheClimbing\RPGLike\Skills;
     
+    use function is_array;
     
     use TheClimbing\RPGLike\RPGLike;
 
@@ -17,10 +18,14 @@
         public function __construct(RPGLike $rpg)
         {
             $skills = $rpg->main->getConfig()->getNested('Skills');
-            foreach($skills as $skill) {
+            foreach($skills as $key => $skill) {
                 try{
-                    $skill = '\TheClimbing\RPGLike\Skills\\' . $skill;
-                    $this->skills[] = new $skill($rpg);
+                    if(is_array($skill)){
+                        $this->skills[] = new $key($skill[0]);
+                    }else{
+                        $skill = "TheClimbing\RPGLike\Skills\\" . $skill;
+                        $this->skills[] = new $skill($rpg);
+                    }
                 }catch(\Error $error){
                     $rpg->main->getLogger()->alert('No such skill: ' . $skill);
                 }
