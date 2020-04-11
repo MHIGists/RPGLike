@@ -12,7 +12,7 @@
     
     use TheClimbing\RPGLike\RPGLike;
 
-    class Init
+    class SkillsManager
     {
         public $skills;
         public function __construct(RPGLike $rpg)
@@ -21,13 +21,14 @@
             foreach($skills as $key => $skill) {
                 try{
                     if(is_array($skill)){
-                        $this->skills[] = new $key($skill[0]);
+                        $namespace = $skill[0] . $key;
+                        $this->skills[$skill[0]] = new $namespace($rpg);
                     }else{
-                        $skill = "TheClimbing\RPGLike\Skills\\" . $skill;
-                        $this->skills[] = new $skill($rpg);
+                        $namespace = "TheClimbing\RPGLike\Skills\\" . $skill;
+                        $this->skills[$skill] = new $namespace($rpg);
                     }
                 }catch(\Error $error){
-                    $rpg->main->getLogger()->alert('No such skill: ' . $skill);
+                    $rpg->main->getLogger()->alert('No such skill with namespace: ' . $skill);
                 }
             }
         }
@@ -35,5 +36,8 @@
         {
             return $this->skills;
         }
-        
+        public function getSkill(string $skillName) : object
+        {
+            return $this->skills[$skillName];
+        }
     }

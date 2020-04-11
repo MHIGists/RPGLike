@@ -8,6 +8,7 @@
     
     namespace TheClimbing\RPGLike;
     
+    use pocketmine\event\player\PlayerMoveEvent;
     use pocketmine\Player;
     
     use pocketmine\event\Listener;
@@ -25,21 +26,21 @@
     class EventListener implements Listener
     {
         private $rpg;
+        
         public function __construct(RPGLike $rpg)
         {
             $this->rpg = $rpg;
         }
-    
-        public function onJoin (PlayerJoinEvent $event)
+        
+        public function onJoin(PlayerJoinEvent $event)
         {
             $player = $event->getPlayer();
             $playerName = $player->getName();
             
-            if ($this->rpg->playerExists($player) === false) {
+            if($this->rpg->playerExists($player) === false) {
                 $this->rpg->setUpPlayer($player, true);
             }
             
-           
             $this->rpg->setPlayerDamage($playerName);
             $this->rpg->setPlayerVitality($player);
             $this->rpg->setPlayerDefense($playerName);
@@ -47,36 +48,48 @@
             $this->rpg->setPlayerMovement($player);
             
         }
-        public function dealDamageEvent (EntityDamageByEntityEvent $event)
+        public function onMove(PlayerMoveEvent $event)
+        {
+            $player = $event->getPlayer();
+            $playerName = $player->getName();
+            $playerSkills = $this->rpg->getPlayerSkills($playerName);
+            if(!empty($playerSkills)){
+                foreach($playerSkills as $playerSkill){
+                    $this->rpg->skillsManager->getSkill($playerSkill)->checkRange($player);
+                }
+            }
+        }
+        public function dealDamageEvent(EntityDamageByEntityEvent $event)
         {
             $dealer = $event->getDamager();
-            if ($dealer instanceof Player){
+            if($dealer instanceof Player) {
                 $playerName = $dealer->getName();
                 $bonusDMG = $this->rpg->getPlayerDamage($playerName);
                 $event->setBaseDamage($event->getFinalDamage() * $bonusDMG);
             }
         }
         
-        public function receiveDmgEvent(EntityDamageEvent $event){
+        public function receiveDmgEvent(EntityDamageEvent $event)
+        {
             $receiver = $event->getEntity();
-            if ($receiver instanceof Player){
+            if($receiver instanceof Player) {
                 $playerName = $receiver->getName();
-                if ($event->canBeReducedByArmor()){
+                if($event->canBeReducedByArmor()) {
                     $receiver->setAbsorption($receiver->getAbsorption() * $this->rpg->getPlayerDefense($playerName));
                 }
             }
         }
         
-        public function onLevelUp (PlayerExperienceChangeEvent $event)
+        public function onLevelUp(PlayerExperienceChangeEvent $event)
         {
             $player = $event->getEntity();
             
             $new_lvl = $event->getNewLevel();
             $old_level = $event->getOldLevel();
             
-            if ($new_lvl !== null) {
-                if ($new_lvl > $old_level){
-                    if ($player instanceof Player) {
+            if($new_lvl !== null) {
+                if($new_lvl > $old_level) {
+                    if($player instanceof Player) {
                         $spleft = $new_lvl - $old_level;
                         
                         $playerName = $player->getName();
@@ -84,7 +97,7 @@
                         $level = $this->rpg->getPlayerLevel($playerName);
                         
                         $this->rpg->setPlayerLevel($playerName, $level + 1);
-
+                        
                         $this->rpg->upgradeStatsForm($player, $spleft);
                         
                         $this->rpg->saveVars();
@@ -93,17 +106,23 @@
                 }
             }
         }
-        public function onDeath(PlayerDeathEvent $event){
+        
+        public function onDeath(PlayerDeathEvent $event)
+        {
             $this->rpg->wipePlayer($event->getPlayer()->getName());
         }
-        public function onRespawn(PlayerRespawnEvent $event){
+        
+        public function onRespawn(PlayerRespawnEvent $event)
+        {
             $player = $event->getPlayer();
             
-            if ($player->getXpLevel() == 0){
+            if($player->getXpLevel() == 0) {
                 $this->rpg->setUpPlayer($player);
             }
         }
-        public function onLogout(PlayerQuitEvent $event){
+        
+        public function onLogout(PlayerQuitEvent $event)
+        {
             $this->rpg->saveVars();
         }
     }

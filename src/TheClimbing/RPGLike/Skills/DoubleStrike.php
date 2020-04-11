@@ -18,7 +18,7 @@
     {
         public function __construct(RPGLike $rpg)
         {
-            parent::__construct('Double Striker', 'passive', 'Has a 10% chance to reset your basic attack.', 0, 0, 'DEX', $rpg);
+            parent::__construct($rpg,'Double Striker', 'passive', 'Has a 10% chance to reset your basic attack.', 0, 0, 'DEX', );
         }
         public function setPlayerAttackCD(EntityDamageByEntityEvent $event)
         {

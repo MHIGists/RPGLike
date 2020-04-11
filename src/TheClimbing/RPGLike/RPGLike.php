@@ -11,7 +11,6 @@
     use function array_merge;
     use function array_key_exists;
     use function str_replace;
-    use function array_flip;
     use function trim;
     
     use pocketmine\Player;
@@ -19,7 +18,7 @@
     use pocketmine\entity\Attribute;
     use pocketmine\entity\Entity;
 
-    use TheClimbing\RPGLike\Skills\Init;
+    use TheClimbing\RPGLike\Skills\SkillsManager;
     
     
     use jojoe77777\FormAPI\SimpleForm;
@@ -29,12 +28,13 @@
         private static $instance;
         public $main;
         public $players = [];
-        public $skills = [];
         public $globalModifiers = [];
         
         public $defaultStats = ['STR' => 1, 'VIT' => 1, 'DEF' => 1, 'DEX' => 1,];
         public $defaultModifiers = ['STR' => 0.15, 'VIT' => 0.2, 'DEF' => 0.1, 'DEX' => 0.005,];
+        
         private $config;
+        public $skillsManager;
         
         public function __construct(Main $main)
         {
@@ -43,7 +43,7 @@
             $this->config = $main->getConfig();
             $this->setConf();
             $this->setModifiers();
-            $this->loadSkills();
+            $this->skillsManager = new SkillsManager($this);
             
         }
         
@@ -72,7 +72,11 @@
         public function setUpPlayer(Player $player, bool $first = false) : void
         {
             $playerName = $player->getName();
-            $playerArray = ['attributes' => $this->defaultStats, 'level' => 0,];
+            $playerArray = [
+                'attributes' => $this->defaultStats,
+                'skills' => [],
+                'level' => 0,
+                ];
             $this->players[$playerName] = $playerArray;
             $player->setXpLevel(1);
             if($first) {
@@ -132,6 +136,7 @@
         
         public function descriptionSkillForm(Player $player, string $skillDescription)
         {
+            
             $form = new SimpleForm(function(Player $player, $data) {
                 switch($data) {
                     case 'Exit':
@@ -169,9 +174,9 @@
         {
             $playerName = $player->getName();
             
-            foreach($this->skills as $skill) {
+            foreach($this->skillsManager->getSkills() as $skill) {
                 
-                if($skill->isSkillUnlocked($playerName) && $skill->playerHasSkill($playerName) == false) {
+                if($skill->isSkillUnlocked($playerName) && $this->playerHasSkill($skill->getName(), $playerName) == false) {
                     $skill->setPlayer($playerName);
                     $this->descriptionSkillForm($player, $skill->getDescription());
                 }
@@ -179,19 +184,6 @@
             }
         }
         
-        public function loadSkills() : void
-        {
-            $this->skills = (new Init($this))->getSkills();
-            $playerSkills = $this->main->getConfig()->getNested('PlayerSkills');
-            if($playerSkills != null){
-                foreach($this->skills as $skill) {
-                    $skill->setPlayers($playerSkills[$skill->getName()]);
-        
-                }
-            }
-            
-            $this->main->getLogger()->notice("Skills loaded");
-        }
         
         public function parseMessages(Player $player, int $spleft, bool $stats = false) : array
         {
@@ -205,7 +197,11 @@
             
             $messages['spleft'] = $spleft;
             
-            $stats = ["STR" => $this->getPlayerAttribute($playerName, 'STR'), "VIT" => $this->getPlayerAttribute($playerName, 'VIT'), "DEF" => $this->getPlayerAttribute($playerName, 'DEF'), "DEX" => $this->getPlayerAttribute($playerName, 'DEX'), "SPLEFT" => $spleft, "PLAYER" => $playerName,];
+            $stats = ["STR" => $this->getPlayerAttribute($playerName, 'STR'),
+                "VIT" => $this->getPlayerAttribute($playerName, 'VIT'),
+                "DEF" => $this->getPlayerAttribute($playerName, 'DEF'),
+                "DEX" => $this->getPlayerAttribute($playerName, 'DEX'),
+                "SPLEFT" => $spleft, "PLAYER" => $playerName,];
             $joined = array_merge($stats, $this->main->consts);
             
             $messages['FormContent'] = $this->parseKeywords($joined, $messages['FormContent']);
@@ -320,17 +316,19 @@
         {
             $this->players[$playerName]['attributes'][$property] = $value;
         }
-        
+    
+        public function playerHasSkill(string $skillName, string $playerName) : bool
+        {
+            return in_array($skillName, $this->players[$playerName]['skills']);
+        }
+        public function getPlayerSkills(string $playerName) : array
+        {
+            return $this->players[$playerName]['skills'];
+        }
         public function saveVars() : void
         {
             $conf = $this->config;
             $conf->setNested('players', $this->players);
-            
-            $skills = [];
-            foreach($this->skills as $skill) {
-                $skills[$skill->getName()] = $skill->getPlayers();
-            }
-            $this->main->getConfig()->setNested('PlayerSkills', $skills);
             $conf->save();
         }
         

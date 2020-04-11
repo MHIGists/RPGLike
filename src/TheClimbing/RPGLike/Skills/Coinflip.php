@@ -10,15 +10,17 @@
     
     use function rand;
     
+    use pocketmine\entity\Effect;
+    
     use pocketmine\event\entity\EntityDamageByEntityEvent;
+    
     use TheClimbing\RPGLike\RPGLike;
 
     class Coinflip extends BaseSkill
     {
         public function __construct(RPGLike $rpg)
         {
-            parent::__construct('Coinflip', 'passive', 'Has a 10% chance to to increase damage dealt by 50%', 0, 0, 'STR',$rpg);
-            
+            parent::__construct($rpg,'Coinflip', 'passive', 'Has a 10% chance to to increase damage dealt by 50%', 0, 0, 'STR', Effect::JUMP_BOOST);
         }
         public function setCritChance(EntityDamageByEntityEvent $event)
         {
@@ -28,5 +30,4 @@
                 $event->setBaseDamage($damage * 1.5);
             }
         }
-        
     }

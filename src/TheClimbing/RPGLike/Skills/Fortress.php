@@ -17,7 +17,7 @@
         
         public function __construct(RPGLike $rpg)
         {
-            parent::__construct('Fortress', 'passive', 'Increases your absorption by 20%', 0, 0, 'VIT' ,$rpg);
+            parent::__construct($rpg,'Fortress', 'passive', 'Increases your absorption by 20%', 0, 0, 'VIT');
         }
         public function setDefense(Player $player) : void
         {

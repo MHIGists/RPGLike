@@ -13,8 +13,6 @@
     use pocketmine\utils\Config;
     
     use TheClimbing\RPGLike\CustomCommands\LevelUpCommand;
-    use TheClimbing\RPGLike\Skills\Tank;
-
 
     class Main extends PluginBase
     {
@@ -30,8 +28,6 @@
             $this->getMessages();
             $this->getMessages();
             $this->setConsts();
-            
-            $this->getLogger()->notice(TextFormat::RED . "Loaded successfully!");
         }
         
         public function onEnable ()
@@ -42,8 +38,6 @@
             $this->getServer()->getCommandMap()->register('levelup', $command);
             
             $this->getServer()->getPluginManager()->registerEvents(new EventListener($this->rpg), $this);
-            
-            $this->getLogger()->notice(TextFormat::RED . "Enabled successfully");
         }
         
         public function getMessages (): void
