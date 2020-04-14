@@ -19,6 +19,7 @@
         
         public $globalMessages = [];
         public $consts;
+        
         private $rpg ;
         
         public function onLoad ()
@@ -37,7 +38,7 @@
             $command = new LevelUpCommand($this);
             $this->getServer()->getCommandMap()->register('levelup', $command);
             
-            $this->getServer()->getPluginManager()->registerEvents(new EventListener($this->rpg), $this);
+            $this->getServer()->getPluginManager()->registerEvents(new EventListener($this->getRpg()), $this);
         }
         
         public function getMessages (): void
@@ -80,11 +81,12 @@
                 "RESET" => TextFormat::RESET,
             ];
         }
-        
-        
-        
+        public function getRpg() : RPGLike
+        {
+            return $this->rpg;
+        }
         public function onDisable ()
         {
-            $this->rpg->saveVars();
+            $this->getRpg()->saveVars();
         }
     }

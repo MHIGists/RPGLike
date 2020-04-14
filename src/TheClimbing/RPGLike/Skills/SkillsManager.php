@@ -1,34 +1,32 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: Kirito
-     * Date: 4/5/2020
-     * Time: 11:50 PM
-     */
+    
+    declare(strict_types = 1);
     
     namespace TheClimbing\RPGLike\Skills;
     
     use function is_array;
     
     use TheClimbing\RPGLike\RPGLike;
-
+    
+    
     class SkillsManager
     {
-        public $skills;
+        private $skills;
         public function __construct(RPGLike $rpg)
         {
-            $skills = $rpg->main->getConfig()->getNested('Skills');
-            foreach($skills as $key => $skill) {
+            $configSkills = $rpg->getMain()->getConfig()->getNested('Skills');
+            foreach($configSkills as $key => $skill) {
                 try{
                     if(is_array($skill)){
                         $namespace = $skill[0] . $key;
                         $this->skills[$skill[0]] = new $namespace($rpg);
                     }else{
-                        $namespace = "TheClimbing\RPGLike\Skills\\" . $skill;
+                        var_dump($skill);
+                        $namespace = "\\TheClimbing\\RPGLike\\Skills\\" . $skill;
                         $this->skills[$skill] = new $namespace($rpg);
                     }
                 }catch(\Error $error){
-                    $rpg->main->getLogger()->alert('No such skill with namespace: ' . $skill);
+                    $rpg->getMain()->getLogger()->alert('No such skill with namespace: ' . $namespace);
                 }
             }
         }
@@ -36,7 +34,7 @@
         {
             return $this->skills;
         }
-        public function getSkill(string $skillName) : object
+        public function getSkill(string $skillName)
         {
             return $this->skills[$skillName];
         }

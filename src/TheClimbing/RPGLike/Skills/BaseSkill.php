@@ -1,15 +1,15 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: Kirito
-     * Date: 3/29/2020
-     * Time: 4:59 PM
-     */
+    
+    declare(strict_types = 1);
+    
     
     namespace TheClimbing\RPGLike\Skills;
     
     use function floor;
-
+    use function call_user_func;
+    use function array_slice;
+    use function is_callable;
+    
     use pocketmine\Player;
     
     use pocketmine\entity\Effect;
@@ -19,124 +19,332 @@
     use pocketmine\math\Vector3;
     
     use TheClimbing\RPGLike\RPGLike;
-    
+
+    /**
+     * Class BaseSkill
+     * @package TheClimbing\RPGLike\Skills
+     */
     class BaseSkill
     {
-        public $rpg;
-        public $name = '';
-        public $type = '';
-        public $description;
-        public $cooldown = 0; //TODO implement this
-        public $range = 0;
-        public $baseUnlock = 10;
-        public $upgrade = 30;// TODO implement this
-        public $attribute = '';
-        public $effect;
+        /**
+         * @var \TheClimbing\RPGLike\RPGLike
+         */
+        private $rpg;
         
+        /**
+         * @var string
+         */
+        private $name ;
         
-        public function __construct(RPGLike $rpg, string $name = '', string $type = '', string $description = '', int $cooldown = 0, int $range = 0, string $attribute = '',  $effect = null)
+        /**
+         * @var string
+         */
+        private $type ;
+        /**
+         * @var array
+         */
+        private $description ;
+        /**
+         * @var int
+         */
+        private $cooldown ; //TODO implement this
+        /**
+         * @var int
+         */
+        private $range ;
+        /**
+         * @var array
+         */
+        private $skillUpgrades = [10, 20, 30];
+        /**
+         * @var string
+         */
+        private $attribute;
+    
+        /**
+         * That's including the source
+         *
+         * @var int
+         */
+        private $maxEntInRange;
+        
+        /**
+         * @var null
+         */
+        private $effect;
+    
+    
+        /**
+         * @var int
+         */
+        private $skillLevel = 0;
+    
+    
+        /**
+         * BaseSkill constructor.
+         *
+         * @param \TheClimbing\RPGLike\RPGLike $rpg
+         * @param string                       $name
+         * @param string                       $type
+         * @param array                        $description
+         * @param int                          $cooldown
+         * @param int                          $range
+         * @param string                       $attribute
+         * @param int                          $maxEntInRange
+         * @param null                         $effect
+         */
+        public function __construct(RPGLike $rpg, string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, string $attribute = '', int $maxEntInRange = 1, $effect = null )
         {
+            $this->rpg = $rpg;
             $this->name = $name;
             $this->type = $type;
             $this->description = $description;
             $this->cooldown = $cooldown;
             $this->range = $range;
             $this->attribute = $attribute;
+            $this->maxEntInRange = $maxEntInRange;
             $this->effect = $effect;
-            $this->rpg = $rpg;
-            
         }
-        
+    
+        /**
+         * @param string $name
+         */
+        protected function setName(string $name) : void
+        {
+            $this->name = $name;
+        }
+    
+        /**
+         * @return string
+         */
         public function getName() : string
         {
             return $this->name;
         }
-        
+    
+        /**
+         * @param string $type
+         */
+        protected function setType(string $type) : void
+        {
+            $this->type = $type;
+        }
+    
+        /**
+         * @return string
+         */
         public function getType() : string
         {
             return $this->type;
         }
-        
-        public function getDescription() : string
+    
+        /**
+         * @param array $description
+         */
+        protected function setDescription(array $description) : void
+        {
+            $this->description = $description;
+        }
+    
+        /**
+         * @return array
+         */
+        public function getDescription() : array
         {
             return $this->description;
         }
-        
+        protected function setCooldown(int $cooldown) : void
+        {
+            $this->cooldown = $cooldown;
+        }
+        /**
+         * @return int
+         */
         public function getCooldown() : int
         {
             return $this->cooldown;
         }
-        
+        protected function setRange(int $range) : void
+        {
+            $this->range = $range;
+        }
+        /**
+         * @return int
+         */
         public function getRange() : int
         {
             return $this->range;
         }
-        
-        public function setBaseUnlock(int $baseUnlock)
+    
+        /**
+         * @param int $baseUnlock
+         */
+        protected function setBaseUnlock(int $baseUnlock) : void
         {
-            $this->baseUnlock = $baseUnlock;
+            $this->skillUpgrades[0] = $baseUnlock;
         }
-        
-        public function getUnlock() : int
+    
+        /**
+         * @return string
+         */
+        public function getBaseUnlock() : string
         {
-            return $this->baseUnlock;
+            return $this->skillUpgrades[0];
         }
-        
-        public function setUpgrade(int $upgrade)
+    
+        /**
+         * Sets the required amount of points needed to upgrade the skill
+         *
+         * @param array $upgrades
+         */
+        protected function setUpgrades(array $upgrades) : void
         {
-            $this->upgrade = $upgrade;
+            $this->skillUpgrades = $upgrades;
         }
-        
-        public function getUpgrade() : int
+    
+        /**
+         * @return array
+         */
+        public function getUpgrades() : array
         {
-            return $this->upgrade;
+            return $this->skillUpgrades;
         }
-        
-        public function setPlayer(string $playerName) : void
+    
+        /**
+         * @param string $attribute
+         */
+        protected function setAttribute(string $attribute) : void
         {
-            if($this->rpg->playerHasSkill($this->getName(), $playerName) == false) {
-                $this->rpg->players[$playerName]['skills'][] = $this->getName();
-            }
+            $this->attribute = $attribute;
         }
-        
+        /**
+         * @return string
+         */
         public function getAttribute() : string
         {
             return $this->attribute;
         }
-        
-        public function getEffect()
+    
+        /**
+         * @param int $maxEnt
+         */
+        protected function setMaxEntInRange(int $maxEnt) : void
+        {
+            $this->maxEntInRange = $maxEnt;
+        }
+    
+        /**
+         * @return int
+         */
+        public function getMaxEntInRange() : int
+        {
+            return $this->maxEntInRange;
+        }
+    
+        /**
+         * @param $id
+         */
+        protected  function setEffect($id) : void
+        {
+            $this->effect = $id;
+        }
+        /**
+         * @return int|null
+         */
+        public function getEffect() : ?int
         {
             return $this->effect;
         }
-        
-        
-        public function isSkillUnlocked(string $playerName) : bool
+    
+        /**
+         * TODO Currently applies level on the whole class
+         * @param int $skillLevel
+         */
+        public function setSkillLevel(int $skillLevel) : void
         {
-            if($this->baseUnlock <= $this->rpg->getPlayerAttribute($playerName, $this->getAttribute())) {
+            $this->skillLevel = $skillLevel;
+        }
+    
+        /**
+         * @return int
+         */
+        public function getSkillLevel() : int
+        {
+            return $this->skillLevel;
+        }
+    
+        /**
+         * @param string $playerName
+         */
+        public function setPlayerSkill(string $playerName) : void
+        {
+            if($this->rpg->playerHasSkill($this->getName(), $playerName) == false) {
+                $this->rpg->getPlayers()[$playerName]['skills'][] = $this->getName();
+            }
+        }
+    
+        /**
+         * @param string $playerName
+         *
+         * @return bool
+         */public function skillUnlock(string $playerName) : bool
+        {
+            if($this->getBaseUnlock() <= $this->rpg->getPlayerAttribute($playerName, $this->getAttribute())) {
                 return true;
             } else {
                 return false;
             }
         }
-        
+    
+        /**
+         * @param string $playerName
+         *
+         * @return bool
+         */public function skillUpgrade(string $playerName) : bool
+        {
+            foreach($this->getUpgrades() as $upgradeLevel) {
+                if($upgradeLevel <= $this->rpg->getPlayerAttribute($playerName, $this->getAttribute())) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        }
+    
+        /**
+         * @param \pocketmine\Player $player
+         * @param array              $func
+         */
         public function checkRange(Player $player, array $func = []) : void
         {
             if($this->range > 0) {
                 $level = $player->getLevel();
-                $players = $this->getNearestEntities($player->getPosition()->asVector3(), $this->range, $level, false);
+                $players = $this->getNearestEntities($player->getPosition()->asVector3(), $this->range, $level, $this->getMaxEntInRange());
                 if(!empty($players)){
                     foreach($players as $player) {
                         if(!empty($func)){
-                            $this->setEffect($player, $func);
+                            $this->setPlayerEffect($player, $func);
                         }else{
-                            $this->setEffect($player, $this->getEffect());
+                            $this->setPlayerEffect($player, $this->getEffect());
                         }
                     }
                 }
             }
         }
-        
-        public function getNearestEntities(Vector3 $pos, ?int $maxDistance, Level $level, bool $includeDead = false) : array
+    
+        /**
+         * Basically taken from source.
+         *
+         * @param \pocketmine\math\Vector3 $pos
+         * @param int|null                 $maxDistance
+         * @param \pocketmine\level\Level  $level
+         * @param int                      $maxEntities
+         * @param bool                     $includeDead
+         *
+         * @return array
+         */
+        public function getNearestEntities(Vector3 $pos, ?int $maxDistance, Level $level, int $maxEntities, bool $includeDead = false) : array
         {
             $nearby = [];
             
@@ -149,7 +357,11 @@
             
             for($x = $minX ; $x <= $maxX ; ++$x) {
                 for($z = $minZ ; $z <= $maxZ ; ++$z) {
-                    foreach((($chunk = $level->getChunk($x, $z)) !== null ? $chunk->getEntities() : []) as $entity) {
+                    $entities = ($chunk = $level->getChunk($x, $z)) !== null ? $chunk->getEntities() : [];
+                    if(count($entities) > $maxEntities){
+                        $entities = array_slice($entities, 0, $maxEntities);
+                    }
+                    foreach($entities as $entity) {
                         if(!($entity instanceof Player) or $entity->isClosed() or $entity->isFlaggedForDespawn() or (!$includeDead and !$entity->isAlive())) {
                             continue;
                         }
@@ -163,17 +375,23 @@
             }
             return $nearby;
         }
-        
-        public function setEffect(Player $player, $effect) : void
+    
+        /**
+         * Sets vanilla effects or applies a callable.
+         * Needs testing!
+         *
+         * @param \pocketmine\Player $player
+         * @param                    $effect
+         */
+        public function setPlayerEffect(Player $player, $effect) : void
         {
             if(is_callable($effect)){
                 call_user_func($effect['objAndFunc'], $effect['params']);
             }else{
-                $effect = new EffectInstance(Effect::getEffect($effect), 2, 1);
+                $effect = new EffectInstance(Effect::getEffect($effect), 2, $this->getSkillLevel());
                 $player->addEffect($effect);
             }
             
         }
-        
         
     }

@@ -1,53 +1,47 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: Kirito
-     * Date: 3/10/2020
-     * Time: 1:40 PM
-     */
+    
+    declare(strict_types = 1);
+    
     
     namespace TheClimbing\RPGLike;
     
     use function array_merge;
     use function array_key_exists;
     use function str_replace;
-    use function trim;
     
     use pocketmine\Player;
-    
     use pocketmine\entity\Attribute;
-    use pocketmine\entity\Entity;
+    use pocketmine\event\entity\EntityDamageByEntityEvent;
 
     use TheClimbing\RPGLike\Skills\SkillsManager;
-    
     
     use jojoe77777\FormAPI\SimpleForm;
     
     class RPGLike
     {
         private static $instance;
-        public $main;
-        public $players = [];
-        public $globalModifiers = [];
         
+        private $main;
+        private $players = [];
+        private $config;
+        private $skillsManager;
+        
+        public $globalModifiers = [];
         public $defaultStats = ['STR' => 1, 'VIT' => 1, 'DEF' => 1, 'DEX' => 1,];
         public $defaultModifiers = ['STR' => 0.15, 'VIT' => 0.2, 'DEF' => 0.1, 'DEX' => 0.005,];
-        
-        private $config;
-        public $skillsManager;
         
         public function __construct(Main $main)
         {
             self::$instance = $this;
             $this->main = $main;
             $this->config = $main->getConfig();
-            $this->setConf();
-            $this->setModifiers();
+            $this->setPlayersFromConfig();
+            $this->setModifiersFromConfig();
             $this->skillsManager = new SkillsManager($this);
             
         }
         
-        public function setConf() : void
+        private function setPlayersFromConfig() : void
         {
             $conf = $this->config;
             $array = $conf->getNested('players');
@@ -56,7 +50,7 @@
             }
         }
         
-        public function setModifiers() : void
+        private function setModifiersFromConfig() : void
         {
             $modifiers = $this->config->get('modifiers');
             if($modifiers === false) {
@@ -98,25 +92,25 @@
                 switch($data) {
                     case "Strength":
                         $this->increasePlayerAttribute($playerName, 'STR');
-                        $this->setPlayerDamage($playerName);
+                        $this->calcDamage($playerName);
                         $spleft--;
                         $this->upgradeStatsForm($player, $spleft);
                         break;
                     case "Vitality":
                         $this->increasePlayerAttribute($playerName, 'VIT');
-                        $this->setPlayerVitality($player);
+                        $this->calcVitality($playerName);
                         $spleft--;
                         $this->upgradeStatsForm($player, $spleft);
                         break;
                     case "Defense":
                         $this->increasePlayerAttribute($playerName, 'DEF');
-                        $this->setPlayerDefense($playerName);
+                        $this->calcDefense($playerName);
                         $spleft--;
                         $this->upgradeStatsForm($player, $spleft);
                         break;
                     case "Dexterity":
                         $this->increasePlayerAttribute($playerName, 'DEX');
-                        $this->setPlayerDexterity($playerName);
+                        $this->calcDexterity($playerName);
                         $spleft--;
                         $this->upgradeStatsForm($player, $spleft);
                         break;
@@ -134,7 +128,7 @@
             $this->checkForSkills($player);
         }
         
-        public function descriptionSkillForm(Player $player, string $skillDescription)
+        public function descriptionSkillForm(Player $player, array $skillDescription)
         {
             
             $form = new SimpleForm(function(Player $player, $data) {
@@ -143,9 +137,9 @@
                         break;
                 }
             });
-            $form->setTitle('You\'ve unlocked new skill!');
-            $form->setContent($skillDescription);
-            $form->addButton('Exit');
+            $form->setTitle($skillDescription['title']);
+            $form->setContent($skillDescription['content']);
+            $form->addButton($skillDescription['exitButton']);
             $player->sendForm($form);
             
         }
@@ -174,11 +168,14 @@
         {
             $playerName = $player->getName();
             
-            foreach($this->skillsManager->getSkills() as $skill) {
+            foreach($this->getSkillsManager()->getSkills() as $skill) {
                 
-                if($skill->isSkillUnlocked($playerName) && $this->playerHasSkill($skill->getName(), $playerName) == false) {
-                    $skill->setPlayer($playerName);
+                if($skill->skillUnlock($playerName) && $this->playerHasSkill($skill->getName(), $playerName) == false) {
+                    $skill->setPlayerSkill($playerName);
                     $this->descriptionSkillForm($player, $skill->getDescription());
+                }
+                if($skill->skillUpgrade($playerName)){
+                    $skill->setSkillLevel($skill->getSkillLevel() + 1);
                 }
                 
             }
@@ -197,11 +194,14 @@
             
             $messages['spleft'] = $spleft;
             
-            $stats = ["STR" => $this->getPlayerAttribute($playerName, 'STR'),
+            $stats = [
+                "STR" => $this->getPlayerAttribute($playerName, 'STR'),
                 "VIT" => $this->getPlayerAttribute($playerName, 'VIT'),
                 "DEF" => $this->getPlayerAttribute($playerName, 'DEF'),
                 "DEX" => $this->getPlayerAttribute($playerName, 'DEX'),
-                "SPLEFT" => $spleft, "PLAYER" => $playerName,];
+                "SPLEFT" => $spleft,
+                "PLAYER" => $playerName,
+                ];
             $joined = array_merge($stats, $this->main->consts);
             
             $messages['FormContent'] = $this->parseKeywords($joined, $messages['FormContent']);
@@ -215,50 +215,46 @@
             foreach($keywords as $key => $value) {
                 $subject = str_replace($key, $value, $subject);
             }
-            $subject = trim($subject, ' ');
             return $subject;
-        }
-        
-        
-        public function setPlayerMovement(Player $player)
-        {
-            if($player instanceof Entity) {
-                $playerName = $player->getName();
-                $dex = $this->getPlayerDexterity($playerName);
-                $movement = $player->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-                $movement->setValue((($movement->getValue() / 1.3) + 0.0245) * $dex, false, true);
-            }
         }
         
         public function setPlayerLevel(string $playerName, int $value) : void
         {
             $this->players[$playerName]['level'] = $value;
-            $this->saveVars();
         }
         
         public function getPlayerLevel(string $playerName) : int
         {
             return $this->players[$playerName]['level'];
         }
-        
-        
+    
+        public function setPlayerAttribute(string $playerName, string $attribute, $value) : void
+        {
+            $this->players[$playerName]['attributes'][$attribute] = $value;
+        }
         public function getPlayerAttribute(string $playerName, string $attribute) : int
         {
             return $this->players[$playerName]['attributes'][$attribute];
         }
         
-        public function increasePlayerAttribute(string $playerName, string $property, int $incrementWith = 1)
+        public function increasePlayerAttribute(string $playerName, string $attribute, int $incrementWith = 1)
         {
-            $this->players[$playerName]['attributes'][$property] += $incrementWith;
-            $this->saveVars();
+            $this->players[$playerName]['attributes'][$attribute] += $incrementWith;
         }
         
-        public function setPlayerDamage(string $playerName)
+        public function applyDamageBonus(EntityDamageByEntityEvent $event) : void
+        {
+            $damager = $event->getDamager();
+            if($damager instanceof Player){
+                $baseDamage = $event->getBaseDamage();
+                $event->setBaseDamage($baseDamage + $this->getPlayerDamage($damager->getName()));
+            }
+        }
+        public function calcDamage(string $playerName)
         {
             $str = $this->getPlayerAttribute($playerName, 'STR');
             $strModifier = $this->globalModifiers['STR'];
-            $this->players[$playerName]['damage'] = 1 + ($str * $strModifier);
-            $this->saveVars();
+            $this->players[$playerName]['damage'] =  $str * $strModifier;
         }
         
         public function getPlayerDamage(string $playerName) : float
@@ -266,37 +262,56 @@
             return $this->players[$playerName]['damage'];
         }
         
-        public function setPlayerVitality(Player $player)
+        public function applyVitalityBonus(Player $player)
         {
             $playerName = $player->getName();
+            $player->setMaxHealth(20 + $this->getPlayerVitality($playerName));
+            $player->setHealth(20 + $this->getPlayerVitality($playerName));
+        }
+        public function calcVitality(string $playerName) : void
+        {
             $vitality = $this->getPlayerAttribute($playerName, 'VIT');
             $vitModifier = $this->globalModifiers['VIT'];
-            $player->setMaxHealth(20 + ($vitality * $vitModifier));
-            $player->setHealth(20 + ($vitality * $vitModifier));
+            $this->players[$playerName]['vitalityBonus'] = 20 + ($vitality * $vitModifier);
         }
-        
-        public function setPlayerDefense(string $playerName)
+        public function getPlayerVitality(string $playerName) : ?float
         {
-            $def = $this->getPLayerAttribute($playerName, 'DEF');
+            return $this->players[$playerName]['vitalityBonus'];
+        }
+        public function applyDefenseBonus(EntityDamageByEntityEvent $event) : void
+        {
+            $receiver = $event->getEntity();
+            if($receiver instanceof Player){
+                $receiver->setAbsorption($receiver->getAbsorption() + $this->getPlayerDefense($receiver->getName()));
+            }
+        }
+        public function calcDefense(string $playerName)
+        {
+            $def = $this->getPlayerAttribute($playerName, 'DEF');
             $defModifier = $this->globalModifiers['DEF'];
-            $this->players[$playerName]['defense'] = 1 + ($def * $defModifier);
-            $this->saveVars();
+            $this->players[$playerName]['defenseBonus'] = $def * $defModifier;
         }
         
-        public function getPlayerDefense(string $playerName) : float
+        public function getPlayerDefense(string $playerName) : ?float
         {
-            return $this->players[$playerName]['defense'];
+            return $this->players[$playerName]['defenseBonus'];
         }
         
-        public function setPlayerDexterity(string $playerName)
+        public function applyDexterityBonus(Player $player)
+        {
+            $playerName = $player->getName();
+            $dex = $this->getPlayerDexterity($playerName);
+            $movement = $player->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+            $movement->setValue($movement->getValue()  * $dex);
+        }
+        
+        public function calcDexterity(string $playerName) : void
         {
             $dex = $this->getPlayerAttribute($playerName, 'DEX');
             $dexModifier = $this->globalModifiers['DEX'];
             $this->players[$playerName]['dexterity'] = 1 + ($dex * $dexModifier);
-            $this->saveVars();
         }
-        
-        public function getPlayerDexterity(string $playerName) : float
+        public function getPlayerDexterity(string $playerName) : ?float
         {
             return $this->players[$playerName]['dexterity'];
         }
@@ -311,11 +326,6 @@
         {
             return array_key_exists($player->getName(), $this->players);
         }
-        
-        public function setPlayerAttribute(string $playerName, string $property, $value) : void
-        {
-            $this->players[$playerName]['attributes'][$property] = $value;
-        }
     
         public function playerHasSkill(string $skillName, string $playerName) : bool
         {
@@ -325,13 +335,24 @@
         {
             return $this->players[$playerName]['skills'];
         }
+        public function getPlayers() : array
+        {
+            return $this->players;
+        }
         public function saveVars() : void
         {
             $conf = $this->config;
             $conf->setNested('players', $this->players);
             $conf->save();
         }
-        
+        public function getMain() : Main
+        {
+            return $this->main;
+        }
+        public function getSkillsManager() : SkillsManager
+        {
+            return $this->skillsManager;
+        }
         public static function getInstance() : RPGLike
         {
             return self::$instance;

@@ -1,10 +1,7 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: Kirito
-     * Date: 3/29/2020
-     * Time: 6:59 PM
-     */
+    
+    declare(strict_types = 1);
+    
     
     namespace TheClimbing\RPGLike\Skills;
     
@@ -20,7 +17,21 @@
     {
         public function __construct(RPGLike $rpg)
         {
-            parent::__construct($rpg,'Coinflip', 'passive', 'Has a 10% chance to to increase damage dealt by 50%', 0, 0, 'STR', Effect::JUMP_BOOST);
+            parent::__construct($rpg);
+            $this->setName('Coinflip');
+            $this->setType('passive');
+            $this->setAttribute('STR');
+            $this->setBaseUnlock(10);
+            $this->setCooldown(0);
+            $description = [
+                'title' => 'You\'ve unlocked the Coinflip skill!',
+                'content' => '"Coinflip" increases your health by 15%',
+                'exitButton' => 'Great!'
+            ];
+            $this->setDescription($description);
+            $this->setMaxEntInRange(1);
+            $this->setRange(0);
+            $this->setEffect(Effect::HEALTH_BOOST);
         }
         public function setCritChance(EntityDamageByEntityEvent $event)
         {

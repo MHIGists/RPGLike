@@ -1,13 +1,8 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: Kirito
-     * Date: 3/29/2020
-     * Time: 7:54 PM
-     */
+    
+    declare(strict_types = 1);
     
     namespace TheClimbing\RPGLike\Skills;
-    
     
     use pocketmine\Player;
     use TheClimbing\RPGLike\RPGLike;
@@ -16,7 +11,17 @@
     {
         public function __construct(RPGLike $rpg)
         {
-            parent::__construct($rpg,'Tank', 'passive', 'Increases your health by additional 15%', 0, 0, 'DEF');
+            $name = 'Tank';
+            $type = 'passive';
+            $description = [
+                'title' => 'You\'ve unlocked the Tank skill!',
+                'content' => '"Tank" increases your health by 15%',
+                'exitButton' => 'Sweet!'
+            ];
+            $cooldown = 0;
+            $range = 0;
+            $attribute = 'DEF';
+            parent::__construct($rpg,$name, $type, $description, $cooldown, $range, $attribute);
           
         }
         public function setPlayerHealth(Player $player)

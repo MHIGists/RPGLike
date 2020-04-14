@@ -1,13 +1,9 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: Kirito
-     * Date: 3/29/2020
-     * Time: 6:52 PM
-     */
+    
+    declare(strict_types = 1);
+    
     
     namespace TheClimbing\RPGLike\Skills;
-    
     
     use pocketmine\Player;
     use TheClimbing\RPGLike\RPGLike;
@@ -17,7 +13,19 @@
         
         public function __construct(RPGLike $rpg)
         {
-            parent::__construct($rpg,'Fortress', 'passive', 'Increases your absorption by 20%', 0, 0, 'VIT');
+            parent::__construct($rpg);
+            $this->setName('Tank');
+            $this->setType('passive');
+            $this->setAttribute('DEF');
+            $this->setBaseUnlock(10);
+            $this->setCooldown(0);
+            $description = [
+                'title' => 'You\'ve unlocked the Tank skill!',
+                ''
+            ];
+            $this->setDescription($description);
+            $this->setMaxEntInRange(1);
+            $this->setRange(0);
         }
         public function setDefense(Player $player) : void
         {

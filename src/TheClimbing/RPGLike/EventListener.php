@@ -1,22 +1,17 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: Kirito
-     * Date: 3/8/2020
-     * Time: 9:29 PM
-     */
+    
+    declare(strict_types = 1);
+    
     
     namespace TheClimbing\RPGLike;
     
-    use pocketmine\event\player\PlayerMoveEvent;
     use pocketmine\Player;
     
     use pocketmine\event\Listener;
     
-    use pocketmine\event\entity\EntityDamageEvent;
     use pocketmine\event\entity\EntityDamageByEntityEvent;
-    
-    use pocketmine\event\player\PlayerQuitEvent;
+
+    use pocketmine\event\player\PlayerMoveEvent;
     use pocketmine\event\player\PlayerRespawnEvent;
     use pocketmine\event\player\PlayerJoinEvent;
     
@@ -41,11 +36,13 @@
                 $this->rpg->setUpPlayer($player, true);
             }
             
-            $this->rpg->setPlayerDamage($playerName);
-            $this->rpg->setPlayerVitality($player);
-            $this->rpg->setPlayerDefense($playerName);
-            $this->rpg->setPlayerDexterity($playerName);
-            $this->rpg->setPlayerMovement($player);
+            $this->rpg->calcDamage($playerName);
+            $this->rpg->calcVitality($player);
+            $this->rpg->calcDefense($playerName);
+            $this->rpg->calcDexterity($playerName);
+            
+            $this->rpg->applyVitalityBonus($player);
+            $this->rpg->applyDexterityBonus($player);
             
         }
         public function onMove(PlayerMoveEvent $event)
@@ -55,29 +52,14 @@
             $playerSkills = $this->rpg->getPlayerSkills($playerName);
             if(!empty($playerSkills)){
                 foreach($playerSkills as $playerSkill){
-                    $this->rpg->skillsManager->getSkill($playerSkill)->checkRange($player);
+                    $this->rpg->getSkillsManager()->getSkill($playerSkill)->checkRange($player);
                 }
             }
         }
         public function dealDamageEvent(EntityDamageByEntityEvent $event)
         {
-            $dealer = $event->getDamager();
-            if($dealer instanceof Player) {
-                $playerName = $dealer->getName();
-                $bonusDMG = $this->rpg->getPlayerDamage($playerName);
-                $event->setBaseDamage($event->getFinalDamage() * $bonusDMG);
-            }
-        }
-        
-        public function receiveDmgEvent(EntityDamageEvent $event)
-        {
-            $receiver = $event->getEntity();
-            if($receiver instanceof Player) {
-                $playerName = $receiver->getName();
-                if($event->canBeReducedByArmor()) {
-                    $receiver->setAbsorption($receiver->getAbsorption() * $this->rpg->getPlayerDefense($playerName));
-                }
-            }
+            $this->rpg->applyDamageBonus($event);
+            $this->rpg->applyDefenseBonus($event);
         }
         
         public function onLevelUp(PlayerExperienceChangeEvent $event)
@@ -95,10 +77,11 @@
                         $playerName = $player->getName();
                         
                         $level = $this->rpg->getPlayerLevel($playerName);
-                        
                         $this->rpg->setPlayerLevel($playerName, $level + 1);
-                        
                         $this->rpg->upgradeStatsForm($player, $spleft);
+    
+                        $this->rpg->applyVitalityBonus($player);
+                        $this->rpg->applyDexterityBonus($player);
                         
                         $this->rpg->saveVars();
                         
@@ -119,10 +102,5 @@
             if($player->getXpLevel() == 0) {
                 $this->rpg->setUpPlayer($player);
             }
-        }
-        
-        public function onLogout(PlayerQuitEvent $event)
-        {
-            $this->rpg->saveVars();
         }
     }
