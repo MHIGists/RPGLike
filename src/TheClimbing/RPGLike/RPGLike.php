@@ -265,8 +265,8 @@
         public function applyVitalityBonus(Player $player)
         {
             $playerName = $player->getName();
-            $player->setMaxHealth((int) (20 + $this->getPlayerVitality($playerName)));
-            $player->setHealth((int)(20 + $this->getPlayerVitality($playerName)));
+            $player->setMaxHealth((int) $this->getPlayerVitality($playerName));
+            $player->setHealth((int)$this->getPlayerVitality($playerName));
         }
         public function calcVitality(string $playerName) : void
         {
