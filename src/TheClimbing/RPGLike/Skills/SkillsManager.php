@@ -21,7 +21,6 @@
                         $namespace = $skill[0] . $key;
                         $this->skills[$skill[0]] = new $namespace($rpg);
                     }else{
-                        var_dump($skill);
                         $namespace = "\\TheClimbing\\RPGLike\\Skills\\" . $skill;
                         $this->skills[$skill] = new $namespace($rpg);
                     }
