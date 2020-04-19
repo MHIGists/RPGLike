@@ -25,6 +25,10 @@
         public function execute (CommandSender $sender, string $commandLabel, array $args)
         {
             $player = $sender->getServer()->getPlayer($sender->getName());
-            $player->setXpLevel($args[0]);
+            if($player->isOp()){
+                $player->setXpLevel($args[0]);
+            }else{
+                $sender->sendMessage('You\'re not OP');
+            }
         }
     }
