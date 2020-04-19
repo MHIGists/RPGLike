@@ -185,9 +185,9 @@
         }
     
         /**
-         * @return string
+         * @return int
          */
-        public function getBaseUnlock() : string
+        public function getBaseUnlock() : int
         {
             return $this->skillUpgrades[0];
         }

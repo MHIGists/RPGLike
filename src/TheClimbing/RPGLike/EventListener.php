@@ -37,7 +37,7 @@
             }
             
             $this->rpg->calcDamage($playerName);
-            $this->rpg->calcVitality($player);
+            $this->rpg->calcVitality($playerName);
             $this->rpg->calcDefense($playerName);
             $this->rpg->calcDexterity($playerName);
             
