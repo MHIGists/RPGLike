@@ -11,7 +11,7 @@ This plugin aims to add more higher RPG feel to minecraft
 ```php
 PlayerManager::getPlayer($playerName);
 ```
-###TODO:
+### TODO:
  * Implement cooldown for skills
  * Come up with ideas for active skills
  * Finish RPGPlayer->checkForSkills()
