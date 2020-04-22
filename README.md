@@ -6,4 +6,14 @@ This plugin aims to add more higher RPG feel to minecraft
  * UI for all of those
  * Almost everything configurable
 ### For devs:
-You can easily create new skills by extending the BaseSkill and adding some Listeners
+ * You can easily create new skills by extending the BaseSkill and adding some Listeners. Go trough the 4 example skills to grasp the Skill Structure you need to extend.
+ * Easily access player objects using the PlayerManager, example: 
+```php
+PlayerManager::getPlayer($playerName);
+```
+###TODO:
+ * Implement cooldown for skills
+ * Come up with ideas for active skills
+ * Finish RPGPlayer->checkForSkills()
+ * Change function visibility to enforce plugin stability
+ * Add more customization trough config
