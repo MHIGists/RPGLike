@@ -5,6 +5,7 @@
     
     namespace TheClimbing\RPGLike;
     
+    use pocketmine\event\player\PlayerQuitEvent;
     use pocketmine\Player;
     
     use pocketmine\event\Listener;
@@ -14,10 +15,12 @@
     use pocketmine\event\player\PlayerMoveEvent;
     use pocketmine\event\player\PlayerRespawnEvent;
     use pocketmine\event\player\PlayerJoinEvent;
-    
     use pocketmine\event\player\PlayerExperienceChangeEvent;
     use pocketmine\event\player\PlayerDeathEvent;
-    
+
+    use TheClimbing\RPGLike\Players\PlayerManager;
+    use TheClimbing\RPGLike\Skills\SkillsManager;
+
     class EventListener implements Listener
     {
         private $rpg;
@@ -30,29 +33,17 @@
         public function onJoin(PlayerJoinEvent $event)
         {
             $player = $event->getPlayer();
-            $playerName = $player->getName();
-            
-            if($this->rpg->playerExists($player) === false) {
-                $this->rpg->setUpPlayer($player, true);
-            }
-            
-            $this->rpg->calcDamage($playerName);
-            $this->rpg->calcVitality($playerName);
-            $this->rpg->calcDefense($playerName);
-            $this->rpg->calcDexterity($playerName);
-            
-            $this->rpg->applyVitalityBonus($player);
-            $this->rpg->applyDexterityBonus($player);
-            
+            PlayerManager::makePlayer($player->getName(), $this->rpg->getModifiers(), SkillsManager::getInstance());
+    
         }
         public function onMove(PlayerMoveEvent $event)
         {
             $player = $event->getPlayer();
             $playerName = $player->getName();
-            $playerSkills = $this->rpg->getPlayerSkills($playerName);
+            $playerSkills = PlayerManager::getPlayer($playerName)->getSkills();
             if(!empty($playerSkills)){
                 foreach($playerSkills as $playerSkill){
-                    $this->rpg->getSkillsManager()->getSkill($playerSkill)->checkRange($player);
+                    PlayerManager::getPlayer($playerName)->getSkill($playerSkill)->checkRange($player);
                 }
             }
         }
@@ -76,14 +67,12 @@
                         
                         $playerName = $player->getName();
                         
-                        $level = $this->rpg->getPlayerLevel($playerName);
-                        $this->rpg->setPlayerLevel($playerName, $level + 1);
-                        $this->rpg->upgradeStatsForm($player, $spleft);
+                        $this->rpg->upgradeStatsForm(PlayerManager::getPlayer($playerName), $spleft);
     
                         $this->rpg->applyVitalityBonus($player);
                         $this->rpg->applyDexterityBonus($player);
                         
-                        $this->rpg->saveVars();
+                        $this->rpg->savePlayerVariables($playerName);
                         
                     }
                 }
@@ -92,7 +81,7 @@
         
         public function onDeath(PlayerDeathEvent $event)
         {
-            $this->rpg->wipePlayer($event->getPlayer()->getName());
+            PlayerManager::getPlayer($event->getPlayer()->getName())->reset();
         }
         
         public function onRespawn(PlayerRespawnEvent $event)
@@ -100,7 +89,11 @@
             $player = $event->getPlayer();
             
             if($player->getXpLevel() == 0) {
-                $this->rpg->setUpPlayer($player);
+                $player->setXpLevel(1);
             }
+        }
+        public function playerLeave(PlayerQuitEvent $event)
+        {
+            PlayerManager::removePlayer($event->getPlayer()->getName());
         }
     }

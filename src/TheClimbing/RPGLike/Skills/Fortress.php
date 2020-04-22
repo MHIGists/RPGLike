@@ -6,14 +6,13 @@
     namespace TheClimbing\RPGLike\Skills;
     
     use pocketmine\Player;
-    use TheClimbing\RPGLike\RPGLike;
 
     class Fortress extends BaseSkill
     {
         
-        public function __construct(RPGLike $rpg)
+        public function __construct()
         {
-            parent::__construct($rpg);
+            parent::__construct();
             $this->setName('Tank');
             $this->setType('passive');
             $this->setAttribute('DEF');

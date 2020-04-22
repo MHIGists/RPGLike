@@ -11,13 +11,11 @@
     
     use pocketmine\event\entity\EntityDamageByEntityEvent;
     
-    use TheClimbing\RPGLike\RPGLike;
-
     class Coinflip extends BaseSkill
     {
-        public function __construct(RPGLike $rpg)
+        public function __construct()
         {
-            parent::__construct($rpg);
+            parent::__construct();
             $this->setName('Coinflip');
             $this->setType('passive');
             $this->setAttribute('STR');

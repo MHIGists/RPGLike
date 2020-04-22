@@ -17,20 +17,12 @@
     
     use pocketmine\level\Level;
     use pocketmine\math\Vector3;
-    
-    use TheClimbing\RPGLike\RPGLike;
-
     /**
      * Class BaseSkill
      * @package TheClimbing\RPGLike\Skills
      */
     class BaseSkill
     {
-        /**
-         * @var \TheClimbing\RPGLike\RPGLike
-         */
-        private $rpg;
-        
         /**
          * @var string
          */
@@ -83,7 +75,6 @@
         /**
          * BaseSkill constructor.
          *
-         * @param \TheClimbing\RPGLike\RPGLike $rpg
          * @param string                       $name
          * @param string                       $type
          * @param array                        $description
@@ -93,9 +84,8 @@
          * @param int                          $maxEntInRange
          * @param null                         $effect
          */
-        public function __construct(RPGLike $rpg, string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, string $attribute = '', int $maxEntInRange = 1, $effect = null )
+        public function __construct(string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, string $attribute = '', int $maxEntInRange = 1, $effect = null )
         {
-            $this->rpg = $rpg;
             $this->name = $name;
             $this->type = $type;
             $this->description = $description;
@@ -257,7 +247,6 @@
         }
     
         /**
-         * TODO Currently applies level on the whole class
          * @param int $skillLevel
          */
         public function setSkillLevel(int $skillLevel) : void
@@ -272,46 +261,8 @@
         {
             return $this->skillLevel;
         }
-    
-        /**
-         * @param string $playerName
-         */
-        public function setPlayerSkill(string $playerName) : void
-        {
-            if($this->rpg->playerHasSkill($this->getName(), $playerName) == false) {
-                $this->rpg->getPlayers()[$playerName]['skills'][] = $this->getName();
-            }
-        }
-    
-        /**
-         * @param string $playerName
-         *
-         * @return bool
-         */public function skillUnlock(string $playerName) : bool
-        {
-            if($this->getBaseUnlock() <= $this->rpg->getPlayerAttribute($playerName, $this->getAttribute())) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    
-        /**
-         * @param string $playerName
-         *
-         * @return bool
-         */public function skillUpgrade(string $playerName) : bool
-        {
-            foreach($this->getUpgrades() as $upgradeLevel) {
-                if($upgradeLevel <= $this->rpg->getPlayerAttribute($playerName, $this->getAttribute())) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            return false;
-        }
-    
+        
+        
         /**
          * @param \pocketmine\Player $player
          * @param array              $func

@@ -10,13 +10,11 @@
     use pocketmine\entity\Effect;
     use pocketmine\event\entity\EntityDamageByEntityEvent;
     
-    use TheClimbing\RPGLike\RPGLike;
-    
     class DoubleStrike extends BaseSkill
     {
-        public function __construct(RPGLike $rpg)
+        public function __construct()
         {
-            parent::__construct($rpg);
+            parent::__construct();
             $this->setName('DoubleStrike');
             $this->setType('passive');
             $this->setAttribute('STR');
@@ -35,8 +33,8 @@
         }
         public function setPlayerAttackCD(EntityDamageByEntityEvent $event)
         {
-            $stage = $this->getSkillLevel();
-            switch($stage){
+            $level = $this->getSkillLevel();
+            switch($level){
                 case 0:
                     if(rand(0,99) < 10)
                     {

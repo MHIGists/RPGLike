@@ -5,36 +5,44 @@
     namespace TheClimbing\RPGLike\Skills;
     
     use function is_array;
-    
+
     use TheClimbing\RPGLike\RPGLike;
-    
     
     class SkillsManager
     {
-        private $skills;
+        private static $skills;
+        private static $instance;
+        
         public function __construct(RPGLike $rpg)
         {
-            $configSkills = $rpg->getMain()->getConfig()->getNested('Skills');
+            self::$instance = $this;
+            
+            $configSkills = $rpg->getConfig()->getNested('Skills');
             foreach($configSkills as $key => $skill) {
                 try{
                     if(is_array($skill)){
                         $namespace = $skill[0] . $key;
-                        $this->skills[$skill[0]] = new $namespace($rpg);
+                        self::$skills[$skill[0]] = new $namespace();
                     }else{
                         $namespace = "\\TheClimbing\\RPGLike\\Skills\\" . $skill;
-                        $this->skills[$skill] = new $namespace($rpg);
+                        self::$skills[$skill] = new $namespace();
                     }
                 }catch(\Error $error){
-                    $rpg->getMain()->getLogger()->alert('No such skill with namespace: ' . $namespace);
+                    $rpg->getLogger()->alert('No such skill with namespace: ' . $namespace);
+                    $rpg->getLogger()->alert($error->getMessage());
                 }
             }
         }
-        public function getSkills() : array
+        public static function getSkills() : array
         {
-            return $this->skills;
+            return self::$skills;
         }
-        public function getSkill(string $skillName)
+        public static function getSkill(string $skillName)
         {
-            return $this->skills[$skillName];
+            return self::$skills[$skillName];
+        }
+        public static function getInstance() : SkillsManager
+        {
+            return self::$instance;
         }
     }
