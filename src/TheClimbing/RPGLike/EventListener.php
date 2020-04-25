@@ -19,7 +19,6 @@
     use pocketmine\event\player\PlayerDeathEvent;
 
     use TheClimbing\RPGLike\Players\PlayerManager;
-    use TheClimbing\RPGLike\Skills\SkillsManager;
 
     class EventListener implements Listener
     {
@@ -33,7 +32,7 @@
         public function onJoin(PlayerJoinEvent $event)
         {
             $player = $event->getPlayer();
-            PlayerManager::makePlayer($player->getName(), $this->rpg->getModifiers(), SkillsManager::getInstance());
+            PlayerManager::makePlayer($player->getName(), $this->rpg->getModifiers());
     
         }
         public function onMove(PlayerMoveEvent $event)
@@ -43,7 +42,7 @@
             $playerSkills = PlayerManager::getPlayer($playerName)->getSkills();
             if(!empty($playerSkills)){
                 foreach($playerSkills as $playerSkill){
-                    PlayerManager::getPlayer($playerName)->getSkill($playerSkill)->checkRange($player);
+                    $playerSkill->checkRange($player);
                 }
             }
         }

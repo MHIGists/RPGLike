@@ -1,7 +1,19 @@
 ---
 Skills:
-  - 'Tank'
-  - 'Fortress'
-  - 'DoubleStrike'
-  - 'Coinflip'
+  Tank:
+    namespace : ""
+    unlockCondition:
+      VIT : 10
+  Coinflip:
+    namespace: ""
+    unlockCondition:
+      STR: 10
+  DoubleStrike:
+    namespace: ""
+    unlockCondition:
+      DEX: 10
+  Fortress:
+    namespace : ""
+    unlockCondition:
+      DEF : 10
 ...

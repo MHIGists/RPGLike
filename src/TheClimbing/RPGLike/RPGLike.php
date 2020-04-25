@@ -17,7 +17,6 @@
     
     use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Players\PlayerManager;
-    use TheClimbing\RPGLike\Skills\SkillsManager;
     use TheClimbing\RPGLike\Commands\StatsCommand;
     
     use jojoe77777\FormAPI\SimpleForm;
@@ -26,7 +25,6 @@
     {
         private static $instance;
         
-        private $skillsManager;
         private $playerManager;
         
         public $globalModifiers = [];
@@ -44,7 +42,6 @@
             $this->getMessages();
             $this->setConsts();
             
-            $this->skillsManager = new SkillsManager($this);
             $this->playerManager = new PlayerManager($this);
         }
         

@@ -23,6 +23,7 @@
      */
     class BaseSkill
     {
+        public static const NAMESPACE = "\\TheClimbing\\RPGLike\\Skills\\";
         /**
          * @var string
          */
@@ -84,7 +85,7 @@
          * @param int                          $maxEntInRange
          * @param null                         $effect
          */
-        public function __construct(string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, string $attribute = '', int $maxEntInRange = 1, $effect = null )
+        public function __construct( string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, string $attribute = '', int $maxEntInRange = 1, $effect = null )
         {
             $this->name = $name;
             $this->type = $type;
@@ -95,7 +96,7 @@
             $this->maxEntInRange = $maxEntInRange;
             $this->effect = $effect;
         }
-    
+       
         /**
          * @param string $name
          */

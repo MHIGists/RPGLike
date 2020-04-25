@@ -19,7 +19,7 @@
             ];
             $cooldown = 0;
             $range = 0;
-            $attribute = 'DEF';
+            $attribute = 'VIT';
             parent::__construct($name, $type, $description, $cooldown, $range, $attribute);
           
         }

@@ -17,7 +17,7 @@
             parent::__construct();
             $this->setName('DoubleStrike');
             $this->setType('passive');
-            $this->setAttribute('STR');
+            $this->setAttribute('DEX');
             $this->setBaseUnlock(10);
             $this->setCooldown(0);
             $description = [

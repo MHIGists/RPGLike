@@ -4,9 +4,7 @@
     
     namespace TheClimbing\RPGLike\Players;
     
-    use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Skills\BaseSkill;
-    use TheClimbing\RPGLike\Skills\SkillsManager;
 
     class RPGPlayer
     {
@@ -15,33 +13,31 @@
         private $skills = [];
         
         private $str = 1;
-        private $strModifier = null;
+        private $strModifier = 1.0;
         private $strBonus = 0;
         
         private $vit = 1;
-        private $vitModifier = null;
+        private $vitModifier = 1.0;
         private $vitBonus = 1;
         
         private $def = 1;
-        private $defModifier = null;
+        private $defModifier = 1.0;
         private $defBonus = 1;
         
         private $dex = 1;
-        private $dexModifier = null;
+        private $dexModifier = 1.0;
         private $dexBonus = 1;
         
         private $level = 1;
         
-        private $skillsManager = null;
         
-        public function __construct(string $playerName, array $modifiers, SkillsManager $skillsManager)
+        public function __construct(string $playerName, array $modifiers)
         {
             $this->playerName = $playerName;
             $this->setDEFModifier($modifiers['defModifier']);
             $this->setVITModifier($modifiers['vitModifier']);
             $this->setSTRModifier($modifiers['strModifier']);
             $this->setDEXModifier($modifiers['dexModifier']);
-            $this->skillsManager = $skillsManager;
         }
         
         public function getName() : string
@@ -153,22 +149,23 @@
         {
             return $this->level;
         }
-        public function unlockSkill(string $skillNamespace)
+        public function unlockSkill(string $skillNamespace, string $skillName)
         {
-            $this->skills[] = new $skillNamespace(RPGLike::getInstance());
+            $skill = $skillNamespace . $skillName;
+            $this->skills[] = new $skill();
         }
-        public function getSkill(string $skilkName) : BaseSkill
+        /* @return BaseSkill */
+        public function getSkill(string $skillName)
         {
-            $skill = $this->skills[$skilkName];
-            if($skill instanceof BaseSkill)
-            {
-                return $skill;
-            }
+            $skill = $this->skills[$skillName];
+            return $skill;
         }
-        public function getSkills() : array
+        /* @return  BaseSkill[] */
+        public function getSkills()
         {
             return $this->skills;
         }
+        /* @return string[] */
         public function getSkillNames() : array
         {
             $skills = [];
@@ -187,9 +184,27 @@
             ];
             return $temp;
         }
+        public function getAttribute(string $attribute) : int
+        {
+            return $this->getAttributes()[$attribute];
+        }
         public function checkForSkills()
         {
-        
+            foreach(PlayerManager::getSkills() as $key =>  $skill) {
+                foreach($skill['unlockConditions'] as $key1 => $value){
+                    if($this->getAttribute($key1) >= $value){
+                        
+                        $namespace = BaseSkill::NAMESPACE;
+                        
+                        if(array_key_exists('namespace', $skill)){
+                            if($skill['namespace'] != ""){
+                                $namespace = $skill['namespace'];
+                            }
+                        }
+                        $this->unlockSkill($namespace, $key);
+                    }
+                }
+            }
         }
         public function reset()
         {
