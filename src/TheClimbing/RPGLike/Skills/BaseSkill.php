@@ -23,7 +23,7 @@
      */
     class BaseSkill
     {
-        public static const NAMESPACE = "\\TheClimbing\\RPGLike\\Skills\\";
+        public static $namespace = "\\TheClimbing\\RPGLike\\Skills\\";
         /**
          * @var string
          */

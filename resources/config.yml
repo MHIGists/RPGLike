@@ -2,18 +2,18 @@
 Skills:
   Tank:
     namespace : ""
-    unlockCondition:
+    unlockConditions:
       VIT : 10
   Coinflip:
     namespace: ""
-    unlockCondition:
+    unlockConditions:
       STR: 10
   DoubleStrike:
     namespace: ""
-    unlockCondition:
+    unlockConditions:
       DEX: 10
   Fortress:
     namespace : ""
-    unlockCondition:
+    unlockConditions:
       DEF : 10
 ...

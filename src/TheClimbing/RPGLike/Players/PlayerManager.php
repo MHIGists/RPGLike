@@ -8,7 +8,8 @@
     use pocketmine\Player;
     
     use TheClimbing\RPGLike\RPGLike;
-    
+    use TheClimbing\RPGLike\Skills\BaseSkill;
+
     class PlayerManager
     {
         private static $rpg;
@@ -40,6 +41,12 @@
                 $player->calcDEFBonus();
                 $player->calcVITBonus();
                 $player->calcSTRBonus();
+                
+                if(!empty($cachedPlayer['skills'])){
+                    foreach($cachedPlayer['skills'] as $skill) {
+                        $player->unlockSkill(BaseSkill::$namespace, $skill);
+                    }
+                }
             }
             if($cachedPlayer == false){
                 self::$players[$playerName] = new RPGPlayer($playerName, $modifiers);

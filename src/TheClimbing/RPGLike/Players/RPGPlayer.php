@@ -194,7 +194,7 @@
                 foreach($skill['unlockConditions'] as $key1 => $value){
                     if($this->getAttribute($key1) >= $value){
                         
-                        $namespace = BaseSkill::NAMESPACE;
+                        $namespace = BaseSkill::$namespace;
                         
                         if(array_key_exists('namespace', $skill)){
                             if($skill['namespace'] != ""){

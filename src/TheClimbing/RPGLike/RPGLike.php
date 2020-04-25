@@ -14,7 +14,7 @@
     use pocketmine\utils\TextFormat;
     use pocketmine\utils\Config;
     use pocketmine\event\entity\EntityDamageByEntityEvent;
-    
+
     use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Commands\StatsCommand;
@@ -47,8 +47,11 @@
         
         public function onEnable()
         {
-            $command = new StatsCommand($this);
-            $this->getServer()->getCommandMap()->register('levelup', $command);
+            $stats = new StatsCommand($this);
+            $this->getServer()->getCommandMap()->register('stats', $stats);
+    
+//            $levelup = new LevelUpCommand($this);
+//            $this->getServer()->getCommandMap()->register('levelup', $levelup);
             
             $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
         }
