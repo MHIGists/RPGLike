@@ -44,7 +44,7 @@
                 
                 if(!empty($cachedPlayer['skills'])){
                     foreach($cachedPlayer['skills'] as $skill) {
-                        $player->unlockSkill(BaseSkill::$namespace, $skill);
+                        $player->unlockSkill(BaseSkill::$namespace, $skill, false);
                     }
                 }
             }
@@ -106,6 +106,7 @@
         
         public static function removePlayer(string $playerName)
         {
+            
             RPGLike::getInstance()->savePlayerVariables($playerName);
             unset(self::$players[$playerName]);
         }

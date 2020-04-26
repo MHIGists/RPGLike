@@ -4,6 +4,7 @@
     
     namespace TheClimbing\RPGLike\Players;
     
+    use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Skills\BaseSkill;
 
     class RPGPlayer
@@ -149,10 +150,13 @@
         {
             return $this->level;
         }
-        public function unlockSkill(string $skillNamespace, string $skillName)
+        public function unlockSkill(string $skillNamespace, string $skillName, bool $form = true)
         {
             $skill = $skillNamespace . $skillName;
-            $this->skills[] = new $skill();
+            $this->skills[$skillName] = new $skill();
+            if($form){
+                RPGLike::getInstance()->descriptionSkillForm(PlayerManager::getServerPlayer($this->getName()), $this->getSkill($skillName)->getDescription());
+            }
         }
         /* @return BaseSkill */
         public function getSkill(string $skillName)
@@ -168,11 +172,7 @@
         /* @return string[] */
         public function getSkillNames() : array
         {
-            $skills = [];
-            foreach($this->getSkills() as $skill) {
-                $skills[] = $skill->getName();
-            }
-            return $skills;
+            return array_keys($this->skills);
         }
         public function getAttributes() : array
         {
@@ -201,7 +201,9 @@
                                 $namespace = $skill['namespace'];
                             }
                         }
-                        $this->unlockSkill($namespace, $key);
+                        if(array_key_exists($key, $this->skills) == false){
+                            $this->unlockSkill($namespace, $key);
+                        }
                     }
                 }
             }
@@ -219,6 +221,12 @@
             $this->calcDEFBonus();
             $this->calcVITBonus();
             $this->calcSTRBonus();
+            
+            $this->skills = [];
+            
+            $player = PlayerManager::getServerPlayer($this->getName());
+            RPGLike::getInstance()->applyDexterityBonus($player);
+            RPGLike::getInstance()->applyVitalityBonus($player);
         }
     }
     

@@ -13,7 +13,6 @@
     use pocketmine\event\entity\EntityDamageByEntityEvent;
 
     use pocketmine\event\player\PlayerMoveEvent;
-    use pocketmine\event\player\PlayerRespawnEvent;
     use pocketmine\event\player\PlayerJoinEvent;
     use pocketmine\event\player\PlayerExperienceChangeEvent;
     use pocketmine\event\player\PlayerDeathEvent;
@@ -33,6 +32,8 @@
         {
             $player = $event->getPlayer();
             PlayerManager::makePlayer($player->getName(), $this->rpg->getModifiers());
+            $this->rpg->applyVitalityBonus($player);
+            $this->rpg->applyDexterityBonus($player);
     
         }
         public function onMove(PlayerMoveEvent $event)
@@ -42,7 +43,7 @@
             $playerSkills = PlayerManager::getPlayer($playerName)->getSkills();
             if(!empty($playerSkills)){
                 foreach($playerSkills as $playerSkill){
-                    $playerSkill->checkRange($player);
+                        $playerSkill->checkRange($player);
                 }
             }
         }
@@ -83,14 +84,6 @@
             PlayerManager::getPlayer($event->getPlayer()->getName())->reset();
         }
         
-        public function onRespawn(PlayerRespawnEvent $event)
-        {
-            $player = $event->getPlayer();
-            
-            if($player->getXpLevel() == 0) {
-                $player->setXpLevel(1);
-            }
-        }
         public function playerLeave(PlayerQuitEvent $event)
         {
             PlayerManager::removePlayer($event->getPlayer()->getName());

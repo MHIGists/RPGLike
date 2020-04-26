@@ -17,7 +17,7 @@
 
     use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Players\PlayerManager;
-    use TheClimbing\RPGLike\Commands\StatsCommand;
+    use TheClimbing\RPGLike\Commands\RPGCommand;
     
     use jojoe77777\FormAPI\SimpleForm;
     
@@ -31,7 +31,7 @@
         public $globalMessages = [];
         public $consts = [];
         public $defaultStats = ['STR' => 1, 'VIT' => 1, 'DEF' => 1, 'DEX' => 1,];
-        public $defaultModifiers = ['strModifier' => 1.15, 'vitModifier' => 1.2, 'defModifier' => 1.1, 'dexModifier' => 1.005,];
+        public $defaultModifiers = ['strModifier' => 0.15, 'vitModifier' => 0.175, 'defModifier' => 0.1, 'dexModifier' => 0.0002,];
         
         public function onLoad()
         {
@@ -47,11 +47,8 @@
         
         public function onEnable()
         {
-            $stats = new StatsCommand($this);
-            $this->getServer()->getCommandMap()->register('stats', $stats);
-    
-//            $levelup = new LevelUpCommand($this);
-//            $this->getServer()->getCommandMap()->register('levelup', $levelup);
+            $rpg = new RPGCommand($this);
+            $this->getServer()->getCommandMap()->register('rpg', $rpg);
             
             $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
         }
@@ -98,8 +95,8 @@
         
         public function getModifiers() : array
         {
-            $modifiers = $this->getConfig()->get('modifiers');
-            if($modifiers === false) {
+            $modifiers = $this->getConfig()->getNested('modifiers');
+            if($modifiers == null) {
                 $this->getConfig()->setNested('modifiers', $this->defaultModifiers);
                 $this->getConfig()->save();
                 $this->globalModifiers = $this->defaultModifiers;
@@ -130,6 +127,7 @@
                         $player->calcVITBonus();
                         $spleft--;
                         $this->upgradeStatsForm($player, $spleft);
+                        $this->applyVitalityBonus($pl);
                         break;
                     case "Defense":
                         $player->setDEF($player->getDEF() + 1);
@@ -142,6 +140,7 @@
                         $player->calcDEXBonus();
                         $spleft--;
                         $this->upgradeStatsForm($player, $spleft);
+                        $this->applyDexterityBonus($pl);
                         break;
                     case "Exit":
                         break;
@@ -191,6 +190,19 @@
             }
             PlayerManager::getServerPlayer($player->getName())->sendForm($form);
             
+        }
+        public function RPGMenuForm(RPGPlayer $player)
+        {
+        
+        }
+        
+        public function skillsForm(RPGPlayer $player)
+        {
+        
+        }
+        public function helpForm(RPGPlayer $player)
+        {
+        
         }
         
         public function parseMessages(string $playerName, int $spleft, bool $stats = false) : array
@@ -249,7 +261,7 @@
             $playerName = $player->getName();
             $dex = PlayerManager::getPlayer($playerName)->getDEXBonus();
             $movement = $player->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-            $movement->setValue($movement->getValue() * $dex);
+            $movement->setValue($movement->getValue() * (1 + $dex));
         }
         
         public function savePlayerVariables(string $playerName) : void
