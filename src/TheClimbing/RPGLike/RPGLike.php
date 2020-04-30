@@ -5,21 +5,15 @@
     
     namespace TheClimbing\RPGLike;
     
-    use function array_merge;
-    use function str_replace;
-    
     use pocketmine\Player;
     use pocketmine\entity\Attribute;
     use pocketmine\plugin\PluginBase;
     use pocketmine\utils\TextFormat;
-    use pocketmine\utils\Config;
     use pocketmine\event\entity\EntityDamageByEntityEvent;
 
-    use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Commands\RPGCommand;
     
-    use jojoe77777\FormAPI\SimpleForm;
     
     class RPGLike extends PluginBase
     {
@@ -39,7 +33,6 @@
             
             $this->saveDefaultConfig();
             $this->saveResource('messages.yml');
-            $this->getMessages();
             $this->setConsts();
             
             $this->playerManager = new PlayerManager($this);
@@ -53,11 +46,7 @@
             $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
         }
         
-        public function getMessages() : void
-        {
-            $messages = (new Config($this->getDataFolder() . 'messages.yml', Config::YAML))->getAll();
-            $this->globalMessages = $messages;
-        }
+        
         
         public function setConsts() : void
         {
@@ -68,7 +57,8 @@
                 "30SPACE" => str_repeat(" ", 30),
                 "40SPACE" => str_repeat(" ", 40),
                 "50SPACE" => str_repeat(" ", 50),
-                "NL" => "\n", "BLACK" => TextFormat::BLACK,
+                "NL" => PHP_EOL,
+                "BLACK" => TextFormat::BLACK,
                 "DARK_BLUE" => TextFormat::DARK_BLUE,
                 "DARK_GREEN" => TextFormat::DARK_GREEN,
                 "DARK_AQUA" => TextFormat::DARK_AQUA,
@@ -104,132 +94,6 @@
                 $this->globalModifiers = $modifiers;
             }
             return $this->globalModifiers;
-        }
-        
-        public function upgradeStatsForm(RPGPlayer $player, int $spleft)
-        {
-            if($spleft <= 0) {
-                $this->statsForm($player);
-                return;
-            }
-            $messages = $this->parseMessages($player->getName(), $spleft);
-            
-            $form = new SimpleForm(function(Player $pl, $data) use ($player, $spleft) {
-                switch($data) {
-                    case "Strength":
-                        $player->setSTR($player->getSTR() + 1);
-                        $player->calcSTRBonus();
-                        $spleft--;
-                        $this->upgradeStatsForm($player, $spleft);
-                        break;
-                    case "Vitality":
-                        $player->setVIT($player->getVIT() + 1);
-                        $player->calcVITBonus();
-                        $spleft--;
-                        $this->upgradeStatsForm($player, $spleft);
-                        $this->applyVitalityBonus($pl);
-                        break;
-                    case "Defense":
-                        $player->setDEF($player->getDEF() + 1);
-                        $player->calcDEFBonus();
-                        $spleft--;
-                        $this->upgradeStatsForm($player, $spleft);
-                        break;
-                    case "Dexterity":
-                        $player->setDEX($player->getDEX() + 1);
-                        $player->calcDEXBonus();
-                        $spleft--;
-                        $this->upgradeStatsForm($player, $spleft);
-                        $this->applyDexterityBonus($pl);
-                        break;
-                    case "Exit":
-                        break;
-                }
-            });
-            
-            $form->setTitle($messages['FormTitle']);
-            $form->setContent($messages['FormContent']);
-            foreach($messages['Buttons'] as $key => $button) {
-                $form->addButton($button, -1, '', $key);
-            }
-            PlayerManager::getServerPlayer($player->getName())->sendForm($form);
-            $player->checkForSkills();
-        }
-        
-        public function descriptionSkillForm(Player $player, array $skillDescription)
-        {
-            
-            $form = new SimpleForm(function(Player $player, $data) {
-                switch($data) {
-                    case 'Exit':
-                        break;
-                }
-            });
-            $form->setTitle($skillDescription['title']);
-            $form->setContent($skillDescription['content']);
-            $form->addButton($skillDescription['exitButton']);
-            $player->sendForm($form);
-            
-        }
-        
-        public function statsForm(RPGPlayer $player)
-        {
-            $messages = $this->parseMessages($player->getName(), 0, true);
-            
-            $form = new SimpleForm(function(Player $player, $data) {
-                switch($data) {
-                    case "Exit":
-                        break;
-                }
-            });
-            
-            $form->setTitle($messages['FormTitle']);
-            $form->setContent($messages['FormContent']);
-            foreach($messages['Buttons'] as $key => $message) {
-                $form->addButton($message, -1, '', $key);
-            }
-            PlayerManager::getServerPlayer($player->getName())->sendForm($form);
-            
-        }
-        public function RPGMenuForm(RPGPlayer $player)
-        {
-        
-        }
-        
-        public function skillsForm(RPGPlayer $player)
-        {
-        
-        }
-        public function helpForm(RPGPlayer $player)
-        {
-        
-        }
-        
-        public function parseMessages(string $playerName, int $spleft, bool $stats = false) : array
-        {
-            if($stats == true) {
-                $messages = $this->globalMessages['StatsForm'];
-            } else {
-                $messages = $this->globalMessages['UpgradeForm'];
-            }
-            $stats = PlayerManager::getPlayer($playerName)->getAttributes();
-            $stats['PLAYER'] = $playerName;
-            $stats['SPLEFT'] = $spleft;
-            
-            $joined = array_merge($stats, $this->consts);
-            
-            $messages['FormContent'] = $this->parseKeywords($joined, $messages['FormContent']);
-            
-            return $messages;
-        }
-        
-        public function parseKeywords(array $keywords, string $subject) : string
-        {
-            $subject = str_replace(['{', '}'], [' ', ' '], $subject);
-            foreach($keywords as $key => $value) {
-                $subject = str_replace($key, $value, $subject);
-            }
-            return $subject;
         }
         
         public function applyDamageBonus(EntityDamageByEntityEvent $event) : void
