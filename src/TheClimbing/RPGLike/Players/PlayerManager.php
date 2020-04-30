@@ -83,7 +83,7 @@
         /**
          * @param string $playerName
          *
-         * @return false|\TheClimbing\RPGLike\Players\RPGPlayer
+         * @return false|RPGPlayer
          */
         public static function getPlayer(string $playerName)
         {

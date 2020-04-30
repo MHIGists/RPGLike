@@ -24,11 +24,11 @@
     class RPGLike extends PluginBase
     {
         private static $instance;
-        
+
         private $playerManager;
-        
-        public $globalModifiers = [];
-        public $globalMessages = [];
+
+        public  $globalModifiers = [];
+        public  $globalMessages = [];
         public $consts = [];
         public $defaultStats = ['STR' => 1, 'VIT' => 1, 'DEF' => 1, 'DEX' => 1,];
         public $defaultModifiers = ['strModifier' => 0.15, 'vitModifier' => 0.175, 'defModifier' => 0.1, 'dexModifier' => 0.0002,];

@@ -265,7 +265,7 @@
         
         
         /**
-         * @param \pocketmine\Player $player
+         * @param Player $player
          * @param array              $func
          */
         public function checkRange(Player $player, array $func = []) : void
@@ -288,9 +288,9 @@
         /**
          * Basically taken from source.
          *
-         * @param \pocketmine\math\Vector3 $pos
+         * @param Vector3 $pos
          * @param int|null                 $maxDistance
-         * @param \pocketmine\level\Level  $level
+         * @param Level $level
          * @param int                      $maxEntities
          * @param bool                     $includeDead
          *
@@ -332,7 +332,7 @@
          * Sets vanilla effects or applies a callable.
          * Needs testing!
          *
-         * @param \pocketmine\Player $player
+         * @param Player $player
          * @param                    $effect
          */
         public function setPlayerEffect(Player $player, $effect) : void

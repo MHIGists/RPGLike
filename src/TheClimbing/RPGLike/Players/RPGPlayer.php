@@ -9,7 +9,7 @@
 
     class RPGPlayer
     {
-        private $playerName = '';
+        private $playerName;
         
         private $skills = [];
         
@@ -161,8 +161,7 @@
         /* @return BaseSkill */
         public function getSkill(string $skillName)
         {
-            $skill = $this->skills[$skillName];
-            return $skill;
+            return $this->skills[$skillName];
         }
         /* @return  BaseSkill[] */
         public function getSkills()
@@ -176,13 +175,12 @@
         }
         public function getAttributes() : array
         {
-            $temp = [
+            return [
                 'STR' => $this->getSTR(),
                 'VIT' => $this->getVIT(),
                 'DEF' => $this->getDEF(),
                 'DEX' => $this->getDEX(),
             ];
-            return $temp;
         }
         public function getAttribute(string $attribute) : int
         {
