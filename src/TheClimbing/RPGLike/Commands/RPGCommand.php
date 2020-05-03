@@ -5,7 +5,8 @@
     use pocketmine\command\Command;
     use pocketmine\command\CommandSender;
     use pocketmine\Player;
-    
+
+    use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\RPGLike;
 
@@ -24,18 +25,18 @@
             if($sender instanceof Player && $sender->hasPermission($this->getPermission())){
                 $player = PlayerManager::getPlayer($sender->getName());
                 if(empty($args)){
-                    $this->loader->RPGMenuForm($player);
+                    RPGForms::RPGMenuForm($player);
                 }else{
                     $args = array_map('strtolower', $args);
                     switch($args){
                         case "stats":
-                            $this->loader->statsForm($player);
+                            RPGForms::statsForm($player);
                             break;
                         case "skills":
-                            $this->loader->skillsForm($player);
+                            RPGForms::skillsHelpForm($player);
                             break;
                         case "help":
-                            $this->loader->helpForm($player);
+                            RPGForms::helpForm($player, $args[1]);
                             break;
                     }
                 }

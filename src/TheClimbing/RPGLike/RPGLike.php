@@ -44,7 +44,7 @@
             $rpg = new RPGCommand($this);
             $this->getServer()->getCommandMap()->register('rpg', $rpg);
 
-            $lvl = new LevelUpCommand($this);
+            $lvl = new LevelUpCommand();
             $this->getServer()->getCommandMap()->register('lvl', $lvl);
             
             $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
