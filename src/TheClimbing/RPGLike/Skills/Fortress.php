@@ -15,9 +15,9 @@
             parent::__construct();
             $this->setName('Tank');
             $this->setType('passive');
-            $this->setAttribute('DEF');
+            $this->setAttribute(['DEF']);
             $this->setBaseUnlock(10);
-            $this->setCooldown(0);
+            $this->setCooldownTime(0);
             $description = [
                 'title' => 'You\'ve unlocked the Tank skill!',
                 ''

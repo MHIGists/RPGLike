@@ -17,9 +17,9 @@
             parent::__construct();
             $this->setName('DoubleStrike');
             $this->setType('passive');
-            $this->setAttribute('DEX');
+            $this->setAttribute(['DEX']);
             $this->setBaseUnlock(10);
-            $this->setCooldown(0);
+            $this->setCooldownTime(0);
             $description = [
                 'title' => 'You\'ve got some Double Strikes... Sometimes!',
                 'content' => 'Skill has 10/15/30 percent chance to reset your basic attack cooldown',

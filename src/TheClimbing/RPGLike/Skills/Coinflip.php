@@ -18,9 +18,9 @@
             parent::__construct();
             $this->setName('Coinflip');
             $this->setType('passive');
-            $this->setAttribute('STR');
+            $this->setAttribute(['STR']);
             $this->setBaseUnlock(10);
-            $this->setCooldown(0);
+            $this->setCooldownTime(0);
             $description = [
                 'title' => 'You\'ve unlocked the Coinflip skill!',
                 'content' => '"Coinflip" increases your health by 15%',

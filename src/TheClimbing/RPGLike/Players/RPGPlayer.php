@@ -4,13 +4,16 @@
     
     namespace TheClimbing\RPGLike\Players;
     
+    use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Skills\BaseSkill;
+    use TheClimbing\RPGLike\Skills\SkillsManager;
 
     class RPGPlayer
     {
         private $playerName;
-        
+
+        /* @var BaseSkill[] */
         private $skills = [];
         
         private $str = 1;
@@ -155,7 +158,7 @@
             $skill = $skillNamespace . $skillName;
             $this->skills[$skillName] = new $skill();
             if($form){
-                RPGLike::getInstance()->descriptionSkillForm(PlayerManager::getServerPlayer($this->getName()), $this->getSkill($skillName)->getDescription());
+                RPGForms::descriptionSkillForm(PlayerManager::getServerPlayer($this->getName()), $this->skills[$skillName]->get);
             }
         }
         /* @return BaseSkill */
@@ -192,7 +195,7 @@
                 foreach($skill['unlockConditions'] as $key1 => $value){
                     if($this->getAttribute($key1) >= $value){
                         
-                        $namespace = BaseSkill::$namespace;
+                        $namespace = SkillsManager::$namespace;
                         
                         if(array_key_exists('namespace', $skill)){
                             if($skill['namespace'] != ""){

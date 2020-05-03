@@ -17,13 +17,15 @@
     
     use pocketmine\level\Level;
     use pocketmine\math\Vector3;
+
+
     /**
      * Class BaseSkill
      * @package TheClimbing\RPGLike\Skills
      */
     class BaseSkill
     {
-        public static $namespace = "\\TheClimbing\\RPGLike\\Skills\\";
+        private $namespace;
         /**
          * @var string
          */
@@ -40,7 +42,9 @@
         /**
          * @var int
          */
-        private $cooldown ; //TODO implement this
+        private $cooldown ;
+
+        private $onCooldown = false;
         /**
          * @var int
          */
@@ -50,7 +54,7 @@
          */
         private $skillUpgrades = [10, 20, 30];
         /**
-         * @var string
+         * @var array
          */
         private $attribute;
     
@@ -95,12 +99,16 @@
             $this->attribute = $attribute;
             $this->maxEntInRange = $maxEntInRange;
             $this->effect = $effect;
+            SkillsManager::registerSkill($this->getName(), [$this->getNamespace(), $this->getBaseUnlock()]);
         }
-       
+       public function getNamespace()
+       {
+           return $this->namespace;
+       }
         /**
          * @param string $name
          */
-        protected function setName(string $name) : void
+        public function setName(string $name) : void
         {
             $this->name = $name;
         }
@@ -116,7 +124,7 @@
         /**
          * @param string $type
          */
-        protected function setType(string $type) : void
+        public function setType(string $type) : void
         {
             $this->type = $type;
         }
@@ -132,7 +140,7 @@
         /**
          * @param array $description
          */
-        protected function setDescription(array $description) : void
+        public function setDescription(array $description) : void
         {
             $this->description = $description;
         }
@@ -144,16 +152,28 @@
         {
             return $this->description;
         }
-        protected function setCooldown(int $cooldown) : void
+        public function setCooldownTime(int $cooldown) : void
         {
             $this->cooldown = $cooldown;
         }
         /**
          * @return int
          */
-        public function getCooldown() : int
+        public function getCooldownTime() : int
         {
             return $this->cooldown;
+        }
+        public function setCooldown() : void
+        {
+            $this->onCooldown = true;
+        }
+        public function isOnCooldown() : bool
+        {
+            return $this->onCooldown;
+        }
+        public function removeCooldown() : void
+        {
+            $this->onCooldown = false;
         }
         protected function setRange(int $range) : void
         {
@@ -200,18 +220,18 @@
         {
             return $this->skillUpgrades;
         }
-    
+
         /**
-         * @param string $attribute
+         * @param array $attributes
          */
-        protected function setAttribute(string $attribute) : void
+        protected function setAttribute(array $attributes) : void
         {
-            $this->attribute = $attribute;
+            $this->attribute = $attributes;
         }
         /**
-         * @return string
+         * @return string | array
          */
-        public function getAttribute() : string
+        public function getAttributes()
         {
             return $this->attribute;
         }
@@ -337,12 +357,16 @@
          */
         public function setPlayerEffect(Player $player, $effect) : void
         {
-            if(is_callable($effect)){
-                call_user_func($effect['objAndFunc'], $effect['params']);
-            }else{
-                $effect = new EffectInstance(Effect::getEffect($effect), 2, $this->getSkillLevel());
-                $player->addEffect($effect);
+            if (!$this->onCooldown)
+            {
+                if(is_callable($effect)){
+                    call_user_func($effect['objAndFunc'], $effect['params']);
+                }else{
+                    $effect = new EffectInstance(Effect::getEffect($effect), 2, $this->getSkillLevel());
+                    $player->addEffect($effect);
+                }
             }
+
             
         }
         

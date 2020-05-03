@@ -17,6 +17,7 @@
     use pocketmine\event\player\PlayerExperienceChangeEvent;
     use pocketmine\event\player\PlayerDeathEvent;
 
+    use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
 
     class EventListener implements Listener
@@ -67,8 +68,8 @@
                         
                         $playerName = $player->getName();
                         
-                        $this->rpg->upgradeStatsForm(PlayerManager::getPlayer($playerName), $spleft);
-    
+                        RPGForms::upgradeStatsForm(PlayerManager::getPlayer($playerName), $spleft);
+
                         $this->rpg->applyVitalityBonus($player);
                         $this->rpg->applyDexterityBonus($player);
                         

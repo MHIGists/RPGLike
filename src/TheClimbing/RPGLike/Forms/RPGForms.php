@@ -12,6 +12,7 @@
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Players\PlayerManager;
+    use TheClimbing\RPGLike\Skills\SkillsManager;
 
     class RPGForms
     {
@@ -128,21 +129,31 @@
             if(array_key_exists('Content', $messages)){
                 $form->setContent($messages['Content']);
             }
+            PlayerManager::getServerPlayer($player->getName())->sendForm($form);
         }
         //TODO finish this
         public static function skillsHelpForm(RPGPlayer $player)
         {
-            $form = new SimpleForm(function(Player $pl, $data)
+            $skills = SkillsManager::getAvailableSkills();
+            $form = new SimpleForm(function(Player $pl, $data) use ($skills, $player)
             {
-               switch($data){
-                   case "":
-                   
+                foreach ($data as $datum) {
+                    foreach ($skills as $skill) {
+                        if ($skill == $datum){
+                            self::helpForm($player, $skill);
+                        }
+                    }
                }
             });
+            $form->setTitle("All available skills");
+            foreach ($skills as $skill) {
+                $form->addButton($skill, -1, '', $skill);
+            }
+            PlayerManager::getServerPlayer($player->getName())->sendForm($form);
         }
-        public static function helpForm(RPGPlayer $player)
+        public static function helpForm(RPGPlayer $player, string $skillName)
         {
-        
+
         }
         public static function parseMessages(string $playerName ,string $formType, int $spleft = 0) : array
         {
