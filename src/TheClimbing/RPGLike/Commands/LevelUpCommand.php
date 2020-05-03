@@ -12,7 +12,7 @@ class LevelUpCommand extends Command
 {
     public function __construct()
     {
-        parent::__construct('rpg');
+        parent::__construct('lvlup');
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args)
