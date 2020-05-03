@@ -9,6 +9,7 @@
     
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Skills\BaseSkill;
+    use TheClimbing\RPGLike\Skills\SkillsManager;
 
     class PlayerManager
     {
@@ -44,7 +45,7 @@
                 
                 if(!empty($cachedPlayer['skills'])){
                     foreach($cachedPlayer['skills'] as $skill) {
-                        $player->unlockSkill(BaseSkill::$namespace, $skill, false);
+                        $player->unlockSkill(SkillsManager::getSkillNamespace(), $skill, false);
                     }
                 }
             }
