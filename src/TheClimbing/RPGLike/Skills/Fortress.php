@@ -10,9 +10,9 @@
     class Fortress extends BaseSkill
     {
         
-        public function __construct()
+        public function __construct(string $owner, string $namespace)
         {
-            parent::__construct();
+            parent::__construct($owner, $namespace);
             $this->setName('Tank');
             $this->setType('passive');
             $this->setAttribute(['DEF']);

@@ -7,9 +7,9 @@ namespace TheClimbing\RPGLike\Skills;
 
 class Explosion extends BaseSkill
 {
-    public function __construct()
+    public function __construct(string $owner, string $namespace)
     {
-        parent::__construct();
+        parent::__construct($owner, $namespace);
         $this->setName('Explosion');
         $this->setAttribute([
             'STR' => 20,

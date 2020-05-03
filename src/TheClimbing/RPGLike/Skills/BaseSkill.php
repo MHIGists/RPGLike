@@ -25,6 +25,8 @@
      */
     class BaseSkill
     {
+        private $owner;
+
         private $namespace;
         /**
          * @var string
@@ -80,17 +82,21 @@
         /**
          * BaseSkill constructor.
          *
+         * @param string                       $owner
+         * @param string                       $namespace
          * @param string                       $name
          * @param string                       $type
          * @param array                        $description
          * @param int                          $cooldown
          * @param int                          $range
-         * @param array                       $attribute
+         * @param array                        $attribute
          * @param int                          $maxEntInRange
          * @param null                         $effect
          */
-        public function __construct( string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, array $attribute = [], int $maxEntInRange = 1, $effect = null )
+        public function __construct(string $owner, string $namespace, string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, array $attribute = [], int $maxEntInRange = 1, $effect = null )
         {
+            $this->owner = $owner;
+            $this->namespace = $namespace;
             $this->name = $name;
             $this->type = $type;
             $this->description = $description;
@@ -100,6 +106,10 @@
             $this->maxEntInRange = $maxEntInRange;
             $this->effect = $effect;
             SkillsManager::registerSkill($this->getName(), [$this->getNamespace(), $this->getBaseUnlock()]);
+        }
+        public function getOwner()
+        {
+            return $this->owner;
         }
        public function getNamespace()
        {

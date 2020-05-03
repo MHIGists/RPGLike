@@ -12,9 +12,9 @@
     
     class DoubleStrike extends BaseSkill
     {
-        public function __construct()
+        public function __construct(string $owner, string $namespace)
         {
-            parent::__construct();
+            parent::__construct($owner, $namespace);
             $this->setName('DoubleStrike');
             $this->setType('passive');
             $this->setAttribute(['DEX']);

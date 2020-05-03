@@ -100,7 +100,6 @@
                         break;
                 }
             });
-        
             $form->setTitle($messages['FormTitle']);
             $form->setContent($messages['FormContent']);
             foreach($messages['Buttons'] as $key => $message) {

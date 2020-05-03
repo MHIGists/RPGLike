@@ -45,7 +45,7 @@
                 
                 if(!empty($cachedPlayer['skills'])){
                     foreach($cachedPlayer['skills'] as $skill) {
-                        $player->unlockSkill(SkillsManager::getSkillNamespace(), $skill, false);
+                        $player->unlockSkill(SkillsManager::getSkillNamespace($skill), $skill, false);
                     }
                 }
             }
