@@ -115,10 +115,10 @@
             $form = new SimpleForm(function(Player $pl, $data) use ($player) {
                 switch($data){
                     case "skills":
-                        $this->skillsForm($player);
+                        self::skillsHelpForm($player);
                         break;
                     case "stats":
-                        $this->statsForm($player);
+                        self::statsForm($player);
                         break;
                 }
             });
@@ -168,7 +168,7 @@
         
             return $messages;
         }
-    
+
         public static function parseKeywords(array $keywords, string $subject) : string
         {
             $subject = str_replace(['{', '}'], [' ', ' '], $subject);
