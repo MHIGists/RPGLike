@@ -38,26 +38,26 @@
                         $player->setSTR($player->getSTR() + 1);
                         $player->calcSTRBonus();
                         $spleft--;
-                        $this->upgradeStatsForm($player, $spleft);
+                        self::upgradeStatsForm($player, $spleft);
                         break;
                     case "Vitality":
                         $player->setVIT($player->getVIT() + 1);
                         $player->calcVITBonus();
                         $spleft--;
-                        $this->upgradeStatsForm($player, $spleft);
+                        self::upgradeStatsForm($player, $spleft);
                         RPGLike::getInstance()->applyVitalityBonus($pl);
                         break;
                     case "Defense":
                         $player->setDEF($player->getDEF() + 1);
                         $player->calcDEFBonus();
                         $spleft--;
-                        $this->upgradeStatsForm($player, $spleft);
+                        self::upgradeStatsForm($player, $spleft);
                         break;
                     case "Dexterity":
                         $player->setDEX($player->getDEX() + 1);
                         $player->calcDEXBonus();
                         $spleft--;
-                        $this->upgradeStatsForm($player, $spleft);
+                        self::upgradeStatsForm($player, $spleft);
                         RPGLike::getInstance()->applyDexterityBonus($pl);
                         break;
                     case "Exit":
