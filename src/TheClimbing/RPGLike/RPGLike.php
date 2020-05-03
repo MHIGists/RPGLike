@@ -12,6 +12,7 @@
     use pocketmine\event\entity\EntityDamageByEntityEvent;
 
     use TheClimbing\RPGLike\Commands\LevelUpCommand;
+    use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Commands\RPGCommand;
     
@@ -35,8 +36,8 @@
             $this->saveDefaultConfig();
             $this->saveResource('messages.yml');
             $this->setConsts();
-            
             $this->playerManager = new PlayerManager($this);
+            new RPGForms($this);
         }
         
         public function onEnable()
