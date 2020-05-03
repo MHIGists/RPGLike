@@ -11,6 +11,7 @@
     use pocketmine\utils\TextFormat;
     use pocketmine\event\entity\EntityDamageByEntityEvent;
 
+    use TheClimbing\RPGLike\Commands\LevelUpCommand;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Commands\RPGCommand;
     
@@ -42,6 +43,9 @@
         {
             $rpg = new RPGCommand($this);
             $this->getServer()->getCommandMap()->register('rpg', $rpg);
+
+            $lvl = new LevelUpCommand($this);
+            $this->getServer()->getCommandMap()->register('lvl', $lvl);
             
             $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
         }
