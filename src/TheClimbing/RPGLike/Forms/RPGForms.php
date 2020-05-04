@@ -7,7 +7,7 @@
     use pocketmine\Player;
     use pocketmine\utils\Config;
     
-    use jojoe77777\FormAPI\SimpleForm;
+    use jojoe77777\FormAPI;
     
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Players\RPGPlayer;
