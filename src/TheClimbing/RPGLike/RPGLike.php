@@ -15,8 +15,9 @@
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Commands\RPGCommand;
-    
-    
+    use TheClimbing\RPGLike\Skills\SkillsManager;
+
+
     class RPGLike extends PluginBase
     {
         private static $instance;
@@ -24,9 +25,7 @@
         private $playerManager;
 
         public  $globalModifiers = [];
-        public  $globalMessages = [];
         public $consts = [];
-        public $defaultStats = ['STR' => 1, 'VIT' => 1, 'DEF' => 1, 'DEX' => 1,];
         public $defaultModifiers = ['strModifier' => 0.15, 'vitModifier' => 0.175, 'defModifier' => 0.1, 'dexModifier' => 0.0002,];
         
         public function onLoad()
@@ -38,6 +37,7 @@
             $this->setConsts();
             $this->playerManager = new PlayerManager($this);
             new RPGForms($this);
+            new SkillsManager($this);
         }
         
         public function onEnable()
@@ -62,7 +62,7 @@
                 "30SPACE" => str_repeat(" ", 30),
                 "40SPACE" => str_repeat(" ", 40),
                 "50SPACE" => str_repeat(" ", 50),
-                "NL" => PHP_EOL,
+                "NL" => TextFormat::EOL,
                 "BLACK" => TextFormat::BLACK,
                 "DARK_BLUE" => TextFormat::DARK_BLUE,
                 "DARK_GREEN" => TextFormat::DARK_GREEN,
@@ -140,6 +140,7 @@
                 'attributes' => PlayerManager::getPlayer($playerName)->getAttributes(),
                 'skills' => $player->getSkillNames(),
                 'level' => PlayerManager::getServerPlayer($playerName)->getXpLevel(),
+                'spleft' => $player->getSPleft()
                 ];
             if($this->getConfig()->getNested($playerName) == null){
                 $players = $this->getConfig()->getNested('players');
@@ -151,7 +152,7 @@
             }
             $this->getConfig()->save();
         }
-        
+
         public static function getInstance() : RPGLike
         {
             return self::$instance;

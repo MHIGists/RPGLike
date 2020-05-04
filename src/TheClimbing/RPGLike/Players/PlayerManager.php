@@ -8,21 +8,18 @@
     use pocketmine\Player;
     
     use TheClimbing\RPGLike\RPGLike;
-    use TheClimbing\RPGLike\Skills\BaseSkill;
     use TheClimbing\RPGLike\Skills\SkillsManager;
 
     class PlayerManager
     {
         private static $rpg;
         private static $players = [];
-        private static $skills = [];
         private static $instance = null;
         
         public function __construct(RPGLike $rpg)
         {
             self::$rpg = $rpg;
             self::$instance = $this;
-            self::$skills = $rpg->getConfig()->getNested('Skills');
         }
         public static function makePlayer(string $playerName, array $modifiers)
         {
@@ -42,7 +39,7 @@
                 $player->calcDEFBonus();
                 $player->calcVITBonus();
                 $player->calcSTRBonus();
-                
+                 $player->setSPleft($cachedPlayer['spleft']);
                 if(!empty($cachedPlayer['skills'])){
                     foreach($cachedPlayer['skills'] as $skill) {
                         $player->unlockSkill(SkillsManager::getSkillNamespace($skill), $skill, false);
@@ -53,10 +50,7 @@
                 self::$players[$playerName] = new RPGPlayer($playerName, $modifiers);
             }
         }
-        public static function getSkills() : array
-        {
-            return self::$skills;
-        }
+
         public static function getCachedPlayer()
         {
             return self::$rpg->getConfig()->getNested('players');
@@ -88,6 +82,7 @@
          */
         public static function getPlayer(string $playerName)
         {
+//            print_r(self::$players);
             if(array_key_exists($playerName, self::$players)){
                 return self::$players[$playerName];
             }else {

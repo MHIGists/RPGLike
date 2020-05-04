@@ -18,8 +18,7 @@
             parent::__construct($owner, $namespace);
             $this->setName('Coinflip');
             $this->setType('passive');
-            $this->setAttribute(['STR']);
-            $this->setBaseUnlock(10);
+            $this->setBaseUnlock("STR", 10);
             $this->setCooldownTime(0);
             $description = [
                 'title' => 'You\'ve unlocked the Coinflip skill!',

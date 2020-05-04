@@ -7,6 +7,7 @@
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Skills\BaseSkill;
+    use TheClimbing\RPGLike\Skills\SkillsManager;
 
     class RPGPlayer
     {
@@ -32,7 +33,8 @@
         private $dexBonus = 1;
         
         private $level = 1;
-        
+
+        public $spleft = 0;
         
         public function __construct(string $playerName, array $modifiers)
         {
@@ -51,6 +53,7 @@
         public function setSTR(int $str) : void
         {
             $this->str = $str;
+            $this->calcSTRBonus();;
         }
         public function getSTR() : int
         {
@@ -75,6 +78,8 @@
         public  function setVIT(int $vit) : void
         {
             $this->vit = $vit;
+            $this->calcVITBonus();;
+            RPGLike::getInstance()->applyVitalityBonus(PlayerManager::getServerPlayer($this->getName()));
         }
         public function getVIT() : int
         {
@@ -99,6 +104,8 @@
         public function setDEX(int $dex) : void
         {
             $this->dex = $dex;
+            $this->calcDEXBonus();
+            RPGLike::getInstance()->applyDexterityBonus(PlayerManager::getServerPlayer($this->getName()));
         }
         public function getDEX() : int
         {
@@ -123,6 +130,7 @@
         public function setDEF(int $def) : void
         {
             $this->def = $def;
+            $this->calcDEFBonus();
         }
         public function getDEF() : int
         {
@@ -155,9 +163,9 @@
         public function unlockSkill(string $skillNamespace, string $skillName, bool $form = true)
         {
             $skill = $skillNamespace . $skillName;
-            $this->skills[$skillName] = new $skill(PlayerManager::getServerPlayer($this->getName()), $skillNamespace);
+            $this->skills[$skillName] = new $skill($this->getName(), $skillNamespace);
             if($form){
-                RPGForms::descriptionSkillForm(PlayerManager::getServerPlayer($this->getName()), $this->skills[$skillName]->get);
+                RPGForms::descriptionSkillForm(PlayerManager::getServerPlayer($this->getName()), $this->skills[$skillName]->getDescription());
             }
         }
         /* @return BaseSkill */
@@ -190,7 +198,7 @@
         }
         public function checkForSkills()
         {
-            foreach(PlayerManager::getSkills() as $key =>  $skill) {
+            foreach(SkillsManager::getSkills() as $key =>  $skill) {
                 foreach($skill['unlockConditions'] as $key1 => $value){
                     if($this->getAttribute($key1) >= $value){
                         $namespace = $skill['namespace'];
@@ -200,6 +208,14 @@
                     }
                 }
             }
+        }
+        public function setSPleft(int $spleft)
+        {
+            $this->spleft = $spleft;
+        }
+        public function getSPleft()
+        {
+            return $this->spleft;
         }
         public function reset()
         {

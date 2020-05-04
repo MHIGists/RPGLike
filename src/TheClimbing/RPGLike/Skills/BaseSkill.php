@@ -54,11 +54,7 @@
         /**
          * @var array
          */
-        private $skillUpgrades = [10, 20, 30];
-        /**
-         * @var array
-         */
-        private $attribute;
+        private $skillUpgrades;
     
         /**
          * That's including the source
@@ -89,11 +85,11 @@
          * @param array                        $description
          * @param int                          $cooldown
          * @param int                          $range
-         * @param array                        $attribute
+         * @param array                        $skillUpgrades
          * @param int                          $maxEntInRange
          * @param null                         $effect
          */
-        public function __construct(string $owner, string $namespace, string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, array $attribute = [], int $maxEntInRange = 1, $effect = null )
+        public function __construct(string $owner, string $namespace, string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, array $skillUpgrades = [], int $maxEntInRange = 1, $effect = null )
         {
             $this->owner = $owner;
             $this->namespace = $namespace;
@@ -102,10 +98,9 @@
             $this->description = $description;
             $this->cooldown = $cooldown;
             $this->range = $range;
-            $this->attribute = $attribute;
+            $this->skillUpgrades = $skillUpgrades;
             $this->maxEntInRange = $maxEntInRange;
             $this->effect = $effect;
-            SkillsManager::registerSkill($this->getName(), [$this->getNamespace(), $this->getBaseUnlock()]);
         }
         public function getOwner()
         {
@@ -196,22 +191,21 @@
         {
             return $this->range;
         }
-    
+
         /**
-         * @param int $baseUnlock
+         * @param string $attributeName
+         * @param int $attributeLevel
          */
-        protected function setBaseUnlock(int $baseUnlock) : void
+        protected function setBaseUnlock(string $attributeName, int $attributeLevel) : void
         {
-            $this->skillUpgrades[0] = $baseUnlock;
+            $this->skillUpgrades[$attributeName] = $attributeLevel;
         }
-    
-        /**
-         * @return int
-         */
-        public function getBaseUnlock() : int
+
+        public function getSkillUpgrades()
         {
-            return $this->skillUpgrades[0];
+            return $this->skillUpgrades;
         }
+
     
         /**
          * Sets the required amount of points needed to upgrade the skill
@@ -229,21 +223,6 @@
         public function getUpgrades() : array
         {
             return $this->skillUpgrades;
-        }
-
-        /**
-         * @param array $attributes
-         */
-        protected function setAttribute(array $attributes) : void
-        {
-            $this->attribute = $attributes;
-        }
-        /**
-         * @return string | array
-         */
-        public function getAttributes()
-        {
-            return $this->attribute;
         }
     
         /**
