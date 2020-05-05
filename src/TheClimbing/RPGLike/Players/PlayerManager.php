@@ -51,7 +51,7 @@
         }
 
 
-        public static function getCachedPlayer()
+        public static function getCachedPlayers()
         {
             return RPGLike::getInstance()->getConfig()->getNested('Players');
         }
