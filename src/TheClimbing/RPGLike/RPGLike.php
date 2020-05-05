@@ -15,18 +15,15 @@
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Commands\RPGCommand;
-    
-    
+    use TheClimbing\RPGLike\Skills\SkillsManager;
+
+
     class RPGLike extends PluginBase
     {
         private static $instance;
 
-        private $playerManager;
-
         public  $globalModifiers = [];
-        public  $globalMessages = [];
         public $consts = [];
-        public $defaultStats = ['STR' => 1, 'VIT' => 1, 'DEF' => 1, 'DEX' => 1,];
         public $defaultModifiers = ['strModifier' => 0.15, 'vitModifier' => 0.175, 'defModifier' => 0.1, 'dexModifier' => 0.0002,];
         
         public function onLoad()
@@ -36,8 +33,9 @@
             $this->saveDefaultConfig();
             $this->saveResource('messages.yml');
             $this->setConsts();
-            $this->playerManager = new PlayerManager($this);
+            new PlayerManager();
             new RPGForms($this);
+            new SkillsManager($this);
         }
         
         public function onEnable()
@@ -62,7 +60,7 @@
                 "30SPACE" => str_repeat(" ", 30),
                 "40SPACE" => str_repeat(" ", 40),
                 "50SPACE" => str_repeat(" ", 50),
-                "NL" => PHP_EOL,
+                "NL" => TextFormat::EOL,
                 "BLACK" => TextFormat::BLACK,
                 "DARK_BLUE" => TextFormat::DARK_BLUE,
                 "DARK_GREEN" => TextFormat::DARK_GREEN,
@@ -136,22 +134,18 @@
         public function savePlayerVariables(string $playerName) : void
         {
             $player = PlayerManager::getPlayer($playerName);
-            $player = [
-                'attributes' => PlayerManager::getPlayer($playerName)->getAttributes(),
+            $playerVars = [
+                'attributes' => $player->getAttributes(),
                 'skills' => $player->getSkillNames(),
-                'level' => PlayerManager::getServerPlayer($playerName)->getXpLevel(),
+                'spleft' => $player->getSPleft(),
+                'level' => $player->getLevel(),
                 ];
-            if($this->getConfig()->getNested($playerName) == null){
-                $players = $this->getConfig()->getNested('players');
-                $players[$playerName] = $player;
-                $this->getConfig()->setNested('players', $players);
-            }else
-            {
-                $this->getConfig()->setNested($playerName, $player);
-            }
+            $players = $this->getConfig()->getNested('Players');
+            $players[$playerName] = $playerVars;
+            $this->getConfig()->setNested('Players', $players);
             $this->getConfig()->save();
         }
-        
+
         public static function getInstance() : RPGLike
         {
             return self::$instance;

@@ -33,9 +33,8 @@
         {
             $player = $event->getPlayer();
             PlayerManager::makePlayer($player->getName(), $this->rpg->getModifiers());
-            $this->rpg->applyVitalityBonus($player);
-            $this->rpg->applyDexterityBonus($player);
-    
+            RPGLike::getInstance()->applyDexterityBonus(PlayerManager::getServerPlayer($player->getName()));
+            RPGLike::getInstance()->applyVitalityBonus(PlayerManager::getServerPlayer($player->getName()));
         }
         public function onMove(PlayerMoveEvent $event)
         {

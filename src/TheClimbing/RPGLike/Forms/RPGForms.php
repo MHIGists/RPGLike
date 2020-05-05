@@ -7,16 +7,16 @@
     use pocketmine\Player;
     use pocketmine\utils\Config;
     
-    use jojoe77777\FormAPI\SimpleForm;
-    
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Skills\SkillsManager;
 
+    use jojoe77777\FormAPI\SimpleForm;
+
     class RPGForms
     {
-        //I just hate the whole FORM API so have fun reading this, I don't have fun writing it. This piece hurts my eyes
+        //I just hate the whole FORM API so have fun reading this, I didn't have fun writing it. This piece hurts my eyes
         private static $messages;
         
         public function __construct(RPGLike $rpg)
@@ -26,6 +26,11 @@
         }
         public static function upgradeStatsForm(RPGPlayer $player, int $spleft)
         {
+            if ($player->getSPleft() > 0)
+            {
+                $spleft += $player->getSPleft();
+                $player->setSPleft(0);
+            }
             if($spleft <= 0) {
                 self::statsForm($player);
                 return;
@@ -36,37 +41,42 @@
                 switch($data) {
                     case "Strength":
                         $player->setSTR($player->getSTR() + 1);
-                        $player->calcSTRBonus();
                         $spleft--;
                         self::upgradeStatsForm($player, $spleft);
                         break;
                     case "Vitality":
                         $player->setVIT($player->getVIT() + 1);
-                        $player->calcVITBonus();
                         $spleft--;
                         self::upgradeStatsForm($player, $spleft);
                         RPGLike::getInstance()->applyVitalityBonus($pl);
                         break;
                     case "Defense":
                         $player->setDEF($player->getDEF() + 1);
-                        $player->calcDEFBonus();
                         $spleft--;
                         self::upgradeStatsForm($player, $spleft);
                         break;
                     case "Dexterity":
                         $player->setDEX($player->getDEX() + 1);
-                        $player->calcDEXBonus();
                         $spleft--;
                         self::upgradeStatsForm($player, $spleft);
                         RPGLike::getInstance()->applyDexterityBonus($pl);
                         break;
                     case "Exit":
+                        if ($spleft > 0)
+                        {
+                            $player->setSPleft($spleft);
+                        }
                         break;
+                    default:
+                        if ($spleft > 0)
+                        {
+                            $player->setSPleft($spleft);
+                        }
                 }
             });
         
-            $form->setTitle($messages['FormTitle']);
-            $form->setContent($messages['FormContent']);
+            $form->setTitle($messages['Title']);
+            $form->setContent($messages['Content']);
             foreach($messages['Buttons'] as $key => $button) {
                 $form->addButton($button, -1, '', $key);
             }
@@ -100,8 +110,8 @@
                         break;
                 }
             });
-            $form->setTitle($messages['FormTitle']);
-            $form->setContent($messages['FormContent']);
+            $form->setTitle($messages['Title']);
+            $form->setContent($messages['Content']);
             foreach($messages['Buttons'] as $key => $message) {
                 $form->addButton($message, -1, '', $key);
             }
@@ -163,7 +173,7 @@
         
             $joined = array_merge($stats, RPGLike::getInstance()->consts);
         
-            $messages['FormContent'] = self::parseKeywords($joined, $messages['FormContent']);
+            $messages['Content'] = self::parseKeywords($joined, $messages['Content']);
         
             return $messages;
         }

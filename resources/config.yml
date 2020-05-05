@@ -16,4 +16,5 @@ Skills:
     namespace : ""
     unlockConditions:
       DEF : 10
+Players: []
 ...
