@@ -26,14 +26,19 @@ class SkillsManager
         if (is_array($values)){
             if (array_key_exists("namespace", $values)){
                 if (is_null($values['namespace']) || $values['namespace'] == "" || empty($values['namespace'])){
+
                     RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have namespace. Using default ones.");
+
                     self::$skills[$skillName]['namespace'] = self::$defaultNamespace;
                 }
             }
             if (!array_key_exists("unlockConditions", $values)){
                 RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have any unlock conditions.");
                 throw new \Error("Please add unlock conditions");//TODO remove this
+
             }
+//            print_r(self::$skills);
+
         }
     }
     public static function isSkillRegistered(string $skillName) : bool

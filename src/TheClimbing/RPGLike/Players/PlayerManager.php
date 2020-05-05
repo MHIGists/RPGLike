@@ -39,7 +39,6 @@
                 $player->calcSTRBonus();
 
                 $player->setSPleft($cachedPlayer['spleft']);
-
                 if(!empty($cachedPlayer['skills'])){
                     foreach($cachedPlayer['skills'] as $skill) {
                         $player->unlockSkill(SkillsManager::getSkillNamespace($skill), $skill, false);
@@ -51,7 +50,8 @@
             }
         }
 
-        public static function getCachedPlayers()
+
+        public static function getCachedPlayer()
         {
             return RPGLike::getInstance()->getConfig()->getNested('Players');
         }
@@ -82,6 +82,7 @@
          */
         public static function getPlayer(string $playerName)
         {
+//            print_r(self::$players);
             if(array_key_exists($playerName, self::$players)){
                 return self::$players[$playerName];
             }else {
