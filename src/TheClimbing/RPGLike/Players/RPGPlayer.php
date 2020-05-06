@@ -168,7 +168,7 @@
             $skill = $skillNamespace . $skillName;
             $this->skills[$skillName] = new $skill($this->getName(), $skillNamespace);
             if($form){
-                RPGForms::descriptionSkillForm(PlayerManager::getServerPlayer($this->getName()), $this->skills[$skillName]->getDescription());
+                RPGForms::skillHelpForm($this, $skillName);
             }
         }
         /* @return BaseSkill */

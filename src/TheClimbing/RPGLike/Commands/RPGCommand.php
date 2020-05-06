@@ -18,14 +18,15 @@
             parent::__construct('rpg');
             $this->loader = $rpg;
             $this->setDescription('Opens RPG Menu');
-            $this->setPermission('rpglike.rpgcommand');
+            $this->setPermission('rpgcommand');
+            $this->setUsage('rpg stats|skills|upgrade or rpg help <skillName>');
         }
         public function execute(CommandSender $sender, string $commandLabel, array $args)
         {
-            if($sender instanceof Player && $sender->hasPermission($this->getPermission())){
+            if($sender instanceof Player && $sender->hasPermission($this->getPermission()) || $sender->isOp()){
                 $player = PlayerManager::getPlayer($sender->getName());
-                if(empty($args)){
-                    RPGForms::RPGMenuForm($player);
+                if(empty($args) || $args[0] == '' || $args[0] == ' '){
+                    RPGForms::menuForm($player);
                 }else{
                     $args = array_map('strtolower', $args);
                     switch($args){
@@ -36,8 +37,14 @@
                             RPGForms::skillsHelpForm($player);
                             break;
                         case "help":
-                            RPGForms::helpForm($player, $args[1]);
+                            if (array_key_exists(1, $args )){
+                                RPGForms::skillHelpForm($player, $args[1]);
+                            }else{
+                                $sender->sendMessage($this->getUsage());
+                            }
                             break;
+                        case "upgrade":
+                            RPGForms::upgradeStatsForm($player, 0);
                     }
                 }
             }else{

@@ -9,20 +9,17 @@
 
     class Tank extends BaseSkill
     {
-        public function __construct(string $owner, string $namespace)
+        public function __construct(string $owner, string $namespace, bool $dummy = false)
         {
-            $name = 'Tank';
-            $type = 'passive';
-            $description = [
-                'title' => 'You\'ve unlocked the Tank skill!',
-                'content' => '"Tank" increases your health by 15%',
-                'exitButton' => 'Sweet!'
-            ];
-            $cooldown = 0;
-            $range = 0;
-            $attribute = ["VIT"];
-            parent::__construct($owner, $namespace, $name, $type, $description, $cooldown, $range, $attribute);
-            $this->setPlayerHealth(PlayerManager::getServerPlayer($owner));
+            parent::__construct($owner, $namespace, ['VIT' => 10], $dummy);
+            $this->setName('Tank');
+            $this->setType('passive');
+            $this->setCooldownTime(0);
+            $this->setRange(0);
+            if (!$dummy){
+                $this->setPlayerHealth(PlayerManager::getServerPlayer($owner));
+
+            }
         }
         public function setPlayerHealth(Player $player)
         {

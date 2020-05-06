@@ -5,6 +5,7 @@
     
     namespace TheClimbing\RPGLike\Skills;
     
+
     use function floor;
     use function call_user_func;
     use function array_slice;
@@ -18,7 +19,7 @@
     use pocketmine\level\Level;
     use pocketmine\math\Vector3;
 
-
+    use TheClimbing\RPGLike\Forms\RPGForms;
     /**
      * Class BaseSkill
      * @package TheClimbing\RPGLike\Skills
@@ -87,6 +88,7 @@
          * @param string $owner
          * @param string $namespace
          * @param array $baseUnlock
+         * @param bool $dummy
          * @param string $name
          * @param string $type
          * @param array $description
@@ -95,20 +97,22 @@
          * @param int $maxEntInRange
          * @param null $effect
          */
-        public function __construct(string $owner, string $namespace, array $baseUnlock,  string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
+        public function __construct(string $owner, string $namespace, array $baseUnlock, bool $dummy = false, string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
         {
-            $this->owner = $owner;
-            $this->namespace = $namespace;
-            $this->name = $name;
-            $this->type = $type;
-            $this->description = $description;
-            $this->cooldown = $cooldown;
-            $this->range = $range;
-            $this->maxEntInRange = $maxEntInRange;
-            $this->effect = $effect;
+            if (!$dummy){
+                $this->owner = $owner;
+                $this->namespace = $namespace;
+                $this->name = $name;
+                $this->type = $type;
+                $this->cooldown = $cooldown;
+                $this->range = $range;
+                $this->maxEntInRange = $maxEntInRange;
+                $this->effect = $effect;
 
-
-            $this->skillUpgrades['base'] = $baseUnlock;
+                $this->skillUpgrades['base'] = $baseUnlock;
+            }else{
+                $this->skillUpgrades['base'] = $baseUnlock;
+            }
         }
         public function getOwner()
         {
@@ -125,6 +129,7 @@
         public function setName(string $name) : void
         {
             $this->name = $name;
+            $this->setDescription();
         }
     
         /**
@@ -154,8 +159,9 @@
         /**
          * @param array $description
          */
-        public function setDescription(array $description) : void
+        public function setDescription() : void
         {
+            $description = RPGForms::$messages['Skills'][$this->getName()];
             $this->description = $description;
         }
     
@@ -177,7 +183,7 @@
         {
             return $this->cooldown;
         }
-        public function setCooldown() : void
+        public function setOnCooldown() : void
         {
             $this->onCooldown = true;
         }

@@ -31,17 +31,17 @@ class SkillsManager
             if (array_key_exists("namespace", $values)){
                 if (is_null($values['namespace']) || $values['namespace'] == "" || empty($values['namespace'])){
 
-                    RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have namespace. Using default ones.");
+                    RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
 
                     self::$skills[$skillName]['namespace'] = self::$defaultNamespace;
+                    $values['namespace'] = self::$defaultNamespace;
                 }else{
                     self::$skills[$skillName]['namespace'] = $values['namespace'];
                 }
             }
             $namespace = $values['namespace'] . $skillName;
 
-            /* @var $skill BaseSkill */
-            $skill = new $namespace('', []);
+            $skill = new $namespace('', '', true);
             self::$skills[$skillName]['unlockConditions'] = $skill->getBaseUnlock();
             unset($skill);
         }
@@ -58,10 +58,6 @@ class SkillsManager
     public static function getSkills()
     {
         return self::$skills;
-    }
-    public static function getSkillMessages(string $skillName)
-    {
-        return self::$skills[$skillName]['messages'];//???
     }
     public static function getAvailableSkills() : array
     {

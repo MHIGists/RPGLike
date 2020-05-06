@@ -8,6 +8,7 @@
     use pocketmine\Player;
     
     use TheClimbing\RPGLike\RPGLike;
+    use TheClimbing\RPGLike\Skills\BaseSkill;
     use TheClimbing\RPGLike\Skills\SkillsManager;
 
     class PlayerManager
@@ -105,6 +106,11 @@
             
             RPGLike::getInstance()->savePlayerVariables($playerName);
             unset(self::$players[$playerName]);
+        }
+        /* @return BaseSkill */
+        public static function getPlayerSkill(string $playerName, string $skillName)
+        {
+            return self::getPlayer($playerName)->getSkill($skillName);
         }
         
         public static function getInstance() : PlayerManager

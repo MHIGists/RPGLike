@@ -33,8 +33,8 @@
             $this->saveDefaultConfig();
             $this->saveResource('messages.yml');
             $this->setConsts();
-            new PlayerManager();
             new RPGForms($this);
+            new PlayerManager();
             new SkillsManager($this);
         }
         

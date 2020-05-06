@@ -14,9 +14,9 @@ Forms:
     Buttons:
       Exit: 'Exit'
   MenuForm:
-    Title: "Available skills:"
+    Title: "Menu"
     Buttons:
-      skill: "Skills help"
+      skills: "Skills help"
       stats: "Your Stats"
       upgrade: "Upgrade stats"
   SkillInfo:

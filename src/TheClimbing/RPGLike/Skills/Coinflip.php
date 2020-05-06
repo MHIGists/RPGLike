@@ -6,24 +6,17 @@
     namespace TheClimbing\RPGLike\Skills;
     
     use function rand;
-    
-    use pocketmine\entity\Effect;
-    
+
     use pocketmine\event\entity\EntityDamageByEntityEvent;
     
     class Coinflip extends BaseSkill
     {
-        public function __construct(string $owner, string $namespace)
+        public function __construct(string $owner, string $namespace, bool $dummy = false)
         {
-            parent::__construct($owner, $namespace, ['STR' => 10]);
+            parent::__construct($owner, $namespace, ['STR' => 10], $dummy);
             $this->setName('Coinflip');
             $this->setType('passive');
             $this->setCooldownTime(0);
-            $description =
-            $this->setDescription($description);
-            $this->setMaxEntInRange(1);
-            $this->setRange(0);
-            $this->setEffect(Effect::HEALTH_BOOST);
         }
         public function setCritChance(EntityDamageByEntityEvent $event)
         {

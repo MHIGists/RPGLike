@@ -20,7 +20,7 @@
     class RPGForms
     {
         //I just hate the whole FORM API so have fun reading this, I didn't have fun writing it.
-        private static $messages;
+        public static $messages;
         
         public function __construct(RPGLike $rpg)
         {
@@ -85,9 +85,8 @@
             $player->checkForSkills();
         }
     
-        public static function skillInfoForm(Player $pl, string $skillName)
+        public static function skillHelpForm(RPGPlayer $player, string $skillName)
         {
-            $player = PlayerManager::getPlayer($pl->getName());
             $messages = Utils::parseArrayKeywords(RPGLike::getInstance()->consts, $player->getSkill($skillName)->getDescription());
             $form = new SimpleForm(function(Player $pl, $data) use ($player) {
                 switch($data) {
@@ -99,8 +98,7 @@
             $form->setTitle(self::$messages['Forms']['SkillInfo']['Title']);
             $form->setContent($messages['Description'] . TextFormat::EOL . $messages['Unlocks']);
             $form->addButton('Back to menu', -1, '', 'Back');
-            $pl->sendForm($form);
-        
+            PlayerManager::getServerPlayer($player->getName())->sendForm($form);
         }
     
         public static function statsForm(RPGPlayer $player)
@@ -141,29 +139,22 @@
             }
             PlayerManager::getServerPlayer($player->getName())->sendForm($form);
         }
-        //TODO finish this
         public static function skillsHelpForm(RPGPlayer $player)
         {
             $skills = SkillsManager::getAvailableSkills();
             $form = new SimpleForm(function(Player $pl, $data) use ($skills, $player)
             {
-                foreach ($data as $datum) {
                     foreach ($skills as $skill) {
-                        if ($skill == $datum){
-                            self::helpForm($player, $skill);
+                        if ($skill == $data){
+                            self::skillHelpForm($player, $skill);
                         }
                     }
-               }
             });
             $form->setTitle("All available skills");
             foreach ($skills as $skill) {
                 $form->addButton($skill, -1, '', $skill);
             }
             PlayerManager::getServerPlayer($player->getName())->sendForm($form);
-        }
-        public static function helpForm(RPGPlayer $player, string $skillName)
-        {
-
         }
         public static function parseMessages(string $playerName ,string $type, int $spleft = 0) : array
         {
