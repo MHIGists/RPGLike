@@ -28,6 +28,7 @@
         private $owner;
 
         private $namespace;
+
         /**
          * @var string
          */
@@ -54,7 +55,12 @@
         /**
          * @var array
          */
-        private $skillUpgrades;
+        private $skillUpgrades = [
+            'base' => [
+            ],
+            'upgrades' => [
+            ]
+        ];
     
         /**
          * That's including the source
@@ -73,23 +79,23 @@
          * @var int
          */
         private $skillLevel = 0;
-    
-    
+
+
         /**
          * BaseSkill constructor.
          *
-         * @param string                       $owner
-         * @param string                       $namespace
-         * @param string                       $name
-         * @param string                       $type
-         * @param array                        $description
-         * @param int                          $cooldown
-         * @param int                          $range
-         * @param array                        $skillUpgrades
-         * @param int                          $maxEntInRange
-         * @param null                         $effect
+         * @param string $owner
+         * @param string $namespace
+         * @param array $baseUnlock
+         * @param string $name
+         * @param string $type
+         * @param array $description
+         * @param int $cooldown
+         * @param int $range
+         * @param int $maxEntInRange
+         * @param null $effect
          */
-        public function __construct(string $owner, string $namespace, string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, array $skillUpgrades = [], int $maxEntInRange = 1, $effect = null )
+        public function __construct(string $owner, string $namespace, array $baseUnlock,  string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
         {
             $this->owner = $owner;
             $this->namespace = $namespace;
@@ -98,9 +104,11 @@
             $this->description = $description;
             $this->cooldown = $cooldown;
             $this->range = $range;
-            $this->skillUpgrades = $skillUpgrades;
             $this->maxEntInRange = $maxEntInRange;
             $this->effect = $effect;
+
+
+            $this->skillUpgrades['base'] = $baseUnlock;
         }
         public function getOwner()
         {
@@ -110,6 +118,7 @@
        {
            return $this->namespace;
        }
+
         /**
          * @param string $name
          */
@@ -193,38 +202,31 @@
         }
 
         /**
-         * @param string $attributeName
-         * @param int $attributeLevel
+         * @param array $baseUnlock
          */
-        protected function setBaseUnlock(string $attributeName, int $attributeLevel) : void
+        protected function setBaseUnlock(array $baseUnlock) : void
         {
-            $this->skillUpgrades[$attributeName] = $attributeLevel;
+            $this->skillUpgrades['base'] = $baseUnlock;
+        }
+        public function getBaseUnlock() : array
+        {
+            return $this->skillUpgrades['base'];
+        }
+        public function getSkillUpgrades() : array
+        {
+            return $this->skillUpgrades['upgrades'];
         }
 
-        public function getSkillUpgrades()
-        {
-            return $this->skillUpgrades;
-        }
-
-    
         /**
-         * Sets the required amount of points needed to upgrade the skill
+         * Reqired array see reademe for more info on the requisite array model
          *
          * @param array $upgrades
          */
         protected function setUpgrades(array $upgrades) : void
         {
-            $this->skillUpgrades = $upgrades;
+            $this->skillUpgrades['upgrades'] = $upgrades;
         }
-    
-        /**
-         * @return array
-         */
-        public function getUpgrades() : array
-        {
-            return $this->skillUpgrades;
-        }
-    
+
         /**
          * @param int $maxEnt
          */

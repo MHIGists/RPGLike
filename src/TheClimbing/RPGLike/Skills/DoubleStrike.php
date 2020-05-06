@@ -17,15 +17,8 @@
             parent::__construct($owner, $namespace);
             $this->setName('DoubleStrike');
             $this->setType('passive');
-            $this->setAttribute(['DEX']);
-            $this->setBaseUnlock(10);
             $this->setCooldownTime(0);
-            $description = [
-                'title' => 'You\'ve got some Double Strikes... Sometimes!',
-                'content' => 'Skill has 10/15/30 percent chance to reset your basic attack cooldown',
-                'exitButton' => 'Exit'
-            ];
-            $this->setDescription($description);
+            $this->setDescription();
             $this->setMaxEntInRange(1);
             $this->setRange(0);
             $this->setEffect(Effect::HEALTH_BOOST);

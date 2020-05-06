@@ -13,7 +13,8 @@
     class PlayerManager
     {
         private static $players = [];
-        private static $instance = null;
+        /* @var PlayerManager */
+        private static $instance;
         
         public function __construct()
         {
@@ -82,7 +83,6 @@
          */
         public static function getPlayer(string $playerName)
         {
-//            print_r(self::$players);
             if(array_key_exists($playerName, self::$players)){
                 return self::$players[$playerName];
             }else {

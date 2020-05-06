@@ -6,17 +6,20 @@
     
     use pocketmine\Player;
     use pocketmine\utils\Config;
-    
+
+    use pocketmine\utils\TextFormat;
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Skills\SkillsManager;
+    use TheClimbing\RPGLike\Utils;
 
     use jojoe77777\FormAPI\SimpleForm;
 
+
     class RPGForms
     {
-        //I just hate the whole FORM API so have fun reading this, I didn't have fun writing it. This piece hurts my eyes
+        //I just hate the whole FORM API so have fun reading this, I didn't have fun writing it.
         private static $messages;
         
         public function __construct(RPGLike $rpg)
@@ -42,23 +45,19 @@
                     case "Strength":
                         $player->setSTR($player->getSTR() + 1);
                         $spleft--;
-                        self::upgradeStatsForm($player, $spleft);
                         break;
                     case "Vitality":
                         $player->setVIT($player->getVIT() + 1);
                         $spleft--;
-                        self::upgradeStatsForm($player, $spleft);
                         RPGLike::getInstance()->applyVitalityBonus($pl);
                         break;
                     case "Defense":
                         $player->setDEF($player->getDEF() + 1);
                         $spleft--;
-                        self::upgradeStatsForm($player, $spleft);
                         break;
                     case "Dexterity":
                         $player->setDEX($player->getDEX() + 1);
                         $spleft--;
-                        self::upgradeStatsForm($player, $spleft);
                         RPGLike::getInstance()->applyDexterityBonus($pl);
                         break;
                     case "Exit":
@@ -73,6 +72,8 @@
                             $player->setSPleft($spleft);
                         }
                 }
+                self::upgradeStatsForm($player, $spleft);
+
             });
         
             $form->setTitle($messages['Title']);
@@ -84,19 +85,21 @@
             $player->checkForSkills();
         }
     
-        public static function descriptionSkillForm(Player $player, array $skillDescription)
+        public static function skillInfoForm(Player $pl, string $skillName)
         {
-        
-            $form = new SimpleForm(function(Player $player, $data) {
+            $player = PlayerManager::getPlayer($pl->getName());
+            $messages = Utils::parseArrayKeywords(RPGLike::getInstance()->consts, $player->getSkill($skillName)->getDescription());
+            $form = new SimpleForm(function(Player $pl, $data) use ($player) {
                 switch($data) {
-                    case 'Exit':
+                    case 'Back':
+                        self::skillsHelpForm($player);
                         break;
                 }
             });
-            $form->setTitle($skillDescription['title']);
-            $form->setContent($skillDescription['content']);
-            $form->addButton($skillDescription['exitButton']);
-            $player->sendForm($form);
+            $form->setTitle(self::$messages['Forms']['SkillInfo']['Title']);
+            $form->setContent($messages['Description'] . TextFormat::EOL . $messages['Unlocks']);
+            $form->addButton('Back to menu', -1, '', 'Back');
+            $pl->sendForm($form);
         
         }
     
@@ -104,12 +107,7 @@
         {
             $messages = self::parseMessages($player->getName(), 'StatsForm');
         
-            $form = new SimpleForm(function(Player $player, $data) {
-                switch($data) {
-                    case "Exit":
-                        break;
-                }
-            });
+            $form = new SimpleForm(function(Player $player, $data) {});
             $form->setTitle($messages['Title']);
             $form->setContent($messages['Content']);
             foreach($messages['Buttons'] as $key => $message) {
@@ -118,9 +116,9 @@
             PlayerManager::getServerPlayer($player->getName())->sendForm($form);
         
         }
-        public static function RPGMenuForm(RPGPlayer $player)
+        public static function menuForm(RPGPlayer $player)
         {
-            $messages = self::parseMessages($player->getName(), 'RPGMenu');
+            $messages = self::parseMessages($player->getName(), 'MenuForm');
             $form = new SimpleForm(function(Player $pl, $data) use ($player) {
                 switch($data){
                     case "skills":
@@ -128,6 +126,9 @@
                         break;
                     case "stats":
                         self::statsForm($player);
+                        break;
+                    case "upgrade":
+                        self::upgradeStatsForm($player, 0);
                         break;
                 }
             });
@@ -164,26 +165,14 @@
         {
 
         }
-        public static function parseMessages(string $playerName ,string $formType, int $spleft = 0) : array
+        public static function parseMessages(string $playerName ,string $type, int $spleft = 0) : array
         {
-           $messages = self::$messages[$formType];
+            $messages = self::$messages['Forms'][$type];
             $stats = PlayerManager::getPlayer($playerName)->getAttributes();
             $stats['PLAYER'] = $playerName;
             $stats['SPLEFT'] = $spleft;
-        
-            $joined = array_merge($stats, RPGLike::getInstance()->consts);
-        
-            $messages['Content'] = self::parseKeywords($joined, $messages['Content']);
-        
-            return $messages;
-        }
 
-        public static function parseKeywords(array $keywords, string $subject) : string
-        {
-            $subject = str_replace(['{', '}'], [' ', ' '], $subject);
-            foreach($keywords as $key => $value) {
-                $subject = str_replace($key, $value, $subject);
-            }
-            return $subject;
+            $joined = array_merge($stats, RPGLike::getInstance()->consts);
+            return Utils::parseArrayKeywords($joined, $messages);
         }
     }

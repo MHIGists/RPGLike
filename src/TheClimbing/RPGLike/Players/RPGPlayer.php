@@ -202,8 +202,14 @@
         public function checkForSkills()
         {
             foreach(SkillsManager::getSkills() as $key =>  $skill) {
+                $requirements = [];
                 foreach($skill['unlockConditions'] as $key1 => $value){
                     if($this->getAttribute($key1) >= $value){
+                        $requirements[] = true;
+                    }else{
+                        $requirements[] = false;
+                    }
+                    if ((bool) array_product($requirements)){
                         $namespace = $skill['namespace'];
                         if(array_key_exists($key, $this->skills) == false){
                             $this->unlockSkill($namespace, $key);

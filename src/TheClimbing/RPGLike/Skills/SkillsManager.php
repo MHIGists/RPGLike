@@ -3,9 +3,13 @@
 
 namespace TheClimbing\RPGLike\Skills;
 
-use TheClimbing\RPGLike\RPGLike;
+use function is_array;
 use function array_key_exists;
 use function array_keys;
+use function is_null;
+
+use TheClimbing\RPGLike\RPGLike;
+
 
 class SkillsManager
 {
@@ -30,21 +34,23 @@ class SkillsManager
                     RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have namespace. Using default ones.");
 
                     self::$skills[$skillName]['namespace'] = self::$defaultNamespace;
+                }else{
+                    self::$skills[$skillName]['namespace'] = $values['namespace'];
                 }
             }
-            if (!array_key_exists("unlockConditions", $values)){
-                RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have any unlock conditions.");
-                throw new \Error("Please add unlock conditions");//TODO remove this
+            $namespace = $values['namespace'] . $skillName;
 
-            }
-//            print_r(self::$skills);
-
+            /* @var $skill BaseSkill */
+            $skill = new $namespace('', []);
+            self::$skills[$skillName]['unlockConditions'] = $skill->getBaseUnlock();
+            unset($skill);
         }
     }
     public static function isSkillRegistered(string $skillName) : bool
     {
         return array_key_exists($skillName, self::$skills);
     }
+
     public static function getSkill(string $skillName) : array
     {
         return self::$skills[$skillName];

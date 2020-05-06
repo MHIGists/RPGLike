@@ -15,16 +15,11 @@
     {
         public function __construct(string $owner, string $namespace)
         {
-            parent::__construct($owner, $namespace);
+            parent::__construct($owner, $namespace, ['STR' => 10]);
             $this->setName('Coinflip');
             $this->setType('passive');
-            $this->setBaseUnlock("STR", 10);
             $this->setCooldownTime(0);
-            $description = [
-                'title' => 'You\'ve unlocked the Coinflip skill!',
-                'content' => '"Coinflip" increases your health by 15%',
-                'exitButton' => 'Great!'
-            ];
+            $description =
             $this->setDescription($description);
             $this->setMaxEntInRange(1);
             $this->setRange(0);

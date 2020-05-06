@@ -2,19 +2,11 @@
 Skills:
   Tank:
     namespace : ""
-    unlockConditions:
-      VIT : 10
   Coinflip:
     namespace: ""
-    unlockConditions:
-      STR: 10
   DoubleStrike:
     namespace: ""
-    unlockConditions:
-      DEX: 10
   Fortress:
     namespace : ""
-    unlockConditions:
-      DEF : 10
 Players: []
 ...
