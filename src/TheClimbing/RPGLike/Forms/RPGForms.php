@@ -87,7 +87,7 @@
     
         public static function skillHelpForm(RPGPlayer $player, string $skillName)
         {
-            $messages = Utils::parseArrayKeywords(RPGLike::getInstance()->consts, $player->getSkill($skillName)->getDescription());
+            $messages = Utils::parseArrayKeywords(RPGLike::getInstance()->consts, $player->getSkill($skillName)->getDescription()); //TODO This will be patched out it SkillManager needs all skill strings
             $form = new SimpleForm(function(Player $pl, $data) use ($player) {
                 switch($data) {
                     case 'Back':
