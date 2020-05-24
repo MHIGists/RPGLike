@@ -5,7 +5,6 @@
     namespace TheClimbing\RPGLike\Forms;
     
     use pocketmine\Player;
-    use pocketmine\utils\Config;
 
     use pocketmine\utils\TextFormat;
     use TheClimbing\RPGLike\RPGLike;
@@ -20,13 +19,7 @@
     class RPGForms
     {
         //I just hate the whole FORM API so have fun reading this, I didn't have fun writing it.
-        public static $messages;
-        
-        public function __construct(RPGLike $rpg)
-        {
-            $messages = (new Config($rpg->getDataFolder() . 'messages.yml', Config::YAML))->getAll();
-            self::$messages = $messages;
-        }
+
         public static function upgradeStatsForm(RPGPlayer $player, int $spleft)
         {
             if ($player->getSPleft() > 0)
@@ -87,7 +80,7 @@
     
         public static function skillHelpForm(RPGPlayer $player, string $skillName)
         {
-            $messages = Utils::parseArrayKeywords(RPGLike::getInstance()->consts, $player->getSkill($skillName)->getDescription()); //TODO This will be patched out it SkillManager needs all skill strings
+            $messages = Utils::parseArrayKeywords(RPGLike::getInstance()->consts, SkillsManager::getSkillDescription($skillName));
             $form = new SimpleForm(function(Player $pl, $data) use ($player) {
                 switch($data) {
                     case 'Back':
@@ -95,7 +88,7 @@
                         break;
                 }
             });
-            $form->setTitle(self::$messages['Forms']['SkillInfo']['Title']);
+            $form->setTitle(RPGLike::$messages['Forms']['SkillInfo']['Title']);
             $form->setContent($messages['Description'] . TextFormat::EOL . $messages['Unlocks']);
             $form->addButton('Back to menu', -1, '', 'Back');
             PlayerManager::getServerPlayer($player->getName())->sendForm($form);
@@ -149,16 +142,21 @@
                             self::skillHelpForm($player, $skill);
                         }
                     }
+                    if ($data == 'Back')
+                    {
+                        self::menuForm($player);
+                    }
             });
             $form->setTitle("All available skills");
             foreach ($skills as $skill) {
                 $form->addButton($skill, -1, '', $skill);
             }
+            $form->addButton("Back to main menu", -1, '', 'Back');
             PlayerManager::getServerPlayer($player->getName())->sendForm($form);
         }
         public static function parseMessages(string $playerName ,string $type, int $spleft = 0) : array
         {
-            $messages = self::$messages['Forms'][$type];
+            $messages = RPGLike::$messages['Forms'][$type];
             $stats = PlayerManager::getPlayer($playerName)->getAttributes();
             $stats['PLAYER'] = $playerName;
             $stats['SPLEFT'] = $spleft;

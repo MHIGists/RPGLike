@@ -39,6 +39,10 @@ class SkillsManager
                     self::$skills[$skillName]['namespace'] = $values['namespace'];
                 }
             }
+            if (array_key_exists($skillName, RPGLike::$messages['Skills']))
+            {
+                self::$skills[$skillName]["description"] = RPGLike::$messages['Skills'][$skillName];
+            }
             $namespace = $values['namespace'] . $skillName;
 
             $skill = new $namespace('', '', true);
@@ -58,6 +62,10 @@ class SkillsManager
     public static function getSkills()
     {
         return self::$skills;
+    }
+    public static function getSkillDescription(string $skillName)
+    {
+        return self::$skills[$skillName]['description'];
     }
     public static function getAvailableSkills() : array
     {

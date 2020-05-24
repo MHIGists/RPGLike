@@ -8,6 +8,7 @@
     use pocketmine\Player;
     use pocketmine\entity\Attribute;
     use pocketmine\plugin\PluginBase;
+    use pocketmine\utils\Config;
     use pocketmine\utils\TextFormat;
     use pocketmine\event\entity\EntityDamageByEntityEvent;
 
@@ -22,6 +23,7 @@
     {
         private static $instance;
 
+        public static $messages;
         public  $globalModifiers = [];
         public $consts = [];
         public $defaultModifiers = ['strModifier' => 0.15, 'vitModifier' => 0.175, 'defModifier' => 0.1, 'dexModifier' => 0.0002,];
@@ -33,7 +35,11 @@
             $this->saveDefaultConfig();
             $this->saveResource('messages.yml');
             $this->setConsts();
-            new RPGForms($this);
+
+            $messages = (new Config($this->getDataFolder() . 'messages.yml', Config::YAML))->getAll();
+            self::$messages = $messages;
+
+            new RPGForms();
             new PlayerManager();
             new SkillsManager($this);
         }

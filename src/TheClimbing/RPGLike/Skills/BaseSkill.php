@@ -6,6 +6,7 @@
     namespace TheClimbing\RPGLike\Skills;
     
 
+
     use function floor;
     use function call_user_func;
     use function array_slice;
@@ -19,7 +20,7 @@
     use pocketmine\level\Level;
     use pocketmine\math\Vector3;
 
-    use TheClimbing\RPGLike\Forms\RPGForms;
+    use TheClimbing\RPGLike\RPGLike;
     /**
      * Class BaseSkill
      * @package TheClimbing\RPGLike\Skills
@@ -161,7 +162,7 @@
          */
         public function setDescription() : void
         {
-            $description = RPGForms::$messages['Skills'][$this->getName()];
+            $description = RPGLike::$messages['Skills'][$this->getName()];
             $this->description = $description;
         }
     
