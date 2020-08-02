@@ -156,13 +156,10 @@
         {
             return $this->type;
         }
-    
-        /**
-         * @param array $description
-         */
+
         public function setDescription() : void
         {
-            $description = RPGLike::$messages['Skills'][$this->getName()];
+            $description = RPGLike::getInstance()->getMessages()['Skills'][$this->getName()];
             $this->description = $description;
         }
     
@@ -351,7 +348,7 @@
          * Needs testing!
          *
          * @param Player $player
-         * @param                    $effect
+         * @param callable|int       $effect
          */
         public function setPlayerEffect(Player $player, $effect) : void
         {
