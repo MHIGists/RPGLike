@@ -88,7 +88,7 @@
                         break;
                 }
             });
-            $form->setTitle(RPGLike::$messages['Forms']['SkillInfo']['Title']);
+            $form->setTitle(RPGLike::getInstance()->getMessages()['Forms']['SkillInfo']['Title']);
             $form->setContent($messages['Description'] . TextFormat::EOL . $messages['Unlocks']);
             $form->addButton('Back to menu', -1, '', 'Back');
             PlayerManager::getServerPlayer($player->getName())->sendForm($form);
@@ -156,7 +156,7 @@
         }
         public static function parseMessages(string $playerName ,string $type, int $spleft = 0) : array
         {
-            $messages = RPGLike::$messages['Forms'][$type];
+            $messages = RPGLike::getInstance()->getMessages()['Forms'][$type];
             $stats = PlayerManager::getPlayer($playerName)->getAttributes();
             $stats['PLAYER'] = $playerName;
             $stats['SPLEFT'] = $spleft;

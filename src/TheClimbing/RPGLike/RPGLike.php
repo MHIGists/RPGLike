@@ -23,8 +23,8 @@
     {
         private static $instance;
 
-        public static $messages;
-        public  $globalModifiers = [];
+        public $messages;
+        public $globalModifiers = [];
         public $consts = [];
         public $defaultModifiers = ['strModifier' => 0.15, 'vitModifier' => 0.175, 'defModifier' => 0.1, 'dexModifier' => 0.0002,];
         
@@ -37,7 +37,7 @@
             $this->setConsts();
 
             $messages = (new Config($this->getDataFolder() . 'messages.yml', Config::YAML))->getAll();
-            self::$messages = $messages;
+            $this->messages = $messages;
 
             new RPGForms();
             new PlayerManager();
@@ -150,6 +150,11 @@
             $players[$playerName] = $playerVars;
             $this->getConfig()->setNested('Players', $players);
             $this->getConfig()->save();
+        }
+
+        public function getMessages() : array
+        {
+            return $this->messages;
         }
 
         public static function getInstance() : RPGLike
