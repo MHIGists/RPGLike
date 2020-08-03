@@ -1,13 +1,10 @@
 <?php
     
     declare(strict_types = 1);
-    
-    
+
     namespace TheClimbing\RPGLike;
     
-    use pocketmine\event\player\PlayerQuitEvent;
-    use pocketmine\Player;
-    
+    use pocketmine\event\player\PlayerCreationEvent;
     use pocketmine\event\Listener;
     
     use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -17,8 +14,10 @@
     use pocketmine\event\player\PlayerExperienceChangeEvent;
     use pocketmine\event\player\PlayerDeathEvent;
 
+    use pocketmine\event\player\PlayerQuitEvent;
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
+    use TheClimbing\RPGLike\Players\RPGPlayer;
 
     class EventListener implements Listener
     {
@@ -32,15 +31,20 @@
         public function onJoin(PlayerJoinEvent $event)
         {
             $player = $event->getPlayer();
-            PlayerManager::makePlayer($player->getName(), $this->rpg->getModifiers());
-            RPGLike::getInstance()->applyDexterityBonus(PlayerManager::getServerPlayer($player->getName()));
-            RPGLike::getInstance()->applyVitalityBonus(PlayerManager::getServerPlayer($player->getName()));
+            PlayerManager::makePlayer($player);
+            RPGLike::getInstance()->applyDexterityBonus($player);
+            RPGLike::getInstance()->applyVitalityBonus($player);
+        }
+        public function playerCreate(PlayerCreationEvent $event)
+        {
+            $event->setPlayerClass("TheClimbing\RPGLike\Players\RPGPlayer");
+            $player = new RPGPlayer($event->getInterface(), $event->getAddress(), $event->getPort());
+
         }
         public function onMove(PlayerMoveEvent $event)
         {
             $player = $event->getPlayer();
-            $playerName = $player->getName();
-            $playerSkills = PlayerManager::getPlayer($playerName)->getSkills();
+            $playerSkills = $player->getSkills();
             if(!empty($playerSkills)){
                 foreach($playerSkills as $playerSkill){
                         $playerSkill->checkRange($player);
@@ -62,17 +66,14 @@
             
             if($new_lvl !== null) {
                 if($new_lvl > $old_level) {
-                    if($player instanceof Player) {
+                    if($player instanceof RPGPlayer) {
                         $spleft = $new_lvl - $old_level;
                         
-                        $playerName = $player->getName();
-                        
-                        RPGForms::upgradeStatsForm(PlayerManager::getPlayer($playerName), $spleft);
+                        RPGForms::upgradeStatsForm($player, $spleft);
 
                         $this->rpg->applyVitalityBonus($player);
                         $this->rpg->applyDexterityBonus($player);
-                        
-                        $this->rpg->savePlayerVariables($playerName);
+
                         
                     }
                 }
@@ -81,11 +82,11 @@
         
         public function onDeath(PlayerDeathEvent $event)
         {
-            PlayerManager::getPlayer($event->getPlayer()->getName())->reset();
+            $event->getPlayer()->reset();
         }
-        
-        public function playerLeave(PlayerQuitEvent $event)
+        public function onLeave(PlayerQuitEvent $event)
         {
-            PlayerManager::removePlayer($event->getPlayer()->getName());
+            $event->getPlayer()->savePlayerVariables();
         }
+
     }

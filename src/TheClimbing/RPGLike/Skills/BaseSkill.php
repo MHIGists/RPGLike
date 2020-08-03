@@ -92,13 +92,12 @@
          * @param bool $dummy
          * @param string $name
          * @param string $type
-         * @param array $description
          * @param int $cooldown
          * @param int $range
          * @param int $maxEntInRange
          * @param null $effect
          */
-        public function __construct(string $owner, string $namespace, array $baseUnlock, bool $dummy = false, string $name = '', string $type = '', array $description = [], int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
+        public function __construct(string $owner, string $namespace, array $baseUnlock, bool $dummy = false, string $name = '', string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
         {
             if (!$dummy){
                 $this->owner = $owner;

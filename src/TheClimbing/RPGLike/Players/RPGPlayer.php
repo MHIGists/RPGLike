@@ -4,14 +4,15 @@
     
     namespace TheClimbing\RPGLike\Players;
     
+    use pocketmine\Player;
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Skills\BaseSkill;
     use TheClimbing\RPGLike\Skills\SkillsManager;
 
-    class RPGPlayer
+    class RPGPlayer extends Player
     {
-        private $playerName;
+
 
         /* @var BaseSkill[] */
         private $skills = [];
@@ -32,13 +33,15 @@
         private $dexModifier = 0.0;
         private $dexBonus = 1;
         
-        private $level = 1;
+        private $XPlevel = 1;
 
         public $spleft = 0;
         
-        public function __construct(string $playerName, array $modifiers)
+        public function __construct($interface, $ip, $port)
         {
-            $this->playerName = $playerName;
+            parent::__construct($interface, $ip, $port);
+
+            $modifiers = RPGLike::getInstance()->getModifiers();
             $this->setDEFModifier($modifiers['defModifier']);
             $this->setVITModifier($modifiers['vitModifier']);
             $this->setSTRModifier($modifiers['strModifier']);
@@ -48,15 +51,10 @@
             $this->calcDEXBonus();
         }
         
-        public function getName() : string
-        {
-            return $this->playerName;
-        }
-        
         public function setSTR(int $str) : void
         {
             $this->str = $str;
-            $this->calcSTRBonus();;
+            $this->calcSTRBonus();
         }
         public function getSTR() : int
         {
@@ -81,8 +79,8 @@
         public  function setVIT(int $vit) : void
         {
             $this->vit = $vit;
-            $this->calcVITBonus();;
-            RPGLike::getInstance()->applyVitalityBonus(PlayerManager::getServerPlayer($this->getName()));
+            $this->calcVITBonus();
+            RPGLike::getInstance()->applyVitalityBonus($this);
         }
         public function getVIT() : int
         {
@@ -108,7 +106,7 @@
         {
             $this->dex = $dex;
             $this->calcDEXBonus();
-            RPGLike::getInstance()->applyDexterityBonus(PlayerManager::getServerPlayer($this->getName()));
+            RPGLike::getInstance()->applyDexterityBonus($this);
         }
         public function getDEX() : int
         {
@@ -155,13 +153,13 @@
         {
             return $this->defBonus;
         }
-        public function setLevel(int $level)
+        public function setCustomXpLevel(int $level)
         {
-            $this->level = $level;
+            $this->XPlevel = $level;
         }
-        public function getLevel() : int
+        public function getCustomXPLevel() : int
         {
-            return $this->level;
+            return $this->XPlevel;
         }
         public function unlockSkill(string $skillNamespace, string $skillName, bool $form = true)
         {
@@ -171,7 +169,7 @@
                 RPGForms::skillHelpForm($this, $skillName);
             }
         }
-        /* @return BaseSkill */
+
         public function getSkill(string $skillName)
         {
             return $this->skills[$skillName];
@@ -228,8 +226,9 @@
         }
         public function reset()
         {
-            $this->setLevel(1);
-            
+            $this->setXPLevel(1);
+            $this->setCustomXpLevel(1);
+
             $this->setDEX(1);
             $this->setSTR(1);
             $this->setVIT(1);
@@ -241,10 +240,40 @@
             $this->calcSTRBonus();
             
             $this->skills = [];
-            
-            $player = PlayerManager::getServerPlayer($this->getName());
-            RPGLike::getInstance()->applyDexterityBonus($player);
-            RPGLike::getInstance()->applyVitalityBonus($player);
+
+            RPGLike::getInstance()->applyDexterityBonus($this);
+            RPGLike::getInstance()->applyVitalityBonus($this);
+        }
+
+        public function savePlayerVariables() : void
+        {
+            $main = RPGLike::getInstance();
+            $playerVars = [
+                'attributes' => $this->getAttributes(),
+                'skills' => $this->getSkillNames(),
+                'spleft' => $this->getSPleft(),
+                'level' => $this->getLevel(),
+            ];
+            $players = $main->getConfig()->getNested('Players');
+            $players[$this->getName()] = $playerVars;
+            $main->getConfig()->setNested('Players', $players);
+            $main->getConfig()->save();
+        }
+
+        /**
+         * @return float
+         */
+        public function getX()
+        {
+            return $this->lastX;
+        }
+
+        /**
+         * @return float
+         */
+        public function getZ()
+        {
+            return $this->lastZ;
         }
     }
     

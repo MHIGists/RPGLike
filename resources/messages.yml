@@ -1,36 +1,36 @@
 Forms:
   UpgradeForm:
-    Title: "Click to upgrade"
-    Content: '{NL}{RED}Your Stats:{NL}{AQUA}Strength: {STR}{NL}{GREEN}Vitality: {VIT}{NL}{GOLD}Defense: {DEF}{NL}{GRAY}Dexterity: {DEX} {NL} {DARK_RED} SP-Left: {SPLEFT}'
-    Buttons:
-      Strength: '§b Upgrade Strength'
-      Vitality: '§b Upgrade Vitality'
-      Defense: '§b Upgrade Defense'
-      Dexterity: '§b Upgrade Dexterity'
-      Exit: 'Exit'
+    title: "Click to upgrade"
+    content: '{NL}{RED}Your Stats:{NL}{AQUA}Strength: {STR}{NL}{GREEN}Vitality: {VIT}{NL}{GOLD}Defense: {DEF}{NL}{GRAY}Dexterity: {DEX} {NL} {DARK_RED} SP-Left: {SPLEFT}'
+    buttons:
+      strength: '§b Upgrade Strength'
+      vitality: '§b Upgrade Vitality'
+      defense: '§b Upgrade Defense'
+      dexterity: '§b Upgrade Dexterity'
+      exit: 'Exit'
   StatsForm:
-    Title: 'Your Stats'
-    Content: '{RED} Your Stats:{NL}{AQUA}Strength: {STR}{NL}{GREEN}Vitality: {VIT}{NL}{GOLD}Defense: {DEF}{NL}{GRAY}Dexterity : {DEX}'
-    Buttons:
-      Exit: 'Exit'
+    title: 'Your Stats'
+    content: '{RED} Your Stats:{NL}{AQUA}Strength: {STR}{NL}{GREEN}Vitality: {VIT}{NL}{GOLD}Defense: {DEF}{NL}{GRAY}Dexterity : {DEX}'
+    buttons:
+      exit: 'Exit'
   MenuForm:
-    Title: "Menu"
-    Buttons:
+    title: "Menu"
+    buttons:
       skills: "Skills help"
       stats: "Your Stats"
       upgrade: "Upgrade stats"
   SkillInfo:
-    Title: ""
+    title: ""
 Skills:
   Tank:
-    Description: 'The Tank skill increases your HP by 10 percent.'
-    Unlocks: 'You can unlock the tank skill once your VIT has reached level 10'
+    description: 'The Tank skill increases your HP by 10 percent.'
+    unlocks: 'You can unlock the tank skill once your VIT has reached level 10'
   Coinflip:
-    Description: 'The Coinflip skill gives you a 10 percent chance to deal 1.5 bonus dmg.'
-    Unlocks: 'You can unlock the coinflip skill once your STR has reached level 10'
+    description: 'The Coinflip skill gives you a 10 percent chance to deal 1.5 bonus dmg.'
+    unlocks: 'You can unlock the coinflip skill once your STR has reached level 10'
   DoubleStrike:
-    Description: 'The Double Strike skill has a 15 percent chance to reset your attack cooldown'
-    Unlocks: 'You can unlock the double strike skill once your DEX has reached level 10'
+    description: 'The Double Strike skill has a 15 percent chance to reset your attack cooldown'
+    unlocks: 'You can unlock the double strike skill once your DEX has reached level 10'
   Fortress:
-    Description: 'The Tank skill increases your absorption by 20 percent.'
-    Unlocks: 'You can unlock the tank skill once your DEF has reached level 10'
+    description: 'The Tank skill increases your absorption by 20 percent.'
+    unlocks: 'You can unlock the tank skill once your DEF has reached level 10'

@@ -7,11 +7,8 @@
     
 
     use function rand;
-    
-    use pocketmine\entity\Effect;
-    use pocketmine\event\entity\EntityDamageByEntityEvent;
 
-    use TheClimbing\RPGLike\Forms\RPGForms;
+    use pocketmine\event\entity\EntityDamageByEntityEvent;
 
     class DoubleStrike extends BaseSkill
     {

@@ -10,6 +10,6 @@ class Explosion extends BaseSkill
     public function __construct(string $owner, string $namespace)
     {
         parent::__construct($owner, $namespace, ['STR' => 20, 'DEX' => 10]);
-        $this->setName('Explosion');;
+        $this->setName('Explosion');
     }
 }

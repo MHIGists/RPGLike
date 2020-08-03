@@ -5,7 +5,6 @@
     
     namespace TheClimbing\RPGLike;
     
-    use pocketmine\Player;
     use pocketmine\entity\Attribute;
     use pocketmine\plugin\PluginBase;
     use pocketmine\utils\Config;
@@ -16,6 +15,7 @@
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Commands\RPGCommand;
+    use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Skills\SkillsManager;
 
 
@@ -108,49 +108,36 @@
         public function applyDamageBonus(EntityDamageByEntityEvent $event) : void
         {
             $damager = $event->getDamager();
-            if($damager instanceof Player) {
+            if($damager instanceof RPGPlayer) {
                 $baseDamage = $event->getBaseDamage();
-                $event->setBaseDamage($baseDamage + PlayerManager::getPlayer($damager->getName())->getSTRBonus());
+                $event->setBaseDamage($baseDamage + $damager->getSTRBonus());
             }
         }
         
-        public function applyVitalityBonus(Player $player)
+        public function applyVitalityBonus(RPGPlayer $player)
         {
             $playerName = $player->getName();
-            $player->setMaxHealth(20 + PlayerManager::getPlayer($playerName)->getVITBonus());
-            $player->setHealth(20 + PlayerManager::getPlayer($playerName)->getVITBonus());
+            $player->setMaxHealth(20 + $player->getVITBonus());
+            $player->setHealth(20 + $player->getVITBonus());
         }
         
         public function applyDefenseBonus(EntityDamageByEntityEvent $event) : void
         {
             $receiver = $event->getEntity();
-            if($receiver instanceof Player) {
-                $receiver->setAbsorption($receiver->getAbsorption() + PlayerManager::getPlayer($receiver->getName())->getDEFBonus());
+            if($receiver instanceof RPGPlayer) {
+                $receiver->setAbsorption($receiver->getAbsorption() + $receiver->getDEFBonus());
             }
         }
         
-        public function applyDexterityBonus(Player $player)
+        public function applyDexterityBonus(RPGPlayer $player)
         {
             $playerName = $player->getName();
-            $dex = PlayerManager::getPlayer($playerName)->getDEXBonus();
+            $dex = $player->getDEXBonus();
             $movement = $player->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
             $movement->setValue($movement->getValue() * (1 + $dex));
         }
         
-        public function savePlayerVariables(string $playerName) : void
-        {
-            $player = PlayerManager::getPlayer($playerName);
-            $playerVars = [
-                'attributes' => $player->getAttributes(),
-                'skills' => $player->getSkillNames(),
-                'spleft' => $player->getSPleft(),
-                'level' => $player->getLevel(),
-                ];
-            $players = $this->getConfig()->getNested('Players');
-            $players[$playerName] = $playerVars;
-            $this->getConfig()->setNested('Players', $players);
-            $this->getConfig()->save();
-        }
+
 
         public function getMessages() : array
         {

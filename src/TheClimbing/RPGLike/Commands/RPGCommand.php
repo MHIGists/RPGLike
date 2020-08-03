@@ -8,6 +8,7 @@
 
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
+    use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\RPGLike;
 
     class RPGCommand extends Command
@@ -23,28 +24,27 @@
         }
         public function execute(CommandSender $sender, string $commandLabel, array $args)
         {
-            if($sender instanceof Player && $sender->hasPermission($this->getPermission()) || $sender->isOp()){
-                $player = PlayerManager::getPlayer($sender->getName());
+            if($sender instanceof RPGPlayer && $sender->hasPermission($this->getPermission()) || $sender->isOp()){
                 if(empty($args) || $args[0] == '' || $args[0] == ' '){
-                    RPGForms::menuForm($player);
+                    RPGForms::menuForm($sender);
                 }else{
                     $args = array_map('strtolower', $args);
                     switch($args){
                         case "stats":
-                            RPGForms::statsForm($player);
+                            RPGForms::statsForm($sender);
                             break;
                         case "skills":
-                            RPGForms::skillsHelpForm($player);
+                            RPGForms::skillsHelpForm($sender);
                             break;
                         case "help":
                             if (array_key_exists(1, $args )){
-                                RPGForms::skillHelpForm($player, $args[1]);
+                                RPGForms::skillHelpForm($sender, $args[1]);
                             }else{
                                 $sender->sendMessage($this->getUsage());
                             }
                             break;
                         case "upgrade":
-                            RPGForms::upgradeStatsForm($player, 0);
+                            RPGForms::upgradeStatsForm($sender, 0);
                     }
                 }
             }else{
