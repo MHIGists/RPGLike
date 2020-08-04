@@ -5,6 +5,7 @@
     namespace TheClimbing\RPGLike\Players;
     
     use pocketmine\Player;
+
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Skills\BaseSkill;
@@ -36,12 +37,15 @@
         private $XPlevel = 1;
 
         public $spleft = 0;
-        
+
+        private $config;
+
         public function __construct($interface, $ip, $port)
         {
             parent::__construct($interface, $ip, $port);
 
             $modifiers = RPGLike::getInstance()->getModifiers();
+            $this->config = RPGLike::getInstance()->getConfig();
             $this->setDEFModifier($modifiers['defModifier']);
             $this->setVITModifier($modifiers['vitModifier']);
             $this->setSTRModifier($modifiers['strModifier']);
@@ -247,17 +251,16 @@
 
         public function savePlayerVariables() : void
         {
-            $main = RPGLike::getInstance();
             $playerVars = [
                 'attributes' => $this->getAttributes(),
                 'skills' => $this->getSkillNames(),
                 'spleft' => $this->getSPleft(),
-                'level' => $this->getLevel(),
+                'level' => $this->getCustomXPLevel(),
             ];
-            $players = $main->getConfig()->getNested('Players');
+            $players = $this->config->getNested('Players');
             $players[$this->getName()] = $playerVars;
-            $main->getConfig()->setNested('Players', $players);
-            $main->getConfig()->save();
+            $this->config->setNested('Players', $players);
+            $this->config->save();
         }
 
         /**
