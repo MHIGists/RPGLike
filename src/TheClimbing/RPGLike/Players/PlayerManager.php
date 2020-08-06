@@ -30,7 +30,7 @@
                 $player->setSTR($attributes['STR']);
                 $player->setVIT($attributes['VIT']);
     
-                $player->setCustomXPLevel($cachedPlayer['level']);
+                $player->setXPLevel($cachedPlayer['level']);
                 
                 $player->calcDEXBonus();
                 $player->calcDEFBonus();

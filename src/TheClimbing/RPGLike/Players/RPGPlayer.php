@@ -19,22 +19,20 @@
         private $skills = [];
         
         private $str = 1;
-        private $strModifier = 0.0;
+        private $strModifier = 0.15;
         private $strBonus = 0;
         
         private $vit = 1;
-        private $vitModifier = 0.0;
+        private $vitModifier = 0.175;
         private $vitBonus = 1;
         
         private $def = 1;
-        private $defModifier = 0.0;
+        private $defModifier = 0.1;
         private $defBonus = 1;
         
         private $dex = 1;
-        private $dexModifier = 0.0;
+        private $dexModifier = 0.0002;
         private $dexBonus = 1;
-        
-        private $XPlevel = 1;
 
         public $spleft = 0;
 
@@ -44,17 +42,32 @@
         {
             parent::__construct($interface, $ip, $port);
 
-            $modifiers = RPGLike::getInstance()->getModifiers();
+
             $this->config = RPGLike::getInstance()->getConfig();
-            $this->setDEFModifier($modifiers['defModifier']);
-            $this->setVITModifier($modifiers['vitModifier']);
-            $this->setSTRModifier($modifiers['strModifier']);
-            $this->setDEXModifier($modifiers['dexModifier']);
+            $modifiers = $this->getModifiers();
+            if ($modifiers != false)
+            {
+                $this->setDEFModifier($modifiers['defModifier']);
+                $this->setVITModifier($modifiers['vitModifier']);
+                $this->setSTRModifier($modifiers['strModifier']);
+                $this->setDEXModifier($modifiers['dexModifier']);
+            }
 
             $this->calcVITBonus();
             $this->calcDEXBonus();
         }
-        
+
+        public function getModifiers()
+        {
+            $modifiers = $this->config->getNested('modifiers');
+            if($modifiers !== null) {
+                return $modifiers;
+            }else{
+                return false;
+            }
+
+        }
+
         public function setSTR(int $str) : void
         {
             $this->str = $str;
@@ -157,18 +170,10 @@
         {
             return $this->defBonus;
         }
-        public function setCustomXpLevel(int $level)
-        {
-            $this->XPlevel = $level;
-        }
-        public function getCustomXPLevel() : int
-        {
-            return $this->XPlevel;
-        }
         public function unlockSkill(string $skillNamespace, string $skillName, bool $form = true)
         {
             $skill = $skillNamespace . $skillName;
-            $this->skills[$skillName] = new $skill($this->getName(), $skillNamespace);
+            $this->skills[$skillName] = new $skill($this, $skillNamespace);
             if($form){
                 RPGForms::skillHelpForm($this, $skillName);
             }
@@ -231,7 +236,6 @@
         public function reset()
         {
             $this->setXPLevel(1);
-            $this->setCustomXpLevel(1);
 
             $this->setDEX(1);
             $this->setSTR(1);
@@ -255,7 +259,7 @@
                 'attributes' => $this->getAttributes(),
                 'skills' => $this->getSkillNames(),
                 'spleft' => $this->getSPleft(),
-                'level' => $this->getCustomXPLevel(),
+                'level' => $this->getXPLevel(),
             ];
             $players = $this->config->getNested('Players');
             $players[$this->getName()] = $playerVars;

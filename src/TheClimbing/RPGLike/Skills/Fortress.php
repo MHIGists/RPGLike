@@ -8,11 +8,12 @@
     use pocketmine\Player;
 
     use TheClimbing\RPGLike\Players\PlayerManager;
+    use TheClimbing\RPGLike\Players\RPGPlayer;
 
     class Fortress extends BaseSkill
     {
         
-        public function __construct(string $owner, string $namespace, bool $dummy = false)
+        public function __construct(RPGPlayer $owner, string $namespace, bool $dummy = false)
         {
             parent::__construct($owner, $namespace, ['DEF' => 10], $dummy);
             $this->setName('Fortress');
@@ -22,10 +23,10 @@
             $this->setRange(0);
             if (!$dummy)
             {
-                $this->setDefense(PlayerManager::getServerPlayer($owner));
+                $this->setDefense($owner);
             }
         }
-        public function setDefense(Player $player) : void
+        public function setDefense(RPGPlayer $player) : void
         {
             $player->setAbsorption($player->getAbsorption() * 1.2);
         }

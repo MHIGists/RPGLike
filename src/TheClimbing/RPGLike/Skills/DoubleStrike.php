@@ -6,13 +6,16 @@
     namespace TheClimbing\RPGLike\Skills;
     
 
+
     use function rand;
 
     use pocketmine\event\entity\EntityDamageByEntityEvent;
 
+    use TheClimbing\RPGLike\Players\RPGPlayer;
+
     class DoubleStrike extends BaseSkill
     {
-        public function __construct(string $owner, string $namespace, bool $dummy = false)
+        public function __construct(RPGPlayer $owner, string $namespace, bool $dummy = false)
         {
             parent::__construct($owner, $namespace, ["DEX" => 10], $dummy);
             $this->setName('DoubleStrike');

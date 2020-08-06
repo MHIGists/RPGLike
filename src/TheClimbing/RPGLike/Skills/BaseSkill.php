@@ -4,7 +4,6 @@
     
     
     namespace TheClimbing\RPGLike\Skills;
-    
 
 
     use function floor;
@@ -21,13 +20,15 @@
     use pocketmine\math\Vector3;
 
     use TheClimbing\RPGLike\RPGLike;
+    use TheClimbing\RPGLike\Tasks\CooldownTask;
+    use TheClimbing\RPGLike\Players\RPGPlayer;
     /**
      * Class BaseSkill
      * @package TheClimbing\RPGLike\Skills
      */
     class BaseSkill
     {
-        private $owner;
+        protected $owner;
 
         private $namespace;
 
@@ -86,7 +87,7 @@
         /**
          * BaseSkill constructor.
          *
-         * @param string $owner
+         * @param RPGPlayer $owner
          * @param string $namespace
          * @param array $baseUnlock
          * @param bool $dummy
@@ -97,7 +98,7 @@
          * @param int $maxEntInRange
          * @param null $effect
          */
-        public function __construct(string $owner, string $namespace, array $baseUnlock, bool $dummy = false, string $name = '', string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
+        public function __construct(RPGPlayer $owner, string $namespace, array $baseUnlock, bool $dummy = false, string $name = '', string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
         {
             if (!$dummy){
                 $this->owner = $owner;
@@ -183,6 +184,7 @@
         public function setOnCooldown() : void
         {
             $this->onCooldown = true;
+            RPGLike::getInstance()->getScheduler()->scheduleDelayedTask(new CooldownTask($this->owner, $this->getName()), $this->getCooldownTime());
         }
         public function isOnCooldown() : bool
         {
@@ -279,20 +281,20 @@
         
         
         /**
-         * @param Player $player
+
          * @param array              $func
          */
-        public function checkRange(Player $player, array $func = []) : void
+        public function checkRange(array $func = []) : void
         {
             if($this->range > 0) {
-                $level = $player->getLevel();
-                $players = $this->getNearestEntities($player->getPosition()->asVector3(), $this->range, $level, $this->getMaxEntInRange());
+                $level = $this->owner->getLevel();
+                $players = $this->getNearestEntities($this->owner->getPosition()->asVector3(), $this->range, $level, $this->getMaxEntInRange());
                 if(!empty($players)){
                     foreach($players as $player) {
                         if(!empty($func)){
-                            $this->setPlayerEffect($player, $func);
+                            $this->setPlayerEffect($func);
                         }else{
-                            $this->setPlayerEffect($player, $this->getEffect());
+                            $this->setPlayerEffect($this->getEffect());
                         }
                     }
                 }
@@ -346,10 +348,9 @@
          * Sets vanilla effects or applies a callable.
          * Needs testing!
          *
-         * @param Player $player
          * @param callable|int       $effect
          */
-        public function setPlayerEffect(Player $player, $effect) : void
+        public function setPlayerEffect($effect) : void
         {
             if (!$this->onCooldown)
             {
@@ -357,7 +358,7 @@
                     call_user_func($effect['objAndFunc'], $effect['params']);
                 }else{
                     $effect = new EffectInstance(Effect::getEffect($effect), 2, $this->getSkillLevel());
-                    $player->addEffect($effect);
+                    $this->owner->addEffect($effect);
                 }
             }
 

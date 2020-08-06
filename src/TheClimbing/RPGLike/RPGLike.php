@@ -24,10 +24,8 @@
         private static $instance;
 
         public $messages;
-        public $globalModifiers = [];
         public $consts = [];
-        public $defaultModifiers = ['strModifier' => 0.15, 'vitModifier' => 0.175, 'defModifier' => 0.1, 'dexModifier' => 0.0002,];
-        
+
         public function onLoad()
         {
             self::$instance = $this;
@@ -91,19 +89,7 @@
                 "RESET" => TextFormat::RESET,
                 ];
         }
-        
-        public function getModifiers() : array
-        {
-            $modifiers = $this->getConfig()->getNested('modifiers');
-            if($modifiers == null) {
-                $this->getConfig()->setNested('modifiers', $this->defaultModifiers);
-                $this->getConfig()->save();
-                $this->globalModifiers = $this->defaultModifiers;
-            } else {
-                $this->globalModifiers = $modifiers;
-            }
-            return $this->globalModifiers;
-        }
+
         
         public function applyDamageBonus(EntityDamageByEntityEvent $event) : void
         {
@@ -116,7 +102,6 @@
         
         public function applyVitalityBonus(RPGPlayer $player)
         {
-            $playerName = $player->getName();
             $player->setMaxHealth(20 + $player->getVITBonus());
             $player->setHealth(20 + $player->getVITBonus());
         }
@@ -131,7 +116,6 @@
         
         public function applyDexterityBonus(RPGPlayer $player)
         {
-            $playerName = $player->getName();
             $dex = $player->getDEXBonus();
             $movement = $player->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
             $movement->setValue($movement->getValue() * (1 + $dex));

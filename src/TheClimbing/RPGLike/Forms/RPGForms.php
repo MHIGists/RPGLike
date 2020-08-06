@@ -7,6 +7,7 @@
     use pocketmine\Player;
 
     use pocketmine\utils\TextFormat;
+
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Skills\SkillsManager;
@@ -127,6 +128,8 @@
             }
             if(array_key_exists('content', $menuStrings)){
                 $form->setContent($menuStrings['content']);
+            }else{
+                RPGLike::getInstance()->getLogger()->alert('Please check messages.yml Menu Form contents are empty');
             }
             $player->sendForm($form);
         }
@@ -140,7 +143,7 @@
                             self::skillHelpForm($player, $skill);
                         }
                     }
-                    if ($data == 'Back')
+                    if ($data == 'back')
                     {
                         self::menuForm($player);
                     }
