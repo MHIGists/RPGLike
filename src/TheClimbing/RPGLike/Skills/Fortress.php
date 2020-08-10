@@ -10,15 +10,14 @@
     class Fortress extends BaseSkill
     {
         
-        public function __construct(RPGPlayer $owner, string $namespace)
+        public function __construct(RPGPlayer $owner)
         {
-            $this->setName('Fortress');
             $this->setType('passive');
             $this->setCooldownTime(0);
             $this->setMaxEntInRange(1);
             $this->setRange(0);
             $this->setDefense($owner);
-            parent::__construct($owner, $namespace);
+            parent::__construct($owner, 'Fortress');
         }
         public function setDefense(RPGPlayer $player) : void
         {

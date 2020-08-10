@@ -14,12 +14,12 @@
     
     class Coinflip extends BaseSkill
     {
-        public function __construct(RPGPlayer $owner, string $namespace)
+        public function __construct(RPGPlayer $owner)
         {
-            $this->setName('Coinflip');
+            parent::__construct($owner, "Coinflip");
             $this->setType('passive');
             $this->setCooldownTime(0);
-            parent::__construct($owner, $namespace);
+
         }
         public function setCritChance(EntityDamageByEntityEvent $event)
         {

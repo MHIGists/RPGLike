@@ -29,17 +29,14 @@ class SkillsManager
 
         if (array_key_exists("namespace", $values)) {
             if (is_null($values['namespace']) || $values['namespace'] == "" || empty($values['namespace'])) {
-
                 RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
-
-                self::$skills[$skillName]['namespace'] = self::$defaultNamespace;
-                $values['namespace'] = self::$defaultNamespace;
+                self::$skills[$skillName]['namespace'] = self::$defaultNamespace . $skillName;
             } else {
                 self::$skills[$skillName]['namespace'] = $values['namespace'];
             }
         }else{
-            self::$skills[$skillName]['namespace'] = self::$defaultNamespace;
-            $values['namespace'] = self::$defaultNamespace;
+            RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
+            self::$skills[$skillName]['namespace'] = self::$defaultNamespace . $skillName;
         }
         if (array_key_exists($skillName, RPGLike::getInstance()->getMessages()['Skills'])) {
             self::$skills[$skillName]["description"] = RPGLike::getInstance()->getMessages()['Skills'][$skillName];

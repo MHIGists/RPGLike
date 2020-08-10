@@ -9,15 +9,13 @@
 
     class Tank extends BaseSkill
     {
-        public function __construct(RPGPlayer $owner, string $namespace)
+        public function __construct(RPGPlayer $owner)
         {
-
-            $this->setName('Tank');
             $this->setType('passive');
             $this->setCooldownTime(0);
             $this->setRange(0);
             $this->setPlayerHealth($owner);
-            parent::__construct($owner, $namespace);
+            parent::__construct($owner, 'Tank');
         }
         public function setPlayerHealth(RPGPlayer $player)
         {

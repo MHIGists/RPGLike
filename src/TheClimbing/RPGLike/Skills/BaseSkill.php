@@ -85,7 +85,6 @@
          * BaseSkill constructor.
          *
          * @param RPGPlayer $owner
-         * @param string $namespace
          * @param string $name
          * @param string $type
          * @param int $cooldown
@@ -93,11 +92,10 @@
          * @param int $maxEntInRange
          * @param null $effect
          */
-        public function __construct(RPGPlayer $owner, string $namespace, string $name = '', string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
+        public function __construct(RPGPlayer $owner, string $name , string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
         {
 
                 $this->owner = $owner;
-                $this->namespace = $namespace;
                 $this->name = $name;
                 $this->type = $type;
                 $this->cooldown = $cooldown;
@@ -105,7 +103,7 @@
                 $this->maxEntInRange = $maxEntInRange;
                 $this->effect = $effect;
 
-                $this->skillUpgrades = RPGLike::getInstance()->skillUnlocks[$this->getName()];
+                $this->skillUpgrades = RPGLike::getInstance()->skillUnlocks[$this->getName()]['upgrades'];
 
         }
         public function getOwner()

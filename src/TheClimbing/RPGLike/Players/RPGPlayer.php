@@ -172,8 +172,7 @@
         }
         public function unlockSkill(string $skillNamespace, string $skillName, bool $form = true)
         {
-            $skill = $skillNamespace . $skillName;
-            $this->skills[$skillName] = new $skill($this, $skillNamespace);
+            $this->skills[$skillName] = new $skillNamespace($this);
             if($form){
                 RPGForms::skillHelpForm($this, $skillName);
             }
@@ -211,19 +210,23 @@
             foreach(RPGLike::getInstance()->skillUnlocks as $key =>  $skill) {
                 $requirements = [];
                 foreach($skill['unlock'] as $key1 => $value){
+                    if ($key1 == 'upgrades')
+                    {
+                        continue;
+                    }
                     if($this->getAttribute($key1) >= $value){
                         $requirements[] = true;
                     }else{
                         $requirements[] = false;
                     }
-
-                }
-                if ((bool) array_product($requirements)){
-                    $namespace = $skill['namespace'];
-                    if(array_key_exists($key, $this->skills) == false){
-                        $this->unlockSkill($namespace, $key);
+                    if ((bool) array_product($requirements)){
+                        $namespace = SkillsManager::getSkill($key)['namespace'];
+                        if(array_key_exists($key, $this->skills) == false){
+                            $this->unlockSkill($namespace, $key);
+                        }
                     }
                 }
+
             }
         }
         public function setSPleft(int $spleft)

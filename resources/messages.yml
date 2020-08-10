@@ -15,6 +15,7 @@ Forms:
       exit: 'Exit'
   MenuForm:
     title: "Menu"
+    content: ''
     buttons:
       skills: "Skills help"
       stats: "Your Stats"

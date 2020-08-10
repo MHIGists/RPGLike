@@ -15,14 +15,13 @@
 
     class DoubleStrike extends BaseSkill
     {
-        public function __construct(RPGPlayer $owner, string $namespace)
+        public function __construct(RPGPlayer $owner)
         {
-            $this->setName('DoubleStrike');
             $this->setType('passive');
             $this->setCooldownTime(0);
             $this->setMaxEntInRange(1);
             $this->setRange(0);
-            parent::__construct($owner, $namespace);
+            parent::__construct($owner, 'DoubleStrike');
         }
         public function setPlayerAttackCD(EntityDamageByEntityEvent $event)
         {

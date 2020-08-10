@@ -14,12 +14,11 @@ use TheClimbing\RPGLike\Players\RPGPlayer;
 class Explosion extends BaseSkill
 {
     private $owner;
-    public function __construct(RPGPlayer $owner, string $namespace)
+    public function __construct(RPGPlayer $owner)
     {
         $this->owner = $owner;
-        $this->setName('Explosion');
         $this->setCooldownTime(10000);
-        parent::__construct($owner, $namespace);
+        parent::__construct($owner, 'Explosion');
     }
     public function damageEvent(EntityDamageByEntityEvent $event)
     {
