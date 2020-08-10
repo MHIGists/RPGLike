@@ -4,7 +4,6 @@
 namespace TheClimbing\RPGLike\Tasks;
 
 
-use pocketmine\scheduler\AsyncTask;
 use pocketmine\scheduler\Task;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
@@ -19,7 +18,7 @@ class CooldownTask extends Task
         $this->skillName = $skillName;
     }
 
-    public function onRun()
+    public function onRun(int $currentTick)
     {
         $this->player->getSkill($this->skillName)->removeCooldown();
     }
