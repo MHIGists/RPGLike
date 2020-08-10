@@ -13,7 +13,7 @@ use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class Explosion extends BaseSkill
 {
-    private $owner;
+    protected $owner;
     public function __construct(RPGPlayer $owner)
     {
         $this->owner = $owner;
