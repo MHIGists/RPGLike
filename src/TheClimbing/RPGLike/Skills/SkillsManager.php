@@ -15,9 +15,11 @@ class SkillsManager
     public static $defaultNamespace = "\\TheClimbing\\RPGLike\\Skills\\";
 
     public static $skills;
+    private static $main;
 
     public function __construct(RPGLike $rpg)
     {
+        self::$main = $rpg;
         foreach ($rpg->getConfig()->getNested("Skills") as $key => $skill) {
             self::registerSkill($key, $skill);
         }
@@ -29,17 +31,17 @@ class SkillsManager
 
         if (array_key_exists("namespace", $values)) {
             if (is_null($values['namespace']) || $values['namespace'] == "" || empty($values['namespace'])) {
-                RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
+                self::$main->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
                 self::$skills[$skillName]['namespace'] = self::$defaultNamespace . $skillName;
             } else {
                 self::$skills[$skillName]['namespace'] = $values['namespace'];
             }
         }else{
-            RPGLike::getInstance()->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
+            self::$main->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
             self::$skills[$skillName]['namespace'] = self::$defaultNamespace . $skillName;
         }
-        if (array_key_exists($skillName, RPGLike::getInstance()->getMessages()['Skills'])) {
-            self::$skills[$skillName]["description"] = RPGLike::getInstance()->getMessages()['Skills'][$skillName];
+        if (array_key_exists($skillName, self::$main->getMessages()['Skills'])) {
+            self::$skills[$skillName]["description"] = self::$main->getMessages()['Skills'][$skillName];
         }
     }
 

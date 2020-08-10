@@ -17,6 +17,11 @@
 
     class RPGForms
     {
+        private static $main;
+        public function __construct(RPGLike $rpg)
+        {
+            self::$main = $rpg;
+        }
 
         public static function upgradeStatsForm(RPGPlayer $player, int $spleft)
         {
@@ -40,7 +45,7 @@
                     case "vitality":
                         $player->setVIT($player->getVIT() + 1);
                         $spleft--;
-                        RPGLike::getInstance()->applyVitalityBonus($pl);
+                        $player->applyVitalityBonus();
                         break;
                     case "defense":
                         $player->setDEF($player->getDEF() + 1);
@@ -49,7 +54,7 @@
                     case "dexterity":
                         $player->setDEX($player->getDEX() + 1);
                         $spleft--;
-                        RPGLike::getInstance()->applyDexterityBonus($pl);
+                        $player->applyDexterityBonus();
                         break;
                     case "exit":
                         if ($spleft > 0)
@@ -79,7 +84,7 @@
     
         public static function skillHelpForm(RPGPlayer $player, string $skillName)
         {
-            $skillDescription = Utils::parseArrayKeywords(RPGLike::getInstance()->consts, SkillsManager::getSkillDescription($skillName));
+            $skillDescription = Utils::parseArrayKeywords(self::$main->consts, SkillsManager::getSkillDescription($skillName));
             $form = new SimpleForm(function(Player $pl, $data) use ($player) {
                 switch($data) {
                     case 'Back':
@@ -87,7 +92,7 @@
                         break;
                 }
             });
-            $form->setTitle(RPGLike::getInstance()->getMessages()['Forms']['SkillInfo']['title']);
+            $form->setTitle(self::$main->getMessages()['Forms']['SkillInfo']['title']);
             $form->setContent($skillDescription['description'] . TextFormat::EOL . $skillDescription['unlocks']);
             $form->addButton('Back to menu', -1, '', 'Back');
             $player->sendForm($form);
@@ -129,7 +134,7 @@
             if(array_key_exists('content', $menuStrings)){
                 $form->setContent($menuStrings['content']);
             }else{
-                RPGLike::getInstance()->getLogger()->alert('Please check messages.yml Menu Form contents are empty');
+                self::$main->getLogger()->alert('Please check messages.yml Menu Form contents are empty');
             }
             $player->sendForm($form);
         }
@@ -157,12 +162,12 @@
         }
         public static function parseMessages(RPGPlayer $player ,string $type, int $spleft = 0) : array
         {
-            $messages = RPGLike::getInstance()->getMessages()['Forms'][$type];
+            $messages = self::$main->getMessages()['Forms'][$type];
             $stats = $player->getAttributes();
             $stats['PLAYER'] = $player->getName();
             $stats['SPLEFT'] = $spleft;
 
-            $joined = array_merge($stats, RPGLike::getInstance()->consts);
+            $joined = array_merge($stats, self::$main->consts);
             return Utils::parseArrayKeywords($joined, $messages);
         }
     }

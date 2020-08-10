@@ -29,7 +29,7 @@
 
         public function onLoad()
         {
-            self::$instance = $this;
+
             
             $this->saveDefaultConfig();
             $this->saveResource('messages.yml');
@@ -38,8 +38,8 @@
             $messages = (new Config($this->getDataFolder() . 'messages.yml', Config::YAML))->getAll();
             $this->messages = $messages;
 
-            new RPGForms();
-            new PlayerManager();
+            new RPGForms($this);
+            new PlayerManager($this);
             new SkillsManager($this);
         }
         
@@ -54,6 +54,7 @@
             $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 
             $this->getSkillUnlocks();
+            self::$instance = $this;
         }
         
         
@@ -97,35 +98,7 @@
         {
             $this->skillUnlocks = $this->getConfig()->getNested('SkillUpgrades');
         }
-        public function applyDamageBonus(EntityDamageByEntityEvent $event) : void
-        {
-            $damager = $event->getDamager();
-            if($damager instanceof RPGPlayer) {
-                $baseDamage = $event->getBaseDamage();
-                $event->setBaseDamage($baseDamage + $damager->getSTRBonus());
-            }
-        }
-        
-        public function applyVitalityBonus(RPGPlayer $player)
-        {
-            $player->setMaxHealth(20 + $player->getVITBonus());
-            $player->setHealth(20 + $player->getVITBonus());
-        }
-        
-        public function applyDefenseBonus(EntityDamageByEntityEvent $event) : void
-        {
-            $receiver = $event->getEntity();
-            if($receiver instanceof RPGPlayer) {
-                $receiver->setAbsorption($receiver->getAbsorption() + $receiver->getDEFBonus());
-            }
-        }
-        
-        public function applyDexterityBonus(RPGPlayer $player)
-        {
-            $dex = $player->getDEXBonus();
-            $movement = $player->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-            $movement->setValue($movement->getValue() * (1 + $dex));
-        }
+
         
 
 

@@ -4,6 +4,8 @@
     
     namespace TheClimbing\RPGLike\Players;
     
+    use pocketmine\entity\Attribute;
+    use pocketmine\event\entity\EntityDamageByEntityEvent;
     use pocketmine\Player;
 
     use TheClimbing\RPGLike\Forms\RPGForms;
@@ -97,7 +99,6 @@
         {
             $this->vit = $vit;
             $this->calcVITBonus();
-            RPGLike::getInstance()->applyVitalityBonus($this);
         }
         public function getVIT() : int
         {
@@ -123,7 +124,7 @@
         {
             $this->dex = $dex;
             $this->calcDEXBonus();
-            RPGLike::getInstance()->applyDexterityBonus($this);
+            $this->applyDexterityBonus();
         }
         public function getDEX() : int
         {
@@ -237,26 +238,39 @@
         {
             return $this->spleft;
         }
-        public function reset()
+        public function resetSkills()
         {
-            $this->setXPLevel(1);
-
-            $this->setDEX(1);
-            $this->setSTR(1);
-            $this->setVIT(1);
-            $this->setDEF(1);
-            
-            $this->calcDEXBonus();
-            $this->calcDEFBonus();
-            $this->calcVITBonus();
-            $this->calcSTRBonus();
-            
             $this->skills = [];
-
-            RPGLike::getInstance()->applyDexterityBonus($this);
-            RPGLike::getInstance()->applyVitalityBonus($this);
+        }
+        public function applyDamageBonus(EntityDamageByEntityEvent $event) : void
+        {
+            $damager = $event->getDamager();
+            if($damager instanceof RPGPlayer) {
+                $baseDamage = $event->getBaseDamage();
+                $event->setBaseDamage($baseDamage + $damager->getSTRBonus());
+            }
         }
 
+        public function applyVitalityBonus()
+        {
+            $this->setMaxHealth(20 + $this->getVITBonus());
+            $this->setHealth(20 + $this->getVITBonus());
+        }
+
+        public function applyDefenseBonus(EntityDamageByEntityEvent $event) : void
+        {
+            $receiver = $event->getEntity();
+            if($receiver instanceof RPGPlayer) {
+                $receiver->setAbsorption($receiver->getAbsorption() + $receiver->getDEFBonus());
+            }
+        }
+
+        public function applyDexterityBonus()
+        {
+            $dex = $this->getDEXBonus();
+            $movement = $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+            $movement->setValue($movement->getValue() * (1 + $dex));
+        }
         public function savePlayerVariables() : void
         {
             $playerVars = [
@@ -271,20 +285,5 @@
             $this->config->save();
         }
 
-        /**
-         * @return float
-         */
-        public function getX()
-        {
-            return $this->lastX;
-        }
-
-        /**
-         * @return float
-         */
-        public function getZ()
-        {
-            return $this->lastZ;
-        }
     }
     

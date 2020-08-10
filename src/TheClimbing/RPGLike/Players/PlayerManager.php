@@ -13,11 +13,11 @@
     class PlayerManager
     {
         /* @var PlayerManager */
-        private static $instance;
+        private static $main;
         
-        public function __construct()
+        public function __construct(RPGLike $rpg)
         {
-            self::$instance = $this;
+            self::$main = $rpg;
         }
         public static function makePlayer(Player $player)
         {
@@ -49,7 +49,7 @@
 
         public static function getCachedPlayers()
         {
-            return RPGLike::getInstance()->getConfig()->getNested('Players');
+            return self::$main->getConfig()->getNested('Players');
         }
     
         /**
@@ -70,8 +70,5 @@
                 return false;
             }
         }
-        public static function getInstance() : PlayerManager
-        {
-            return self::$instance;
-        }
+
     }
