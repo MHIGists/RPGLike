@@ -8,5 +8,46 @@ Skills:
     namespace: ""
   Fortress:
     namespace : ""
+SkillUpgrades:
+  Tank:
+    unlock:
+      VIT : 10
+    upgrades:
+      - VIT : 15
+      - VIT : 20
+        DEF : 10
+      - VIT : 35
+        DEF : 20
+    Coinflip:
+      unlock:
+        STR: 10
+        upgrades:
+          - STR: 15
+          - STR: 20
+            DEX: 10
+          - STR: 35
+            DEX: 20
+    DoubleStrike:
+      unlock:
+        DEX: 10
+        upgrades:
+          - DEX: 15
+          - DEX: 20
+            STR: 10
+          - DEX: 35
+            STR: 20
+    Fortress:
+      unlock:
+        DEF: 10
+        upgrades:
+          - DEF: 15
+          - DEF: 20
+            VIT: 10
+          - DEF: 35
+            VIT: 20
+    Explosion:
+      unlock:
+        - STR : 20
+          DEX : 10
 Players: []
 ...

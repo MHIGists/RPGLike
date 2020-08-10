@@ -25,6 +25,7 @@
 
         public $messages;
         public $consts = [];
+        public $skillUnlocks = [];
 
         public function onLoad()
         {
@@ -51,6 +52,8 @@
             $this->getServer()->getCommandMap()->register('lvlup', $lvl);
             
             $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+
+            $this->getSkillUnlocks();
         }
         
         
@@ -90,7 +93,10 @@
                 ];
         }
 
-        
+        public function getSkillUnlocks() : void
+        {
+            $this->skillUnlocks = $this->getConfig()->getNested('SkillUpgrades');
+        }
         public function applyDamageBonus(EntityDamageByEntityEvent $event) : void
         {
             $damager = $event->getDamager();

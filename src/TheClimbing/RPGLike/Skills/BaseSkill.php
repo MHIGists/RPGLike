@@ -58,12 +58,7 @@
         /**
          * @var array
          */
-        private $skillUpgrades = [
-            'base' => [
-            ],
-            'upgrades' => [
-            ]
-        ];
+        private $skillUpgrades = [];
     
         /**
          * That's including the source
@@ -83,14 +78,14 @@
          */
         private $skillLevel = 0;
 
+        public $cdStartTime = 0.0;
+
 
         /**
          * BaseSkill constructor.
          *
          * @param RPGPlayer $owner
          * @param string $namespace
-         * @param array $baseUnlock
-         * @param bool $dummy
          * @param string $name
          * @param string $type
          * @param int $cooldown
@@ -98,9 +93,9 @@
          * @param int $maxEntInRange
          * @param null $effect
          */
-        public function __construct(RPGPlayer $owner, string $namespace, array $baseUnlock, bool $dummy = false, string $name = '', string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
+        public function __construct(RPGPlayer $owner, string $namespace, string $name = '', string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
         {
-            if (!$dummy){
+
                 $this->owner = $owner;
                 $this->namespace = $namespace;
                 $this->name = $name;
@@ -110,10 +105,8 @@
                 $this->maxEntInRange = $maxEntInRange;
                 $this->effect = $effect;
 
-                $this->skillUpgrades['base'] = $baseUnlock;
-            }else{
-                $this->skillUpgrades['base'] = $baseUnlock;
-            }
+                $this->skillUpgrades = RPGLike::getInstance()->skillUnlocks[$this->getName()];
+
         }
         public function getOwner()
         {
@@ -185,6 +178,7 @@
         {
             $this->onCooldown = true;
             RPGLike::getInstance()->getScheduler()->scheduleDelayedTask(new CooldownTask($this->owner, $this->getName()), $this->getCooldownTime());
+            $this->cdStartTime = time();
         }
         public function isOnCooldown() : bool
         {
@@ -193,6 +187,12 @@
         public function removeCooldown() : void
         {
             $this->onCooldown = false;
+        }
+        public function getRemainingCooldown() : float
+        {
+            $deltaTime = time() - $this->cdStartTime;
+            $deltaTime %= 3600;
+            return floor($deltaTime / 60);
         }
         protected function setRange(int $range) : void
         {
@@ -211,11 +211,11 @@
          */
         protected function setBaseUnlock(array $baseUnlock) : void
         {
-            $this->skillUpgrades['base'] = $baseUnlock;
+            $this->skillUpgrades['unlock'] = $baseUnlock;
         }
-        public function getBaseUnlock() : array
+        public function getBaseUnlock() : int
         {
-            return $this->skillUpgrades['base'];
+            return $this->skillUpgrades['unlock'];
         }
         public function getSkillUpgrades() : array
         {
@@ -223,7 +223,7 @@
         }
 
         /**
-         * Reqired array see reademe for more info on the requisite array model
+         * Reqired array see reademe for more info on the required array model
          *
          * @param array $upgrades
          */

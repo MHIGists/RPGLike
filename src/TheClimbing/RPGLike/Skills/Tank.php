@@ -4,23 +4,20 @@
     
     namespace TheClimbing\RPGLike\Skills;
     
-    use pocketmine\Player;
-    use TheClimbing\RPGLike\Players\PlayerManager;
+
     use TheClimbing\RPGLike\Players\RPGPlayer;
 
     class Tank extends BaseSkill
     {
-        public function __construct(RPGPlayer $owner, string $namespace, bool $dummy = false)
+        public function __construct(RPGPlayer $owner, string $namespace)
         {
-            parent::__construct($owner, $namespace, ['VIT' => 10], $dummy);
+
             $this->setName('Tank');
             $this->setType('passive');
             $this->setCooldownTime(0);
             $this->setRange(0);
-            if (!$dummy){
-                $this->setPlayerHealth($owner);
-
-            }
+            $this->setPlayerHealth($owner);
+            parent::__construct($owner, $namespace);
         }
         public function setPlayerHealth(RPGPlayer $player)
         {

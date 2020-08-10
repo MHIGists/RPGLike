@@ -44,12 +44,6 @@ class SkillsManager
         if (array_key_exists($skillName, RPGLike::getInstance()->getMessages()['Skills'])) {
             self::$skills[$skillName]["description"] = RPGLike::getInstance()->getMessages()['Skills'][$skillName];
         }
-        $namespace = $values['namespace'] . $skillName;
-
-        $skill = new $namespace('', '', true);
-        self::$skills[$skillName]['unlockConditions'] = $skill->getBaseUnlock();
-        unset($skill);
-
     }
 
     public static function skillRegistered(string $skillName): bool
