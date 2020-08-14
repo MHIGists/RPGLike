@@ -12,8 +12,8 @@
     use pocketmine\event\player\PlayerMoveEvent;
     use pocketmine\event\player\PlayerJoinEvent;
     use pocketmine\event\player\PlayerExperienceChangeEvent;
-    use pocketmine\event\player\PlayerDeathEvent;
     use pocketmine\event\player\PlayerQuitEvent;
+    use pocketmine\event\player\PlayerRespawnEvent;
 
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
@@ -93,7 +93,7 @@
             }
         }
         
-        public function onDeath(PlayerDeathEvent $event)
+        public function onRespawn(PlayerRespawnEvent $event)
         {
             $player = $event->getPlayer();
             if ($player instanceof RPGPlayer)
