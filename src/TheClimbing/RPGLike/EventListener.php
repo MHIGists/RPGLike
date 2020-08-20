@@ -8,7 +8,7 @@
     use pocketmine\event\Listener;
     
     use pocketmine\event\entity\EntityDamageByEntityEvent;
-
+    
     use pocketmine\event\player\PlayerMoveEvent;
     use pocketmine\event\player\PlayerJoinEvent;
     use pocketmine\event\player\PlayerExperienceChangeEvent;
@@ -56,10 +56,6 @@
                 }
             }
 
-            if ($player->getMaxHealth() != (20 + $player->getVITBonus()))
-            {
-                $player->applyVitalityBonus();
-            }
         }
         public function dealDamageEvent(EntityDamageByEntityEvent $event)
         {
@@ -78,7 +74,6 @@
 
             $new_lvl = $event->getNewLevel();
             $old_level = $event->getOldLevel();
-
             if($new_lvl !== null) {
                 if($new_lvl > $old_level) {
                     if($player instanceof RPGPlayer) {
@@ -89,10 +84,15 @@
                         $player->applyVitalityBonus();
                         $player->applyDexterityBonus();
                     }
+                }else{
+                    if ($this->main->config['keep-xp'] == true)
+                    {
+                        $event->setCancelled(true); // Unwanted behavior this breaks anvil functionality
+                    }
                 }
             }
         }
-        
+
         public function onRespawn(PlayerRespawnEvent $event)
         {
             $player = $event->getPlayer();
@@ -104,6 +104,7 @@
                 $player->setDEF(1);
                 $player->resetSkills();
                 $player->setXpLevel(1);
+                $player->applyVitalityBonus();
             }
 
         }

@@ -20,7 +20,7 @@ class SkillsManager
     public function __construct(RPGLike $rpg)
     {
         self::$main = $rpg;
-        foreach ($rpg->getConfig()->getNested("Skills") as $key => $skill) {
+        foreach ($rpg->config['Skills'] as $key => $skill) {
             self::registerSkill($key, $skill);
         }
     }

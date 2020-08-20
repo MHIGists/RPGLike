@@ -5,17 +5,14 @@
     
     namespace TheClimbing\RPGLike;
     
-    use pocketmine\entity\Attribute;
     use pocketmine\plugin\PluginBase;
     use pocketmine\utils\Config;
     use pocketmine\utils\TextFormat;
-    use pocketmine\event\entity\EntityDamageByEntityEvent;
 
     use TheClimbing\RPGLike\Commands\LevelUpCommand;
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Commands\RPGCommand;
-    use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\Skills\SkillsManager;
 
 
@@ -24,6 +21,7 @@
         private static $instance;
 
         public $messages;
+        public $config;
         public $consts = [];
         public $skillUnlocks = [];
 
@@ -37,6 +35,8 @@
 
             $messages = (new Config($this->getDataFolder() . 'messages.yml', Config::YAML))->getAll();
             $this->messages = $messages;
+
+            $this->config = $this->getConfig()->getAll();
 
             new RPGForms($this);
             new PlayerManager($this);
@@ -96,11 +96,8 @@
 
         public function getSkillUnlocks() : void
         {
-            $this->skillUnlocks = $this->getConfig()->getNested('SkillUpgrades');
+            $this->skillUnlocks = $this->config['SkillUpgrades'];
         }
-
-        
-
 
         public function getMessages() : array
         {

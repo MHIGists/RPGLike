@@ -45,7 +45,7 @@
             parent::__construct($interface, $ip, $port);
 
 
-            $this->config = RPGLike::getInstance()->getConfig();
+            $this->config = RPGLike::getInstance()->config;
             $modifiers = $this->getModifiers();
             if ($modifiers != false)
             {
