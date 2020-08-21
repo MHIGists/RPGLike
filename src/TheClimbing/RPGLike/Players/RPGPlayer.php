@@ -36,23 +36,24 @@
         private $dexModifier = 0.0002;
         private $dexBonus = 1;
 
-        public $spleft = 0;
-
         private $config;
+
+        public $movementSpeed = 0;
+        public $spleft = 0;
+        public $xplevel = 0;
 
         public function __construct($interface, $ip, $port)
         {
             parent::__construct($interface, $ip, $port);
 
-
-            $this->config = RPGLike::getInstance()->config;
+            $this->config = RPGLike::getInstance()->getConfig();
             $modifiers = $this->getModifiers();
             if ($modifiers != false)
             {
-                $this->setDEFModifier($modifiers['defModifier']);
-                $this->setVITModifier($modifiers['vitModifier']);
-                $this->setSTRModifier($modifiers['strModifier']);
-                $this->setDEXModifier($modifiers['dexModifier']);
+                $this->setDEFModifier($modifiers['DEF']);
+                $this->setVITModifier($modifiers['VIT']);
+                $this->setSTRModifier($modifiers['STR']);
+                $this->setDEXModifier($modifiers['DEX']);
             }
 
             $this->calcVITBonus();
@@ -249,6 +250,7 @@
                 $baseDamage = $event->getBaseDamage();
                 $event->setBaseDamage($baseDamage + $damager->getSTRBonus());
             }
+
         }
 
         public function applyVitalityBonus()
@@ -262,6 +264,7 @@
             $receiver = $event->getEntity();
             if($receiver instanceof RPGPlayer) {
                 $receiver->setAbsorption($receiver->getAbsorption() + $receiver->getDEFBonus());
+
             }
         }
 
@@ -270,6 +273,7 @@
             $dex = $this->getDEXBonus();
             $movement = $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
             $movement->setValue($movement->getValue() * (1 + $dex));
+            $this->movementSpeed = $movement->getValue() * (1 + $dex);
         }
         public function savePlayerVariables() : void
         {

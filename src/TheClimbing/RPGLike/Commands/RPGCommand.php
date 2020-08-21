@@ -21,6 +21,7 @@
             $this->setDescription('Opens RPG Menu');
             $this->setPermission('rpgcommand');
             $this->setUsage('rpg stats|skills|upgrade or rpg help <skillName>');
+            $this->setPermissionMessage('You dont have permission to use this command');
         }
         public function execute(CommandSender $sender, string $commandLabel, array $args)
         {

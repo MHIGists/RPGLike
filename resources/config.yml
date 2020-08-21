@@ -1,4 +1,10 @@
 ---
+keep-xp : true
+Hud:
+   on: true
+   message: '{HEALTH}/{MAXHP} MS: {MOVEMENTSPEED} | DMG: {DAMAGE}{NL}Absorption: {ABSORPTION}'
+   period: 3
+   timezone: 'UTC'
 Skills:
   Tank:
     namespace: ""
@@ -50,4 +56,9 @@ SkillUpgrades:
       - STR: 20
         DEX: 10
 Players: []
+Modifiers:
+  STR : 0.15
+  VIT : 0.175
+  DEF : 0.1
+  DEX : 0.0002
 ...
