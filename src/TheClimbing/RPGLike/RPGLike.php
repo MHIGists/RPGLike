@@ -113,7 +113,7 @@ class RPGLike extends PluginBase
             'MAXHP' => $player->getMaxHealth(),
             'DAMAGE' => $swordDamage + round($player->getSTRBonus(), 0, PHP_ROUND_HALF_UP),
             'MOVEMENTSPEED' => round($player->movementSpeed, 4, PHP_ROUND_HALF_UP),
-            'ABSORPTION' => $player->getArmorPoints() + $player->getDEFBonus(),
+            'ABSORPTION' => $player->getAbsorption() + $player->getDEFBonus(),
             'TICKS' => $player->getServer()->getTicksPerSecondAverage(),
             'LEVEL' => $player->getLevel()->getName(),
             'XPLEVEL' => $player->getXpLevel(),
