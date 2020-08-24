@@ -4,22 +4,19 @@
 
     namespace TheClimbing\RPGLike;
     
-    use pocketmine\block\Block;
-    use pocketmine\event\block\BlockBreakEvent;
+
+    use pocketmine\event\entity\EntityRegainHealthEvent;
     use pocketmine\event\player\PlayerCreationEvent;
     use pocketmine\event\Listener;
     
     use pocketmine\event\entity\EntityDamageByEntityEvent;
 
-    use pocketmine\event\player\PlayerDataSaveEvent;
-    use pocketmine\event\player\PlayerDeathEvent;
     use pocketmine\event\player\PlayerMoveEvent;
     use pocketmine\event\player\PlayerJoinEvent;
     use pocketmine\event\player\PlayerExperienceChangeEvent;
     use pocketmine\event\player\PlayerQuitEvent;
     use pocketmine\event\player\PlayerRespawnEvent;
 
-    use pocketmine\item\Pickaxe;
     use pocketmine\Player;
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\PlayerManager;
@@ -99,7 +96,14 @@
             }
 
         }
-
+        public function healtRegen(EntityRegainHealthEvent $event)
+        {
+            $player = $event->getEntity();
+            if ($player instanceof Player)
+            {
+                $event->setAmount($event->getAmount() + $player->getHealthRegenBonus());
+            }
+        }
         public function onRespawn(PlayerRespawnEvent $event)
         {
             $player = $event->getPlayer();

@@ -106,13 +106,23 @@
                 $this->skillUpgrades = RPGLike::getInstance()->skillUnlocks[$this->getName()]['upgrades'];
 
         }
-        public function getOwner()
+        public function getOwner() : RPGPlayer
         {
             return $this->owner;
         }
-       public function getNamespace()
+       public function getNamespace() : string
        {
            return $this->namespace;
+       }
+       public function isActive() : bool
+       {
+           if ($this->type = 'active')
+           {
+               return true;
+           }else
+           {
+               return false;
+           }
        }
 
         /**

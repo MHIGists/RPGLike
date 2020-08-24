@@ -17,7 +17,7 @@
         public function __construct(RPGPlayer $owner)
         {
             parent::__construct($owner, "Coinflip");
-            $this->setType('passive');
+            $this->setType('active');
             $this->setCooldownTime(0);
 
         }

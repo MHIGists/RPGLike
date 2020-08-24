@@ -17,7 +17,7 @@
     {
         public function __construct(RPGPlayer $owner)
         {
-            $this->setType('passive');
+            $this->setType('active');
             $this->setCooldownTime(0);
             $this->setMaxEntInRange(1);
             $this->setRange(0);

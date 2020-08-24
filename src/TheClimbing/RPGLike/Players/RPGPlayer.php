@@ -70,7 +70,21 @@
             }
 
         }
+        public function triggerSkills()
+        {
+            if (!empty($this->skills))
+            {
+                foreach ($this->skills as $skill) {
+                    if ($skill->isActive())
+                    {
+                        continue;
+                    }
+                    $function = get_class_methods($skill);
 
+                    $skill->$function[0]($this);
+                }
+            }
+        }
         public function setSTR(int $str) : void
         {
             $this->str = $str;
@@ -274,6 +288,10 @@
             $movement = $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
             $movement->setValue($movement->getValue() * (1 + $dex));
             $this->movementSpeed = $movement->getValue() * (1 + $dex);
+        }
+        public function getHealthRegenBonus()
+        {
+            return floor($this->getVITBonus() / 3);
         }
         public function savePlayerVariables() : void
         {

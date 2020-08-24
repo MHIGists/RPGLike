@@ -4,6 +4,7 @@
     
     namespace TheClimbing\RPGLike\Forms;
     
+    use pocketmine\event\entity\EntityRegainHealthEvent;
     use pocketmine\Player;
 
     use pocketmine\utils\TextFormat;
@@ -80,6 +81,7 @@
             }
             $player->sendForm($form);
             $player->checkForSkills();
+            $player->triggerSkills();
         }
     
         public static function skillHelpForm(RPGPlayer $player, string $skillName)
@@ -160,6 +162,7 @@
             $form->addButton("Back to main menu", -1, '', 'Back');
             $player->sendForm($form);
         }
+
         public static function parseMessages(RPGPlayer $player ,string $type, int $spleft = 0) : array
         {
             $messages = self::$main->getMessages()['Forms'][$type];

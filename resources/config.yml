@@ -55,6 +55,10 @@ SkillUpgrades:
     unlock:
       - STR: 20
         DEX: 10
+  HealthRegen:
+    unlock:
+      - VIT: 20
+        DEX: 10
 Players: []
 Modifiers:
   STR : 0.15

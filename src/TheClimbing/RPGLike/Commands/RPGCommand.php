@@ -4,14 +4,13 @@
     
     use pocketmine\command\Command;
     use pocketmine\command\CommandSender;
-    use pocketmine\Player;
+    use pocketmine\command\PluginIdentifiableCommand;
 
     use TheClimbing\RPGLike\Forms\RPGForms;
-    use TheClimbing\RPGLike\Players\PlayerManager;
     use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\RPGLike;
 
-    class RPGCommand extends Command
+    class RPGCommand extends Command implements PluginIdentifiableCommand
     {
         private $loader;
         public function __construct(RPGLike $rpg)
@@ -51,5 +50,9 @@
             }else{
                 $sender->sendMessage($this->getPermissionMessage());
             }
+        }
+        public function getPlugin(): RPGLike
+        {
+            return $this->loader;
         }
     }
