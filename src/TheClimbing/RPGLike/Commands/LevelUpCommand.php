@@ -19,7 +19,13 @@ class LevelUpCommand extends Command
     {
         if ($sender instanceof Player)
         {
-            $sender->setXpLevel($args[0]);
+            if (empty($args))
+            {
+                $sender->setXpLevel($sender->getXpLevel() + 1);
+            }
+            else{
+                $sender->setXpLevel($args[0]);
+            }
         }
     }
 }

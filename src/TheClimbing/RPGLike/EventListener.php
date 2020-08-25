@@ -99,7 +99,7 @@
         public function healtRegen(EntityRegainHealthEvent $event)
         {
             $player = $event->getEntity();
-            if ($player instanceof Player)
+            if ($player instanceof Player && $event->getRegainReason() == EntityRegainHealthEvent::CAUSE_SATURATION)
             {
                 $event->setAmount($event->getAmount() + $player->getHealthRegenBonus());
             }
