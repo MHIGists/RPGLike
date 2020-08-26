@@ -4,7 +4,6 @@
     
     namespace TheClimbing\RPGLike\Forms;
     
-    use pocketmine\event\entity\EntityRegainHealthEvent;
     use pocketmine\Player;
 
     use pocketmine\utils\TextFormat;
@@ -63,7 +62,7 @@
                             $player->setSPleft($spleft);
                         }
                         return;
-                        default:
+                    default:
                         if ($spleft > 0)
                         {
                             $player->setSPleft($spleft);
@@ -84,7 +83,7 @@
             $player->triggerSkills();
         }
     
-        public static function skillHelpForm(RPGPlayer $player, string $skillName)
+        public static function skillHelpForm(RPGPlayer $player, string $skillName, bool $unlock = true)
         {
             $skillDescription = Utils::parseArrayKeywords(self::$main->consts, SkillsManager::getSkillDescription($skillName));
             $form = new SimpleForm(function(Player $pl, $data) use ($player) {
@@ -95,20 +94,35 @@
                 }
             });
             $form->setTitle(self::$main->getMessages()['Forms']['SkillInfo']['title']);
-            $form->setContent($skillDescription['description'] . TextFormat::EOL . $skillDescription['unlocks']);
+            if ($unlock)
+            {
+                $form->setContent($skillDescription['description'] . TextFormat::EOL . $skillDescription['unlocks']);
+            }else{
+                $form->setContent($skillDescription['description']);
+
+            }
             $form->addButton('Back to menu', -1, '', 'Back');
             $player->sendForm($form);
         }
     
-        public static function statsForm(RPGPlayer $player)
+        public static function statsForm(RPGPlayer $player, bool $back = false)
         {
             $messages = self::parseMessages(($player), 'StatsForm');
         
-            $form = new SimpleForm(function(Player $player, $data) {});
+            $form = new SimpleForm(function(Player $p, $data) use ($player){
+                if ($data[0] == 'back')
+                {
+                    self::menuForm($player);
+                }
+            });
             $form->setTitle($messages['title']);
             $form->setContent($messages['content']);
             foreach($messages['buttons'] as $key => $message) {
                 $form->addButton($message, -1, '', $key);
+            }
+            if ($back)
+            {
+                $form->addButton('Back', -1, '', 'Back');
             }
             $player->sendForm($form);
         

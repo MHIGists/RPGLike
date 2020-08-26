@@ -59,7 +59,7 @@
             $this->calcVITBonus();
             $this->calcDEXBonus();
         }
-
+        /* @return array|false */
         public function getModifiers()
         {
             $modifiers = $this->config->getNested('modifiers');
@@ -70,7 +70,7 @@
             }
 
         }
-        public function triggerSkills()
+        public function triggerSkills() : void
         {
             if (!empty($this->skills))
             {
@@ -94,7 +94,7 @@
         {
             return $this->str;
         }
-        public function setSTRModifier(float $strModifier)
+        public function setSTRModifier(float $strModifier) : void
         {
             $this->strModifier = $strModifier;
         }
@@ -102,7 +102,7 @@
         {
             return $this->strModifier;
         }
-        public function calcSTRBonus()
+        public function calcSTRBonus() : void
         {
             $this->strBonus = $this->getSTR() * $this->getSTRModifier();
         }
@@ -119,7 +119,7 @@
         {
             return $this->vit;
         }
-        public function setVITModifier(float $vitModifier)
+        public function setVITModifier(float $vitModifier) : void
         {
             $this->vitModifier  = $vitModifier;
         }
@@ -127,7 +127,7 @@
         {
             return $this->vitModifier;
         }
-        public function calcVITBonus()
+        public function calcVITBonus() : void
         {
             $this->vitBonus = $this->getVIT() * $this->getVITModifier();
         }
@@ -145,7 +145,7 @@
         {
             return $this->dex;
         }
-        public function setDEXModifier(float $dexModifier)
+        public function setDEXModifier(float $dexModifier) : void
         {
             $this->dexModifier = $dexModifier;
         }
@@ -153,7 +153,7 @@
         {
             return $this->dexModifier;
         }
-        public function calcDEXBonus()
+        public function calcDEXBonus() : void
         {
             $this->dexBonus = $this->getDex() * $this->getDEXModifier();
         }
@@ -178,7 +178,7 @@
         {
             return $this->defModifier;
         }
-        public function calcDEFBonus()
+        public function calcDEFBonus() : void
         {
             $this->defBonus = $this->getDEF() * $this->getDEFModifier();
         }
@@ -186,7 +186,7 @@
         {
             return $this->defBonus;
         }
-        public function unlockSkill(string $skillNamespace, string $skillName, bool $form = true)
+        public function unlockSkill(string $skillNamespace, string $skillName, bool $form = true) : void
         {
             $this->skills[$skillName] = new $skillNamespace($this);
             if($form){
@@ -194,9 +194,24 @@
             }
         }
 
-        public function getSkill(string $skillName)
+        public function getSkill(string $skillName) : ?BaseSkill
         {
-            return $this->skills[$skillName];
+            if ($this->hasSkill($skillName))
+            {
+                return $this->skills[$skillName];
+            }else{
+                return null;
+            }
+        }
+        public function hasSkill(string $skillName) : bool
+        {
+            if (isset($this->skills[$skillName]))
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
         }
         /* @return  BaseSkill[] */
         public function getSkills()

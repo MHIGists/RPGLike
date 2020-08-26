@@ -96,12 +96,15 @@
             }
 
         }
-        public function healtRegen(EntityRegainHealthEvent $event)
+        public function healthRegen(EntityRegainHealthEvent $event)
         {
             $player = $event->getEntity();
-            if ($player instanceof Player && $event->getRegainReason() == EntityRegainHealthEvent::CAUSE_SATURATION)
+            if ($player instanceof Player)
             {
-                $event->setAmount($event->getAmount() + $player->getHealthRegenBonus());
+                if ($player->hasSkill('HealthRegen'))
+                {
+                    $player->getSkill('HealthRegen')->healthRegen($event);
+                }
             }
         }
         public function onRespawn(PlayerRespawnEvent $event)
