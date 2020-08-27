@@ -90,6 +90,8 @@
                         RPGForms::upgradeStatsForm($player, $spleft);
                         $player->applyVitalityBonus();
                         $player->applyDexterityBonus();
+                        $player->checkForSkills();
+                        $player->triggerSkills();
                     }
                 }
 

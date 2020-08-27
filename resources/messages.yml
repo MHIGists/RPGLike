@@ -35,3 +35,9 @@ Skills:
   Fortress:
     description: 'The Tank skill increases your absorption by 20 percent.'
     unlocks: 'You can unlock the tank skill once your DEF has reached level 10'
+  HealthRegen:
+    description: 'Health regen increases the total amount of health regened from one tick of saturation'
+    unlocks: 'You can unlock the health regen skill once your dexterity and vitality has reached 20 and 10'
+  Explosion:
+    description: 'Creates explosion when tapped with item on certain block'
+    unlocks: 'You can unlock it once you have your strength on lvl 20 and your dexterity on lvl 10'

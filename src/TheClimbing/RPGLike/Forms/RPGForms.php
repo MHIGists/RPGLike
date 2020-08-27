@@ -79,8 +79,6 @@
                 $form->addButton($button, -1, '', $key);
             }
             $player->sendForm($form);
-            $player->checkForSkills();
-            $player->triggerSkills();
         }
     
         public static function skillHelpForm(RPGPlayer $player, string $skillName, bool $unlock = true)
@@ -96,9 +94,9 @@
             $form->setTitle(self::$main->getMessages()['Forms']['SkillInfo']['title']);
             if ($unlock)
             {
-                $form->setContent($skillDescription['description'] . TextFormat::EOL . $skillDescription['unlocks']);
-            }else{
                 $form->setContent($skillDescription['description']);
+            }else{
+                $form->setContent($skillDescription['description'] . TextFormat::EOL . $skillDescription['unlocks']);
 
             }
             $form->addButton('Back to menu', -1, '', 'Back');
@@ -110,7 +108,7 @@
             $messages = self::parseMessages(($player), 'StatsForm');
         
             $form = new SimpleForm(function(Player $p, $data) use ($player){
-                if ($data[0] == 'back')
+                if ($data == 'back')
                 {
                     self::menuForm($player);
                 }
@@ -122,7 +120,7 @@
             }
             if ($back)
             {
-                $form->addButton('Back', -1, '', 'Back');
+                $form->addButton('Back', -1, '', 'back');
             }
             $player->sendForm($form);
         
@@ -136,7 +134,7 @@
                         self::skillsHelpForm($player);
                         break;
                     case "stats":
-                        self::statsForm($player);
+                        self::statsForm($player, true);
                         break;
                     case "upgrade":
                         self::upgradeStatsForm($player, 0);
@@ -173,7 +171,7 @@
             foreach ($skills as $skill) {
                 $form->addButton($skill, -1, '', $skill);
             }
-            $form->addButton("Back to main menu", -1, '', 'Back');
+            $form->addButton("Back to main menu", -1, '', 'back');
             $player->sendForm($form);
         }
 

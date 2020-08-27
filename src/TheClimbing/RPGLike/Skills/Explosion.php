@@ -29,7 +29,7 @@ class Explosion extends BaseSkill
             {
                 if ($this->isOnCooldown())
                 {
-                    $damager->sendPopup('Skill on cooldown: ' . $this->getRemainingCooldown());
+                    $damager->sendMessage('Skill on cooldown: ' . $this->getRemainingCooldown());
                 }
                 $pos = $event->getEntity()->getPosition();
                 switch ($this->getSkillLevel()){

@@ -6,6 +6,7 @@
     use pocketmine\command\CommandSender;
     use pocketmine\command\PluginIdentifiableCommand;
 
+    use pocketmine\plugin\Plugin;
     use TheClimbing\RPGLike\Forms\RPGForms;
     use TheClimbing\RPGLike\Players\RPGPlayer;
     use TheClimbing\RPGLike\RPGLike;
@@ -51,7 +52,7 @@
                 $sender->sendMessage($this->getPermissionMessage());
             }
         }
-        public function getPlugin(): RPGLike
+        public function getPlugin(): Plugin
         {
             return $this->loader;
         }

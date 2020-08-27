@@ -14,6 +14,10 @@ Skills:
     namespace: ""
   Fortress:
     namespace: ""
+  Explosion:
+    namespace: ""
+  HealthRegen:
+    namespace: ""
 SkillUpgrades:
   Tank:
     unlock:
@@ -55,10 +59,16 @@ SkillUpgrades:
     unlock:
       - STR: 20
         DEX: 10
+    upgrades:
+      - STR: 40
+        DEX: 15
   HealthRegen:
     unlock:
       - VIT: 20
         DEX: 10
+    upgrades:
+      - VIT: 40
+        DEX: 15
 Players: []
 Modifiers:
   STR : 0.15
