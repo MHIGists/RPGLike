@@ -21,7 +21,7 @@ Forms:
       stats: "Your Stats"
       upgrade: "Upgrade stats"
   SkillInfo:
-    title: ""
+    title: "{SKILLNAME}"
 Skills:
   Tank:
     description: 'The Tank skill increases your HP by 10 percent.'

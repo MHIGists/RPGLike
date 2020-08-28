@@ -8,7 +8,6 @@
     use pocketmine\Player;
     
     use TheClimbing\RPGLike\RPGLike;
-    use TheClimbing\RPGLike\Skills\SkillsManager;
 
     class PlayerManager
     {
@@ -40,7 +39,7 @@
                 $player->setSPleft($cachedPlayer['spleft']);
                 if(!empty($cachedPlayer['skills'])){
                     foreach($cachedPlayer['skills'] as $skill) {
-                        $player->unlockSkill(SkillsManager::getSkillNamespace($skill), $skill, false);
+                        $player->unlockSkill(RPGLike::getInstance()->getSkillNamespace($skill), $skill, false);
                     }
                 }
             }

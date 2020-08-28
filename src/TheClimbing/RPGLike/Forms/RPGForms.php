@@ -10,7 +10,6 @@
 
     use TheClimbing\RPGLike\RPGLike;
     use TheClimbing\RPGLike\Players\RPGPlayer;
-    use TheClimbing\RPGLike\Skills\SkillsManager;
     use TheClimbing\RPGLike\Utils;
 
     use jojoe77777\FormAPI\SimpleForm;
@@ -83,7 +82,7 @@
     
         public static function skillHelpForm(RPGPlayer $player, string $skillName, bool $unlock = true)
         {
-            $skillDescription = Utils::parseArrayKeywords(self::$main->consts, SkillsManager::getSkillDescription($skillName));
+            $skillDescription = Utils::parseArrayKeywords(self::$main->consts, RPGLike::getInstance()->getSkillDescription($skillName));
             $form = new SimpleForm(function(Player $pl, $data) use ($player) {
                 switch($data) {
                     case 'Back':
@@ -91,7 +90,10 @@
                         break;
                 }
             });
-            $form->setTitle(self::$main->getMessages()['Forms']['SkillInfo']['title']);
+            $title = self::$main->getMessages()['Forms']['SkillInfo']['title'];
+            str_replace(['{', '}'], [' ', ' '], $title);
+            str_replace('SKILLNAME', $skillName, $title);
+            $form->setTitle($title);
             if ($unlock)
             {
                 $form->setContent($skillDescription['description']);
@@ -154,7 +156,7 @@
         }
         public static function skillsHelpForm(RPGPlayer $player)
         {
-            $skills = SkillsManager::getAvailableSkills();
+            $skills = RPGLike::getInstance()->getAvailableSkills();
             $form = new SimpleForm(function(Player $pl, $data) use ($skills, $player)
             {
                     foreach ($skills as $skill) {

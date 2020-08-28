@@ -15,8 +15,6 @@ use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\Players\PlayerManager;
 use TheClimbing\RPGLike\Commands\RPGCommand;
-use TheClimbing\RPGLike\Players\RPGPlayer;
-use TheClimbing\RPGLike\Skills\SkillsManager;
 use TheClimbing\RPGLike\Tasks\HudTask;
 
 
@@ -28,6 +26,9 @@ class RPGLike extends PluginBase
     public $config;
     public $consts = [];
     public $skillUnlocks = [];
+    
+    private $defaultNamespace = "\\TheClimbing\\RPGLike\\Skills\\";
+    private $skills;
 
     public function onLoad()
     {
@@ -43,7 +44,6 @@ class RPGLike extends PluginBase
 
         new RPGForms($this);
         new PlayerManager($this);
-        new SkillsManager($this);
     }
 
     public function onEnable()
@@ -61,6 +61,9 @@ class RPGLike extends PluginBase
 
         if ($this->config['Hud']['on'] == true) {
             $this->getScheduler()->scheduleRepeatingTask(new HudTask($this), $this->config['Hud']['period']);
+        }
+        foreach ($this->config['Skills'] as $key => $skill) {
+            $this->registerSkill($key, $skill);
         }
     }
 
@@ -122,7 +125,54 @@ class RPGLike extends PluginBase
         $string = Utils::parseKeywords($playerSpecific, $string);
         return $string;
     }
+    public function registerSkill(string $skillName, array $values): void
+    {
+        $this->skills[$skillName] = $values;
 
+        if (array_key_exists("namespace", $values)) {
+            if (is_null($values['namespace']) || $values['namespace'] == "" || empty($values['namespace'])) {
+                $this->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
+                $this->skills[$skillName]['namespace'] = $this->defaultNamespace . $skillName;
+            } else {
+                $this->skills[$skillName]['namespace'] = $values['namespace'];
+            }
+        }else{
+            $this->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
+            $this->skills[$skillName]['namespace'] = $this->defaultNamespace . $skillName;
+        }
+        if (array_key_exists($skillName, $this->getMessages()['Skills'])) {
+            $this->skills[$skillName]["description"] = $this->getMessages()['Skills'][$skillName];
+        }
+    }
+    public  function skillRegistered(string $skillName): bool
+    {
+        return array_key_exists($skillName, $this->skills);
+    }
+
+    public  function getSkill(string $skillName): array
+    {
+        return $this->skills[$skillName];
+    }
+
+    public  function getSkills()
+    {
+        return $this->skills;
+    }
+
+    public  function getSkillDescription(string $skillName)
+    {
+        return $this->skills[$skillName]['description'];
+    }
+
+    public  function getAvailableSkills(): array
+    {
+        return array_keys($this->skills);
+    }
+
+    public  function getSkillNamespace(string $skillName)
+    {
+        return $this->skills[$skillName]['namespace'];
+    }
     public function getSkillUnlocks(): void
     {
         $this->skillUnlocks = $this->config['SkillUpgrades'];

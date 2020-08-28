@@ -11,7 +11,6 @@ use pocketmine\Player;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
-use TheClimbing\RPGLike\Skills\SkillsManager;
 
 class RPGPlayer extends Player
 {
@@ -281,13 +280,13 @@ class RPGPlayer extends Player
                     }
                     if ($req == count($value))
                     {
-                        $namespace = SkillsManager::getSkill($skillName)['namespace'];
+                        $namespace = RPGLike::getInstance()->getSkill($skillName)['namespace'];
                         $this->unlockSkill($namespace, $skillName);
                     }
 
                 } else {
                     if ($this->getAttribute($key1) >= $value) {
-                        $namespace = SkillsManager::getSkill($skillName)['namespace'];
+                        $namespace = RPGLike::getInstance()->getSkill($skillName)['namespace'];
                         $this->unlockSkill($namespace, $skillName);
                     }
                 }
