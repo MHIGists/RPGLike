@@ -18,6 +18,7 @@ class RPGPlayer extends Player
 
     /* @var BaseSkill[] */
     private $skills = [];
+    private $traits = [];
 
     private $str = 1;
     private $strModifier = 0.15;
