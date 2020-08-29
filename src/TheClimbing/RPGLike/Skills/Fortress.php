@@ -16,7 +16,6 @@
             $this->setCooldownTime(0);
             $this->setMaxEntInRange(1);
             $this->setRange(0);
-            $this->setDefense($owner);
             parent::__construct($owner, 'Fortress');
         }
         public function setDefense(RPGPlayer $player) : void

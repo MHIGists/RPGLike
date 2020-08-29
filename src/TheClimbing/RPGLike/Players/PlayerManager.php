@@ -39,7 +39,7 @@
                 $player->setSPleft($cachedPlayer['spleft']);
                 if(!empty($cachedPlayer['skills'])){
                     foreach($cachedPlayer['skills'] as $skill) {
-                        $player->unlockSkill(RPGLike::getInstance()->getSkillNamespace($skill), $skill, false);
+                        $player->getSkill($skill)->unlock();
                     }
                 }
             }

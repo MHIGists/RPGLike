@@ -14,7 +14,6 @@
             $this->setType('passive');
             $this->setCooldownTime(0);
             $this->setRange(0);
-            $this->setPlayerHealth($owner);
             parent::__construct($owner, 'Tank');
         }
         public function setPlayerHealth(RPGPlayer $player)

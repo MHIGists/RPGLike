@@ -26,8 +26,7 @@ class RPGLike extends PluginBase
     public $config;
     public $consts = [];
     public $skillUnlocks = [];
-    
-    private $defaultNamespace = "\\TheClimbing\\RPGLike\\Skills\\";
+
     private $skills;
 
     public function onLoad()
@@ -130,24 +129,16 @@ class RPGLike extends PluginBase
         $this->skills[$skillName] = $values;
 
         if (array_key_exists("namespace", $values)) {
-            if (is_null($values['namespace']) || $values['namespace'] == "" || empty($values['namespace'])) {
-                $this->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
-                $this->skills[$skillName]['namespace'] = $this->defaultNamespace . $skillName;
-            } else {
+            if (!empty($values['namespace']))
+            {
                 $this->skills[$skillName]['namespace'] = $values['namespace'];
             }
-        }else{
-            $this->getLogger()->info("Skill: $skillName doesn't have namespace. Using default one.");
-            $this->skills[$skillName]['namespace'] = $this->defaultNamespace . $skillName;
         }
         if (array_key_exists($skillName, $this->getMessages()['Skills'])) {
             $this->skills[$skillName]["description"] = $this->getMessages()['Skills'][$skillName];
         }
     }
-    public  function skillRegistered(string $skillName): bool
-    {
-        return array_key_exists($skillName, $this->skills);
-    }
+
 
     public  function getSkill(string $skillName): array
     {

@@ -58,7 +58,9 @@
         /**
          * @var array
          */
-        private $skillUpgrades = [];
+        private $skillUpgrades;
+
+        private $skillUnlock;
     
         /**
          * That's including the source
@@ -80,6 +82,7 @@
 
         public $cdStartTime = 0.0;
 
+        private $unlocked = false;
 
         /**
          * BaseSkill constructor.
@@ -104,15 +107,24 @@
                 $this->effect = $effect;
 
                 $this->skillUpgrades = RPGLike::getInstance()->skillUnlocks[$this->getName()]['upgrades'];
+                $this->skillUnlock = RPGLike::getInstance()->skillUnlocks[$this->getName()]['unlock'];
 
         }
-        public function getOwner() : RPGPlayer
+        public function unlock() : void
         {
-            return $this->owner;
+            $this->unlocked = true;
+        }
+        public function isUnlocked()
+        {
+            return $this->unlocked;
         }
        public function getNamespace() : string
        {
            return $this->namespace;
+       }
+       public function setNamespace(string $namespace) : void
+       {
+           $this->namespace = $namespace;
        }
        public function isActive() : bool
        {
@@ -219,15 +231,15 @@
          */
         protected function setBaseUnlock(array $baseUnlock) : void
         {
-            $this->skillUpgrades['unlock'] = $baseUnlock;
+            $this->skillUnlock = $baseUnlock;
         }
-        public function getBaseUnlock() : int
+        public function getBaseUnlock() : array
         {
-            return $this->skillUpgrades['unlock'];
+            return $this->skillUnlock;
         }
         public function getSkillUpgrades() : array
         {
-            return $this->skillUpgrades['upgrades'];
+            return $this->skillUpgrades;
         }
 
         /**
@@ -237,7 +249,7 @@
          */
         protected function setUpgrades(array $upgrades) : void
         {
-            $this->skillUpgrades['upgrades'] = $upgrades;
+            $this->skillUpgrades = $upgrades;
         }
 
         /**

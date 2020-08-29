@@ -11,6 +11,12 @@ use pocketmine\Player;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
+use TheClimbing\RPGLike\Skills\Coinflip;
+use TheClimbing\RPGLike\Skills\DoubleStrike;
+use TheClimbing\RPGLike\Skills\Explosion;
+use TheClimbing\RPGLike\Skills\Fortress;
+use TheClimbing\RPGLike\Skills\HealthRegen;
+use TheClimbing\RPGLike\Skills\Tank;
 
 class RPGPlayer extends Player
 {
@@ -57,8 +63,29 @@ class RPGPlayer extends Player
 
         $this->calcVITBonus();
         $this->calcDEXBonus();
+        $this->addSkills();
     }
-
+    public function addSkills() : void
+    {
+        /* @var BaseSkill[] */
+        $skills = [
+            new Coinflip($this),
+            new DoubleStrike($this),
+            new Explosion($this),
+            new Fortress($this),
+            new HealthRegen($this),
+            new Tank($this)
+        ];
+        foreach ($skills as $skill) {
+            $this->skills[$skill->getName()] = $skill;
+        }
+        foreach ($this->config->getAll()['Skills'] as $skillName => $skill) {
+            if ($this->getSkill($skillName) === null)
+            {
+                $this->skills[$skillName] = new $skill['namespace']($this);
+            }
+        }
+    }
     /* @return array|false */
     public function getModifiers()
     {
@@ -210,13 +237,6 @@ class RPGPlayer extends Player
         return $this->defBonus;
     }
 
-    public function unlockSkill(string $skillNamespace, string $skillName, bool $form = true): void
-    {
-        $this->skills[$skillName] = new $skillNamespace($this);
-        if ($form) {
-            RPGForms::skillHelpForm($this, $skillName);
-        }
-    }
 
     public function getSkill(string $skillName): ?BaseSkill
     {
@@ -245,7 +265,14 @@ class RPGPlayer extends Player
     /* @return string[] */
     public function getSkillNames(): array
     {
-        return array_keys($this->skills);
+        $skills = [];
+        foreach ($this->skills as $skill) {
+            if ($skill->isUnlocked())
+            {
+                $skills[] = $skill->getName();
+            }
+        }
+        return $skills;
     }
 
     public function getAttributes(): array
@@ -265,31 +292,27 @@ class RPGPlayer extends Player
 
     public function checkForSkills()
     {
-        foreach (RPGLike::getInstance()->skillUnlocks as $skillName => $skillArray) {
-            if ($this->hasSkill($skillName))
+        foreach ($this->skills as $skill) {
+            $skillBaseUnlock = $skill->getBaseUnlock();
+            $firstKey = array_key_first($skillBaseUnlock);
+            if (is_array($skillBaseUnlock[$firstKey]))
             {
-                continue;
-            }
-            foreach ($skillArray['unlock'] as $key1 => $value) {
-
-                if (is_array($value)) {
-                    $req = 0;
-                    foreach ($value as $key2 => $value1) {
-                        if ($this->getAttribute($key2) >= $value1) {
-                            $req += 1;
-                        }
-                    }
-                    if ($req == count($value))
+                $req = 0;
+                foreach ($skillBaseUnlock[$firstKey] as $key => $value) {
+                    if ($this->getAttribute($key) >= $value)
                     {
-                        $namespace = RPGLike::getInstance()->getSkill($skillName)['namespace'];
-                        $this->unlockSkill($namespace, $skillName);
+                        $req += 1;
                     }
-
-                } else {
-                    if ($this->getAttribute($key1) >= $value) {
-                        $namespace = RPGLike::getInstance()->getSkill($skillName)['namespace'];
-                        $this->unlockSkill($namespace, $skillName);
-                    }
+                }
+                if ($req == count($skillBaseUnlock[$firstKey]))
+                {
+                    $skill->unlock();
+                    RPGForms::skillHelpForm($this,$skill->getName());
+                }
+            }else{
+                if ($this->getAttribute($firstKey) >= $skillBaseUnlock[$firstKey]){
+                    $skill->unlock();
+                    RPGForms::skillHelpForm($this,$skill->getName());
                 }
             }
 
