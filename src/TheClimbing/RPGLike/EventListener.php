@@ -68,9 +68,22 @@
         public function dealDamageEvent(EntityDamageByEntityEvent $event)
         {
             $player = $event->getDamager();
+            $coinflip = $player->getSkill('Coinflip');
+            $doublestrike = $player->getSkill('DoubleStrike');
+            $explosion = $player->getSkill('Explosion');
             if ($player instanceof RPGPlayer) {
                 $player->applyDamageBonus($event);
                 $player->applyDefenseBonus($event);
+                if ($coinflip->isUnlocked())
+                {
+                    $coinflip->setCritChance($event);
+                }
+                if ($doublestrike->isUnlocked()){
+                    $doublestrike->setPlayerAttackCD($event);
+                }
+                if ($explosion->isUnlocked()){
+                    $doublestrike->damageEvent($event);
+                }
             }
 
         }
@@ -91,7 +104,9 @@
                         $player->applyVitalityBonus();
                         $player->applyDexterityBonus();
                         $player->checkForSkills();
-                        $player->triggerSkills();
+                        $player->getSkill('Tank')->setPlayerHealth($player);
+                        $player->getSkill('Fortress')->setDefense($player);
+                        $player->checkSkillLevel();
                     }
                 }
 
@@ -101,11 +116,12 @@
         public function healthRegen(EntityRegainHealthEvent $event)
         {
             $player = $event->getEntity();
+            $healthRegen = $player->getSkill('HealthRegen');
             if ($player instanceof Player)
             {
-                if ($player->hasSkill('HealthRegen'))
+                if ($healthRegen->isUnlocked())
                 {
-                    $player->getSkill('HealthRegen')->healthRegen($event);
+                    $healthRegen->healthRegen($event);
                 }
             }
         }

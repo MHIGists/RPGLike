@@ -84,6 +84,7 @@
 
         private $unlocked = false;
 
+
         /**
          * BaseSkill constructor.
          *
@@ -95,7 +96,7 @@
          * @param int $maxEntInRange
          * @param null $effect
          */
-        public function __construct(RPGPlayer $owner, string $name , string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
+        public function __construct(RPGPlayer $owner,  string $name , string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null )
         {
 
                 $this->owner = $owner;
@@ -118,13 +119,38 @@
         {
             return $this->unlocked;
         }
+        public function reset()
+        {
+            $this->unlocked = false;
+            $this->skillLevel = 0;
+        }
+        public function checkLevel()
+        {
+            foreach ($this->skillUpgrades as $key => $value) {
+                if (is_array($value)){
+                    $req = 0;
+                    foreach ($value as $key1 => $value1) {
+                        if ($this->owner->getAttribute($key1) >= $value1)
+                        {
+                            $req += 1;
+                        }
+                    }
+                    if ($req == count($value))
+                    {
+                        $this->skillLevel += 1;
+                    }
+                }else{
+                    if ($this->owner->getAttribute($key) >= $value)
+                    {
+                        $this->skillLevel += 1;
+                    }
+                }
+            }
+        }
+
        public function getNamespace() : string
        {
            return $this->namespace;
-       }
-       public function setNamespace(string $namespace) : void
-       {
-           $this->namespace = $namespace;
        }
        public function isActive() : bool
        {

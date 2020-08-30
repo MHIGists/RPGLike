@@ -86,6 +86,12 @@ class RPGPlayer extends Player
             }
         }
     }
+    public function checkSkillLevel()
+    {
+        foreach ($this->skills as $skill) {
+            $skill->checkLevel();
+        }
+    }
     /* @return array|false */
     public function getModifiers()
     {
@@ -96,20 +102,6 @@ class RPGPlayer extends Player
             return false;
         }
 
-    }
-
-    public function triggerSkills(): void
-    {
-        if (!empty($this->skills)) {
-            foreach ($this->skills as $skill) {
-                if ($skill->isActive()) {
-                    continue;
-                }
-                $function = get_class_methods($skill);
-
-                $skill->$function[0]($this);
-            }
-        }
     }
 
     public function setSTR(int $str): void
@@ -331,7 +323,9 @@ class RPGPlayer extends Player
 
     public function resetSkills()
     {
-        $this->skills = [];
+        foreach ($this->skills as $skill) {
+            $skill->reset();
+        }
     }
 
     public function applyDamageBonus(EntityDamageByEntityEvent $event): void
