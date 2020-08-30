@@ -10,6 +10,7 @@ use TheClimbing\RPGLike\RPGLike;
 class HudTask extends Task
 {
     public $main;
+
     public function __construct(RPGLike $main)
     {
         $this->main = $main;

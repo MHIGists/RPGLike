@@ -7,7 +7,6 @@ namespace TheClimbing\RPGLike\Players;
 use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\Player;
-
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
@@ -22,31 +21,25 @@ class RPGPlayer extends Player
 {
 
 
-    /* @var BaseSkill[] */
-    private $skills = [];
-    private $traits = [];
-
-    private $str = 1;
-    private $strModifier = 0.15;
-    private $strBonus = 0;
-
-    private $vit = 1;
-    private $vitModifier = 0.175;
-    private $vitBonus = 1;
-
-    private $def = 1;
-    private $defModifier = 0.1;
-    private $defBonus = 1;
-
-    private $dex = 1;
-    private $dexModifier = 0.0002;
-    private $dexBonus = 1;
-
-    private $config;
-
     public $movementSpeed = 0;
     public $spleft = 0;
     public $xplevel = 0;
+    /* @var BaseSkill[] */
+    private $skills = [];
+    private $traits = [];
+    private $str = 1;
+    private $strModifier = 0.15;
+    private $strBonus = 0;
+    private $vit = 1;
+    private $vitModifier = 0.175;
+    private $vitBonus = 1;
+    private $def = 1;
+    private $defModifier = 0.1;
+    private $defBonus = 1;
+    private $dex = 1;
+    private $dexModifier = 0.0002;
+    private $dexBonus = 1;
+    private $config;
 
     public function __construct($interface, $ip, $port)
     {
@@ -65,7 +58,73 @@ class RPGPlayer extends Player
         $this->calcDEXBonus();
         $this->addSkills();
     }
-    public function addSkills() : void
+
+    /* @return array|false */
+    public function getModifiers()
+    {
+        $modifiers = $this->config->getNested('modifiers');
+        if ($modifiers !== null) {
+            return $modifiers;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function calcVITBonus(): void
+    {
+        $this->vitBonus = $this->getVIT() * $this->getVITModifier();
+    }
+
+    public function getVIT(): int
+    {
+        return $this->vit;
+    }
+
+    public function setVIT(int $vit): void
+    {
+        $this->vit = $vit;
+        $this->calcVITBonus();
+    }
+
+    public function getVITModifier(): float
+    {
+        return $this->vitModifier;
+    }
+
+    public function setVITModifier(float $vitModifier): void
+    {
+        $this->vitModifier = $vitModifier;
+    }
+
+    public function calcDEXBonus(): void
+    {
+        $this->dexBonus = $this->getDex() * $this->getDEXModifier();
+    }
+
+    public function getDEX(): int
+    {
+        return $this->dex;
+    }
+
+    public function setDEX(int $dex): void
+    {
+        $this->dex = $dex;
+        $this->calcDEXBonus();
+        $this->applyDexterityBonus();
+    }
+
+    public function getDEXModifier(): float
+    {
+        return $this->dexModifier;
+    }
+
+    public function setDEXModifier(float $dexModifier): void
+    {
+        $this->dexModifier = $dexModifier;
+    }
+
+    public function addSkills(): void
     {
         /* @var BaseSkill[] */
         $skills = [
@@ -80,155 +139,11 @@ class RPGPlayer extends Player
             $this->skills[$skill->getName()] = $skill;
         }
         foreach ($this->config->getAll()['Skills'] as $skillName => $skill) {
-            if ($this->getSkill($skillName) === null)
-            {
+            if ($this->getSkill($skillName) === null) {
                 $this->skills[$skillName] = new $skill['namespace']($this);
             }
         }
     }
-    public function checkSkillLevel()
-    {
-        foreach ($this->skills as $skill) {
-            $skill->checkLevel();
-        }
-    }
-    /* @return array|false */
-    public function getModifiers()
-    {
-        $modifiers = $this->config->getNested('modifiers');
-        if ($modifiers !== null) {
-            return $modifiers;
-        } else {
-            return false;
-        }
-
-    }
-
-    public function setSTR(int $str): void
-    {
-        $this->str = $str;
-        $this->calcSTRBonus();
-    }
-
-    public function getSTR(): int
-    {
-        return $this->str;
-    }
-
-    public function setSTRModifier(float $strModifier): void
-    {
-        $this->strModifier = $strModifier;
-    }
-
-    public function getSTRModifier(): float
-    {
-        return $this->strModifier;
-    }
-
-    public function calcSTRBonus(): void
-    {
-        $this->strBonus = $this->getSTR() * $this->getSTRModifier();
-    }
-
-    public function getSTRBonus(): float
-    {
-        return $this->strBonus;
-    }
-
-    public function setVIT(int $vit): void
-    {
-        $this->vit = $vit;
-        $this->calcVITBonus();
-    }
-
-    public function getVIT(): int
-    {
-        return $this->vit;
-    }
-
-    public function setVITModifier(float $vitModifier): void
-    {
-        $this->vitModifier = $vitModifier;
-    }
-
-    public function getVITModifier(): float
-    {
-        return $this->vitModifier;
-    }
-
-    public function calcVITBonus(): void
-    {
-        $this->vitBonus = $this->getVIT() * $this->getVITModifier();
-    }
-
-    public function getVITBonus(): int
-    {
-        return (int)ceil($this->vitBonus);
-    }
-
-    public function setDEX(int $dex): void
-    {
-        $this->dex = $dex;
-        $this->calcDEXBonus();
-        $this->applyDexterityBonus();
-    }
-
-    public function getDEX(): int
-    {
-        return $this->dex;
-    }
-
-    public function setDEXModifier(float $dexModifier): void
-    {
-        $this->dexModifier = $dexModifier;
-    }
-
-    public function getDEXModifier(): float
-    {
-        return $this->dexModifier;
-    }
-
-    public function calcDEXBonus(): void
-    {
-        $this->dexBonus = $this->getDex() * $this->getDEXModifier();
-    }
-
-    public function getDEXBonus(): float
-    {
-        return $this->dexBonus;
-    }
-
-    public function setDEF(int $def): void
-    {
-        $this->def = $def;
-        $this->calcDEFBonus();
-    }
-
-    public function getDEF(): int
-    {
-        return $this->def;
-    }
-
-    public function setDEFModifier(float $defModifier)
-    {
-        $this->defModifier = $defModifier;
-    }
-
-    public function getDEFModifier(): float
-    {
-        return $this->defModifier;
-    }
-
-    public function calcDEFBonus(): void
-    {
-        $this->defBonus = $this->getDEF() * $this->getDEFModifier();
-    }
-
-    public function getDEFBonus(): float
-    {
-        return $this->defBonus;
-    }
-
 
     public function getSkill(string $skillName): ?BaseSkill
     {
@@ -248,23 +163,61 @@ class RPGPlayer extends Player
         }
     }
 
+    public function applyDexterityBonus()
+    {
+        $dex = $this->getDEXBonus();
+        $movement = $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+        $movement->setValue($movement->getValue() * (1 + $dex));
+        $this->movementSpeed = $movement->getValue() * (1 + $dex);
+    }
+
+    public function getDEXBonus(): float
+    {
+        return $this->dexBonus;
+    }
+
+    public function checkSkillLevel()
+    {
+        foreach ($this->skills as $skill) {
+            $skill->checkLevel();
+        }
+    }
+
     /* @return  BaseSkill[] */
     public function getSkills()
     {
         return $this->skills;
     }
 
-    /* @return string[] */
-    public function getSkillNames(): array
+    public function checkForSkills()
     {
-        $skills = [];
         foreach ($this->skills as $skill) {
-            if ($skill->isUnlocked())
-            {
-                $skills[] = $skill->getName();
+            $skillBaseUnlock = $skill->getBaseUnlock();
+            $firstKey = array_key_first($skillBaseUnlock);
+            if (is_array($skillBaseUnlock[$firstKey])) {
+                $req = 0;
+                foreach ($skillBaseUnlock[$firstKey] as $key => $value) {
+                    if ($this->getAttribute($key) >= $value) {
+                        $req += 1;
+                    }
+                }
+                if ($req == count($skillBaseUnlock[$firstKey])) {
+                    $skill->unlock();
+                    RPGForms::skillHelpForm($this, $skill->getName());
+                }
+            } else {
+                if ($this->getAttribute($firstKey) >= $skillBaseUnlock[$firstKey]) {
+                    $skill->unlock();
+                    RPGForms::skillHelpForm($this, $skill->getName());
+                }
             }
+
         }
-        return $skills;
+    }
+
+    public function getAttribute(string $attribute): int
+    {
+        return $this->getAttributes()[$attribute];
     }
 
     public function getAttributes(): array
@@ -277,48 +230,56 @@ class RPGPlayer extends Player
         ];
     }
 
-    public function getAttribute(string $attribute): int
+    public function getSTR(): int
     {
-        return $this->getAttributes()[$attribute];
+        return $this->str;
     }
 
-    public function checkForSkills()
+    public function setSTR(int $str): void
     {
-        foreach ($this->skills as $skill) {
-            $skillBaseUnlock = $skill->getBaseUnlock();
-            $firstKey = array_key_first($skillBaseUnlock);
-            if (is_array($skillBaseUnlock[$firstKey]))
-            {
-                $req = 0;
-                foreach ($skillBaseUnlock[$firstKey] as $key => $value) {
-                    if ($this->getAttribute($key) >= $value)
-                    {
-                        $req += 1;
-                    }
-                }
-                if ($req == count($skillBaseUnlock[$firstKey]))
-                {
-                    $skill->unlock();
-                    RPGForms::skillHelpForm($this,$skill->getName());
-                }
-            }else{
-                if ($this->getAttribute($firstKey) >= $skillBaseUnlock[$firstKey]){
-                    $skill->unlock();
-                    RPGForms::skillHelpForm($this,$skill->getName());
-                }
-            }
-
-        }
+        $this->str = $str;
+        $this->calcSTRBonus();
     }
 
-    public function setSPleft(int $spleft)
+    public function calcSTRBonus(): void
     {
-        $this->spleft = $spleft;
+        $this->strBonus = $this->getSTR() * $this->getSTRModifier();
     }
 
-    public function getSPleft()
+    public function getSTRModifier(): float
     {
-        return $this->spleft;
+        return $this->strModifier;
+    }
+
+    public function setSTRModifier(float $strModifier): void
+    {
+        $this->strModifier = $strModifier;
+    }
+
+    public function getDEF(): int
+    {
+        return $this->def;
+    }
+
+    public function setDEF(int $def): void
+    {
+        $this->def = $def;
+        $this->calcDEFBonus();
+    }
+
+    public function calcDEFBonus(): void
+    {
+        $this->defBonus = $this->getDEF() * $this->getDEFModifier();
+    }
+
+    public function getDEFModifier(): float
+    {
+        return $this->defModifier;
+    }
+
+    public function setDEFModifier(float $defModifier)
+    {
+        $this->defModifier = $defModifier;
     }
 
     public function resetSkills()
@@ -338,10 +299,20 @@ class RPGPlayer extends Player
 
     }
 
+    public function getSTRBonus(): float
+    {
+        return $this->strBonus;
+    }
+
     public function applyVitalityBonus()
     {
         $this->setMaxHealth(20 + $this->getVITBonus());
         $this->setHealth(20 + $this->getVITBonus());
+    }
+
+    public function getVITBonus(): int
+    {
+        return (int)ceil($this->vitBonus);
     }
 
     public function applyDefenseBonus(EntityDamageByEntityEvent $event): void
@@ -353,12 +324,9 @@ class RPGPlayer extends Player
         }
     }
 
-    public function applyDexterityBonus()
+    public function getDEFBonus(): float
     {
-        $dex = $this->getDEXBonus();
-        $movement = $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-        $movement->setValue($movement->getValue() * (1 + $dex));
-        $this->movementSpeed = $movement->getValue() * (1 + $dex);
+        return $this->defBonus;
     }
 
     public function getHealthRegenBonus()
@@ -378,6 +346,28 @@ class RPGPlayer extends Player
         $players[$this->getName()] = $playerVars;
         $this->config->setNested('Players', $players);
         $this->config->save();
+    }
+
+    /* @return string[] */
+    public function getSkillNames(): array
+    {
+        $skills = [];
+        foreach ($this->skills as $skill) {
+            if ($skill->isUnlocked()) {
+                $skills[] = $skill->getName();
+            }
+        }
+        return $skills;
+    }
+
+    public function getSPleft()
+    {
+        return $this->spleft;
+    }
+
+    public function setSPleft(int $spleft)
+    {
+        $this->spleft = $spleft;
     }
 
 }

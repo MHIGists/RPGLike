@@ -10,11 +10,10 @@ use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
-
 use TheClimbing\RPGLike\Commands\LevelUpCommand;
+use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\Players\PlayerManager;
-use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Tasks\HudTask;
 
 
@@ -124,13 +123,13 @@ class RPGLike extends PluginBase
         $string = Utils::parseKeywords($playerSpecific, $string);
         return $string;
     }
+
     public function registerSkill(string $skillName, array $values): void
     {
         $this->skills[$skillName] = $values;
 
         if (array_key_exists("namespace", $values)) {
-            if (!empty($values['namespace']))
-            {
+            if (!empty($values['namespace'])) {
                 $this->skills[$skillName]['namespace'] = $values['namespace'];
             }
         }
@@ -140,30 +139,31 @@ class RPGLike extends PluginBase
     }
 
 
-    public  function getSkill(string $skillName): array
+    public function getSkill(string $skillName): array
     {
         return $this->skills[$skillName];
     }
 
-    public  function getSkills()
+    public function getSkills()
     {
         return $this->skills;
     }
 
-    public  function getSkillDescription(string $skillName)
+    public function getSkillDescription(string $skillName)
     {
         return $this->skills[$skillName]['description'];
     }
 
-    public  function getAvailableSkills(): array
+    public function getAvailableSkills(): array
     {
         return array_keys($this->skills);
     }
 
-    public  function getSkillNamespace(string $skillName)
+    public function getSkillNamespace(string $skillName)
     {
         return $this->skills[$skillName]['namespace'];
     }
+
     public function getSkillUnlocks(): void
     {
         $this->skillUnlocks = $this->config['SkillUpgrades'];

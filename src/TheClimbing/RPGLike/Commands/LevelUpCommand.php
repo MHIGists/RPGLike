@@ -17,13 +17,10 @@ class LevelUpCommand extends Command
 
     public function execute(CommandSender $sender, string $commandLabel, array $args)
     {
-        if ($sender instanceof Player)
-        {
-            if (empty($args))
-            {
+        if ($sender instanceof Player) {
+            if (empty($args)) {
                 $sender->setXpLevel($sender->getXpLevel() + 1);
-            }
-            else{
+            } else {
                 $sender->setXpLevel($args[0]);
             }
         }

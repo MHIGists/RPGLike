@@ -1,51 +1,46 @@
 <?php
-    
-    declare(strict_types = 1);
-    
-    
-    namespace TheClimbing\RPGLike\Skills;
-    
+
+declare(strict_types=1);
 
 
-    use function rand;
+namespace TheClimbing\RPGLike\Skills;
 
-    use pocketmine\event\entity\EntityDamageByEntityEvent;
 
-    use TheClimbing\RPGLike\Players\RPGPlayer;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use TheClimbing\RPGLike\Players\RPGPlayer;
+use function rand;
 
-    class DoubleStrike extends BaseSkill
+class DoubleStrike extends BaseSkill
+{
+    public function __construct(RPGPlayer $owner)
     {
-        public function __construct(RPGPlayer $owner)
-        {
-            $this->setType('active');
-            $this->setCooldownTime(0);
-            $this->setMaxEntInRange(1);
-            $this->setRange(0);
-            parent::__construct($owner, 'DoubleStrike');
-        }
-        public function setPlayerAttackCD(EntityDamageByEntityEvent $event)
-        {
-            $level = $this->getSkillLevel();
-            switch($level){
-                case 0:
-                    if(rand(0,99) < 10)
-                    {
-                        $event->setAttackCooldown(0);
-                    }
-                    break;
-                case 1:
-                    if(rand(0,99) < 15)
-                    {
-                        $event->setAttackCooldown(0);
-                    }
-                    break;
-                case 2:
-                    if(rand(0,99) < 30)
-                    {
-                        $event->setAttackCooldown(0);
-                    }
-                    break;
-            }
-            
-        }
+        $this->setType('active');
+        $this->setCooldownTime(0);
+        $this->setMaxEntInRange(1);
+        $this->setRange(0);
+        parent::__construct($owner, 'DoubleStrike');
     }
+
+    public function setPlayerAttackCD(EntityDamageByEntityEvent $event)
+    {
+        $level = $this->getSkillLevel();
+        switch ($level) {
+            case 0:
+                if (rand(0, 99) < 10) {
+                    $event->setAttackCooldown(0);
+                }
+                break;
+            case 1:
+                if (rand(0, 99) < 15) {
+                    $event->setAttackCooldown(0);
+                }
+                break;
+            case 2:
+                if (rand(0, 99) < 30) {
+                    $event->setAttackCooldown(0);
+                }
+                break;
+        }
+
+    }
+}

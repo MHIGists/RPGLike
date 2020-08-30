@@ -18,11 +18,11 @@ class HealthRegen extends BaseSkill
         $this->setRange(0);
         parent::__construct($owner, 'HealthRegen');
     }
+
     public function healthRegen(EntityRegainHealthEvent $event)
     {
         $player = $event->getEntity();
-        if ($player instanceof Player && $event->getRegainReason() == EntityRegainHealthEvent::CAUSE_SATURATION)
-        {
+        if ($player instanceof Player && $event->getRegainReason() == EntityRegainHealthEvent::CAUSE_SATURATION) {
             $event->setAmount($event->getAmount() + $player->getHealthRegenBonus());
         }
     }

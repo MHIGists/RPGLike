@@ -16,19 +16,23 @@ class BaseTrait
         $this->levels = $levels;
         $this->requirements = $requirements;
     }
-    public function getName() : string
+
+    public function getName(): string
     {
         return $this->name;
     }
-    public function setName(string $name) : void
+
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
-    public function getLevels() : array
+
+    public function getLevels(): array
     {
         return $this->levels;
     }
-    public function setLevels(array $levels) : void
+
+    public function setLevels(array $levels): void
     {
         $this->levels = $levels;
     }
