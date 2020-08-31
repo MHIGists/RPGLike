@@ -77,7 +77,7 @@ class EventListener implements Listener
                 $doublestrike->setPlayerAttackCD($event);
             }
             if ($explosion->isUnlocked()) {
-                $doublestrike->damageEvent($event);
+                $explosion->damageEvent($event);
             }
         }
 
@@ -99,8 +99,12 @@ class EventListener implements Listener
                     $player->applyVitalityBonus();
                     $player->applyDexterityBonus();
                     $player->checkForSkills();
-                    $player->getSkill('Tank')->setPlayerHealth($player);
-                    $player->getSkill('Fortress')->setDefense($player);
+                    if ($player->getSkill('Tank')->isUnlocked()) {
+                        $player->getSkill('Tank')->setPlayerHealth($player);
+                    }
+                    if ($player->getSkill('Fortress')->isUnlocked()) {
+                        $player->getSkill('Fortress')->setDefense($player);
+                    }
                     $player->checkSkillLevel();
                 }
             }

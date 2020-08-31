@@ -237,11 +237,31 @@ class BaseSkill
         $this->onCooldown = false;
     }
 
-    public function getRemainingCooldown(): float
+    public function getRemainingCooldown(string $format): string
     {
-        $deltaTime = time() - $this->cdStartTime;
-        $deltaTime %= 3600;
-        return floor($deltaTime / 60);
+        $timediff = time() - $this->cdStartTime;
+        $cdsecs = ($this->getCooldownTime() / 20) - $timediff;
+        $cdmins = $cdsecs / 60;
+        if ($cdmins < 1) {
+            $cdmins = 0;
+        }
+        $cdhours = $cdmins / 60;
+        if ($cdhours < 1) {
+            $cdhours = 0;
+        }
+        $format = str_split($format);
+        foreach ($format as $key => $item) {
+            if ($item == 'H') {
+                $format[$key] = round($cdhours, PHP_ROUND_HALF_DOWN);
+            }
+            if ($item == 'M') {
+                $format[$key] = round($cdmins, PHP_ROUND_HALF_DOWN);
+            }
+            if ($item == 'S') {
+                $format[$key] = round($cdsecs, PHP_ROUND_HALF_DOWN);
+            }
+        }
+        return implode('', $format);
     }
 
     protected function setRange(int $range): void

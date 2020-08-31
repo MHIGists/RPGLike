@@ -90,9 +90,9 @@ class RPGForms
         str_replace('SKILLNAME', $skillName, $title);
         $form->setTitle($title);
         if ($unlock) {
-            $form->setContent($skillDescription['description']);
-        } else {
             $form->setContent($skillDescription['description'] . TextFormat::EOL . $skillDescription['unlocks']);
+        } else {
+            $form->setContent($skillDescription['description']);
 
         }
         $form->addButton('Back to menu', -1, '', 'Back');

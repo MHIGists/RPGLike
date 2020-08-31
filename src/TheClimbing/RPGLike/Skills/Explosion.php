@@ -17,8 +17,8 @@ class Explosion extends BaseSkill
     public function __construct(RPGPlayer $owner)
     {
         $this->owner = $owner;
-        $this->setCooldownTime(10000);
         parent::__construct($owner, 'Explosion');
+        $this->setCooldownTime(400);
     }
 
     public function damageEvent(EntityDamageByEntityEvent $event)
@@ -27,23 +27,23 @@ class Explosion extends BaseSkill
         if ($damager instanceof Player) {
             if ($damager->getInventory()->getItemInHand()->getId() == 433) {
                 if ($this->isOnCooldown()) {
-                    $damager->sendMessage('Skill on cooldown: ' . $this->getRemainingCooldown());
+                    $damager->sendMessage('Skill on cooldown: ' . $this->getRemainingCooldown('M:S') . ' left');
+                    return;
                 }
                 $pos = $event->getEntity()->getPosition();
                 switch ($this->getSkillLevel()) {
                     case 0:
-                        $explosion = new \pocketmine\level\Explosion($pos, 4);
-                        break;
-                    case 1:
                         $explosion = new \pocketmine\level\Explosion($pos, 5);
                         break;
+                    case 1:
+                        $explosion = new \pocketmine\level\Explosion($pos, 4);
+                        break;
                     case 2:
-                        $explosion = new \pocketmine\level\Explosion($pos, 6);
+                        $explosion = new \pocketmine\level\Explosion($pos, 3);
                         break;
                     default:
-                        $explosion = new \pocketmine\level\Explosion($pos, 4);
+                        $explosion = new \pocketmine\level\Explosion($pos, 5);
                 }
-
                 $explosion->explodeB();
                 $this->setOnCooldown();
             }

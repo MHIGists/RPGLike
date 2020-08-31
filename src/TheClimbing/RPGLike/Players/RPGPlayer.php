@@ -189,6 +189,14 @@ class RPGPlayer extends Player
         return $this->skills;
     }
 
+    public function onPickupXp(int $xpValue): void
+    {
+        if ($this->config->get('keep-xp') == true) {
+            $xpValue = 0;
+        }
+        parent::onPickupXp($xpValue);
+    }
+
     public function checkForSkills()
     {
         foreach ($this->skills as $skill) {
@@ -203,12 +211,12 @@ class RPGPlayer extends Player
                 }
                 if ($req == count($skillBaseUnlock[$firstKey])) {
                     $skill->unlock();
-                    RPGForms::skillHelpForm($this, $skill->getName());
+                    RPGForms::skillHelpForm($this, $skill->getName(), false);
                 }
             } else {
                 if ($this->getAttribute($firstKey) >= $skillBaseUnlock[$firstKey]) {
                     $skill->unlock();
-                    RPGForms::skillHelpForm($this, $skill->getName());
+                    RPGForms::skillHelpForm($this, $skill->getName(), false);
                 }
             }
 
