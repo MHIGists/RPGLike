@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace TheClimbing\RPGLike;
 
 
+use pocketmine\block\Wood;
+use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\Listener;
@@ -140,7 +142,68 @@ class EventListener implements Listener
         $player->applyVitalityBonus();
         $player->applyDexterityBonus();
     }
+    public function blockDestroy(BlockBreakEvent $event){
+        $block = $event->getBlock();
+        $player = $event->getPlayer();
+        $drops = $event->getDrops();
+        $player->checkBlocks();
+        switch ($block->getName()){
+            case 'Stone':
+                $player->addStone();
+                if (mt_rand(0, 99) < $player->getBlockDropChance('Stone')) {
+                    $drops[] = $drops[mt_rand(0, count($drops) - 1)];
+                    $event->setDrops($drops);
+                    $player->sendMessage('You just got extra drops!');
+                }
+                break;
+            case 'Oak Wood':
+            case 'Spruce Wood':
+            case 'Birch Wood':
+            case 'Jungle Wood':
+                $player->addWood();
+            if (mt_rand(0, 99) < $player->getBlockDropChance('Wood')) {
+                $drops[] = $drops[mt_rand(0, count($drops) - 1)];
+                $event->setDrops($drops);
+            }
+                break;
+            case 'Coal Ore':
+                $player->addCoal();
+                if (mt_rand(0, 99) < $player->getBlockDropChance('Coal Ore')) {
+                    $drops[] = $drops[mt_rand(0, count($drops) - 1)];
+                    $event->setDrops($drops);
+                }
+                break;
+            case 'Iron Ore':
+                $player->addIron();
+                if (mt_rand(0, 99) < $player->getBlockDropChance('Iron Ore')) {
+                    $drops[] = $drops[mt_rand(0, count($drops) - 1)];
+                    $event->setDrops($drops);
+                }
+                break;
+            case 'Gold Ore':
+                $player->addGold();
+                if (mt_rand(0, 99) < $player->getBlockDropChance('Gold Ore')) {
+                    $drops[] = $drops[mt_rand(0, count($drops) - 1)];
+                    $event->setDrops($drops);
+                }
+                break;
+            case 'Diamond Ore':
+                $player->addDiamond();
+                if (mt_rand(0, 99) < $player->getBlockDropChance('Diamond Ore')) {
+                    $drops[] = $drops[mt_rand(0, count($drops) - 1)];
+                    $event->setDrops($drops);
+                }
+                break;
+            case 'Lapis Ore':
+                $player->addLapis();
+                if (mt_rand(0, 99) < $player->getBlockDropChance('Stone')) {
+                    $drops[] = $drops[mt_rand(0, count($drops) - 1)];
+                    $event->setDrops($drops);
+                }
+                break;
+        }
 
+    }
     public function onLeave(PlayerQuitEvent $event)
     {
         $event->getPlayer()->savePlayerVariables();

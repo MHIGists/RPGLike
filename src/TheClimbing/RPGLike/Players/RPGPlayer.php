@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Players;
 
+use pocketmine\block\CoalOre;
+use pocketmine\block\Stone;
+use pocketmine\block\Wood;
 use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\Player;
@@ -40,6 +43,36 @@ class RPGPlayer extends Player
     private $dexModifier = 0.0002;
     private $dexBonus = 1;
     private $config;
+    private $blocks = [
+        'Stone' => [
+            'level' => 0,
+            'count' => 0
+        ],
+        'Wood' => [
+            'level' => 0,
+            'count' => 0
+        ],
+        'Coal Ore' => [
+            'level' => 0,
+            'count' => 0
+        ],
+        'Iron Ore' => [
+            'level' => 0,
+            'count' => 0
+        ],
+        'Gold Ore' => [
+            'level' => 0,
+            'count' => 0
+        ],
+        'Diamond Ore' => [
+            'level' => 0,
+            'count' => 0
+        ],
+        'Lapis Ore' => [
+            'level' => 0,
+            'count' => 0
+        ]
+    ];
 
     public function __construct($interface, $ip, $port)
     {
@@ -58,7 +91,60 @@ class RPGPlayer extends Player
         $this->calcDEXBonus();
         $this->addSkills();
     }
+    public function addStone(){
+        $this->blocks['Stone']['count'] += 1;
+        print_r($this->blocks['Stone']);
+    }
+    public function addWood(){
+        $this->blocks['Stone']['count'] += 1;
+    }
+    public function addCoal(){
+        $this->blocks['Stone']['count'] += 1;
+    }
+    public function addIron(){
+        $this->blocks['Stone']['count'] += 1;
+    }
+    public function addGold(){
+        $this->blocks['Stone']['count'] += 1;
+    }
+    public function addDiamond(){
+        $this->blocks['Stone']['count'] += 1;
+    }
+    public function addLapis(){
+        $this->blocks['Stone']['count'] += 1;
+    }
+    public function checkBlocks(){
+        foreach ($this->getBlocksConfig() as $blockName => $blockArray) {
+            foreach ($blockArray as $blockLevel => $blockLevelArray) {
+                foreach ($blockLevelArray as $key => $value) {
+                    if ($key == 'dropChance'){
+                        continue;
+                    }
+                    if ($this->getBlockCount($blockName) >= $value && $this->getBlockLevel($blockName) < $blockLevel){
+                        $this->blocks[$blockName]['level'] += 1;
+                        $this->sendMessage('You now have ' . $this->getBlockDropChance($blockName) . '% chance to get bonus drops');
+                    }
+                }
 
+            }
+        }
+    }
+    public function getBlocksConfig(){
+        return $this->config->getNested('Blocks');
+    }
+    public function getBlockLevel(string $blockName){
+        return $this->blocks[$blockName]['level'];
+    }
+    public function getBlockCount(string $blockName){
+        return $this->blocks[$blockName]['count'];
+    }
+    public function getBlockDropChance(string $blockName){
+        if ($this->getBlockLevel($blockName) == 0){
+            return -1;
+        }
+        $blocks = $this->getBlocksConfig();
+        return $blocks[$blockName][$this->getBlockLevel($blockName)]['dropChance'];
+    }
     /* @return array|false */
     public function getModifiers()
     {
@@ -196,7 +282,6 @@ class RPGPlayer extends Player
         }
         parent::onPickupXp($xpValue);
     }
-
     public function checkForSkills()
     {
         foreach ($this->skills as $skill) {

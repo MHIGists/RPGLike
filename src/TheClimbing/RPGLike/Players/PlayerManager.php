@@ -45,7 +45,6 @@ class PlayerManager
         }
     }
 
-
     public static function getCachedPlayers()
     {
         return self::$main->getConfig()->getNested('Players');

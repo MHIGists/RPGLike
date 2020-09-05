@@ -70,6 +70,56 @@ SkillUpgrades:
       - VIT: 40
         DEX: 15
 Players: []
+Blocks:
+  Stone:
+    1 :
+      count: 1000
+      dropChance: 5
+    2:
+      count: 5000
+      dropChance: 10
+  Wood:
+    1:
+      count: 1000
+      dropChance: 5
+    2:
+      count: 5000
+      dropChance: 10
+  Coal Ore:
+    1:
+      count: 1000
+      dropChance: 5
+    2:
+      count: 5000
+      dropChance: 10
+  Iron Ore:
+    1:
+      count: 1000
+      dropChance: 5
+    2:
+      count: 5000
+      dropChance: 10
+  Gold Ore:
+    1:
+      count: 1000
+      dropChance: 5
+    2:
+      count: 5000
+      dropChance: 10
+  Diamond Ore:
+    1:
+      count: 1000
+      dropChance: 5
+    2:
+      count: 5000
+      dropChance: 10
+  Lapis Ore:
+    1:
+      count: 1000
+      dropChance: 5
+    2:
+      count: 5000
+      dropChance: 10
 Modifiers:
   STR : 0.15
   VIT : 0.175
