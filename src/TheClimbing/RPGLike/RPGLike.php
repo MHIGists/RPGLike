@@ -13,7 +13,6 @@ use pocketmine\utils\TextFormat;
 use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
-use TheClimbing\RPGLike\Players\PlayerManager;
 use TheClimbing\RPGLike\Tasks\HudTask;
 
 
@@ -41,7 +40,6 @@ class RPGLike extends PluginBase
         date_default_timezone_set($this->config['Hud']['timezone']);
 
         new RPGForms($this);
-        new PlayerManager($this);
     }
 
     public function onEnable()
@@ -105,7 +103,7 @@ class RPGLike extends PluginBase
     {
         $string = Utils::parseKeywords($this->consts, $this->config['Hud']['message']);
         $item = $player->getInventory()->getItemInHand();
-        $swordDamage = 1;
+        $swordDamage = 0;
         if ($item instanceof Sword) {
             $swordDamage = $item->getAttackPoints();
         }
@@ -113,7 +111,7 @@ class RPGLike extends PluginBase
             'HEALTH' => $player->getHealth(),
             'MAXHP' => $player->getMaxHealth(),
             'DAMAGE' => $swordDamage + round($player->getSTRBonus(), 0, PHP_ROUND_HALF_UP),
-            'MOVEMENTSPEED' => round($player->movementSpeed, 4, PHP_ROUND_HALF_UP),
+            'MOVEMENTSPEED' => round($player->getMovementSpeed(), 4, PHP_ROUND_HALF_UP),
             'ABSORPTION' => $player->getAbsorption() + $player->getDEFBonus(),
             'TICKS' => $player->getServer()->getTicksPerSecondAverage(),
             'LEVEL' => $player->getLevel()->getName(),
@@ -138,17 +136,6 @@ class RPGLike extends PluginBase
         }
     }
 
-
-    public function getSkill(string $skillName): array
-    {
-        return $this->skills[$skillName];
-    }
-
-    public function getSkills()
-    {
-        return $this->skills;
-    }
-
     public function getSkillDescription(string $skillName)
     {
         return $this->skills[$skillName]['description'];
@@ -159,10 +146,6 @@ class RPGLike extends PluginBase
         return array_keys($this->skills);
     }
 
-    public function getSkillNamespace(string $skillName)
-    {
-        return $this->skills[$skillName]['namespace'];
-    }
 
     public function getSkillUnlocks(): void
     {

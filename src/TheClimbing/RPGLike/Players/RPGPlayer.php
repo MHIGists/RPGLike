@@ -19,9 +19,6 @@ use TheClimbing\RPGLike\Skills\Tank;
 
 class RPGPlayer extends Player
 {
-
-
-    public $movementSpeed = 0;
     public $spleft = 0;
     public $xplevel = 0;
     /* @var BaseSkill[] */
@@ -76,6 +73,7 @@ class RPGPlayer extends Player
         parent::__construct($interface, $ip, $port);
 
         $this->config = RPGLike::getInstance()->getConfig();
+        $this->restorePlayerVariables($this);
         $modifiers = $this->getModifiers();
         if ($modifiers != false) {
             $this->setDEFModifier($modifiers['DEF']);
@@ -87,29 +85,16 @@ class RPGPlayer extends Player
         $this->calcVITBonus();
         $this->calcDEXBonus();
         $this->addSkills();
+        if ($this->getXpLevel() <= 0) {
+            $this->setXpLevel(1);
+        }
+        $this->applyDexterityBonus();
+        $this->applyVitalityBonus();
+
     }
-    public function addStone(){
-        $this->blocks['Stone']['count'] += 1;
-        print_r($this->blocks['Stone']);
-    }
-    public function addWood(){
-        $this->blocks['Stone']['count'] += 1;
-    }
-    public function addCoal(){
-        $this->blocks['Stone']['count'] += 1;
-    }
-    public function addIron(){
-        $this->blocks['Stone']['count'] += 1;
-    }
-    public function addGold(){
-        $this->blocks['Stone']['count'] += 1;
-    }
-    public function addDiamond(){
-        $this->blocks['Stone']['count'] += 1;
-    }
-    public function addLapis(){
-        $this->blocks['Stone']['count'] += 1;
-    }
+    public  function addBlockCount(string $type) : void{
+        $this->blocks[$type]['count'] += 1;
+}
     public function checkBlocks(){
         foreach ($this->getBlocksConfig() as $blockName => $blockArray) {
             foreach ($blockArray as $blockLevel => $blockLevelArray) {
@@ -233,20 +218,7 @@ class RPGPlayer extends Player
 
     public function getSkill(string $skillName): ?BaseSkill
     {
-        if ($this->hasSkill($skillName)) {
-            return $this->skills[$skillName];
-        } else {
-            return null;
-        }
-    }
-
-    public function hasSkill(string $skillName): bool
-    {
-        if (isset($this->skills[$skillName])) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->skills[$skillName];
     }
 
     public function applyDexterityBonus()
@@ -254,12 +226,15 @@ class RPGPlayer extends Player
         $dex = $this->getDEXBonus();
         $movement = $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
         $movement->setValue($movement->getValue() * (1 + $dex));
-        $this->movementSpeed = $movement->getValue() * (1 + $dex);
     }
 
     public function getDEXBonus(): float
     {
         return $this->dexBonus;
+    }
+    public function getMovementSpeed(){
+        $this->applyDexterityBonus();
+        return $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->getValue();
     }
 
     public function checkSkillLevel()
@@ -434,11 +409,52 @@ class RPGPlayer extends Player
             'skills' => $this->getSkillNames(),
             'spleft' => $this->getSPleft(),
             'level' => $this->getXPLevel(),
+            'blocks' => $this->getBrokenBlocks()
         ];
         $players = $this->config->getNested('Players');
         $players[$this->getName()] = $playerVars;
         $this->config->setNested('Players', $players);
         $this->config->save();
+    }
+    public function restorePlayerVariables(Player $player)
+    {
+        $cachedPlayer = $this->getPlayerVariables($player->getName());
+
+        if ($cachedPlayer != false) {
+            $attributes = $cachedPlayer['attributes'];
+            $player->setDEF($attributes['DEF']);
+            $player->setDEX($attributes['DEX']);
+            $player->setSTR($attributes['STR']);
+            $player->setVIT($attributes['VIT']);
+
+            $player->xplevel = $cachedPlayer['level'];
+
+            $player->calcDEXBonus();
+            $player->calcDEFBonus();
+            $player->calcVITBonus();
+            $player->calcSTRBonus();
+
+            $player->setSPleft($cachedPlayer['spleft']);
+            if (!empty($cachedPlayer['skills'])) {
+                foreach ($cachedPlayer['skills'] as $skill) {
+                    $player->getSkill($skill)->unlock();
+                }
+            }
+            $this->blocks = $cachedPlayer['blocks'];
+        }
+    }
+    public function getPlayerVariables(string $playerName)
+    {
+        $players =  $this->config->getNested('Players');
+        if ($players != null) {
+            if (array_key_exists($playerName, $players)) {
+                return $players[$playerName];
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /* @return string[] */
@@ -462,6 +478,8 @@ class RPGPlayer extends Player
     {
         $this->spleft = $spleft;
     }
-
+    public function getBrokenBlocks() : array{
+        return $this->blocks;
+    }
 }
     

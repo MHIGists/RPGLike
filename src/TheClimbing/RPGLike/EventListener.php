@@ -29,17 +29,6 @@ class EventListener implements Listener
         $this->main = $rpg;
     }
 
-    public function onJoin(PlayerJoinEvent $event)
-    {
-        $player = $event->getPlayer();
-        if ($player->getXpLevel() <= 0) {
-            $player->setXpLevel(1);
-        }
-        PlayerManager::makePlayer($player);
-        $player->applyDexterityBonus();
-        $player->applyVitalityBonus();
-    }
-
     public function playerCreate(PlayerCreationEvent $event)
     {
         $event->setPlayerClass("TheClimbing\RPGLike\Players\RPGPlayer");
@@ -90,16 +79,17 @@ class EventListener implements Listener
 
         $new_lvl = $event->getNewLevel();
         $old_level = $event->getOldLevel();
+
         if ($new_lvl !== null) {
             if ($new_lvl > $old_level && $new_lvl > $player->xplevel) {
                 if ($player instanceof RPGPlayer) {
                     $player->xplevel = $new_lvl;
                     $spleft = $new_lvl - $old_level;
 
+                    $player->checkForSkills();
                     RPGForms::upgradeStatsForm($player, $spleft);
                     $player->applyVitalityBonus();
                     $player->applyDexterityBonus();
-                    $player->checkForSkills();
                     if ($player->getSkill('Tank')->isUnlocked()) {
                         $player->getSkill('Tank')->setPlayerHealth($player);
                     }
@@ -109,7 +99,6 @@ class EventListener implements Listener
                     $player->checkSkillLevel();
                 }
             }
-
         }
 
     }
@@ -148,7 +137,7 @@ class EventListener implements Listener
         $player->checkBlocks();
         switch ($block->getName()){
             case 'Stone':
-                $player->addStone();
+                $player->addBlockCount('Stone');
                 if (mt_rand(0, 99) < $player->getBlockDropChance('Stone')) {
                     $drops[] = $drops[mt_rand(0, count($drops) - 1)];
                     $event->setDrops($drops);
@@ -159,42 +148,42 @@ class EventListener implements Listener
             case 'Spruce Wood':
             case 'Birch Wood':
             case 'Jungle Wood':
-                $player->addWood();
+                $player->addBlockCount('Wood');
             if (mt_rand(0, 99) < $player->getBlockDropChance('Wood')) {
                 $drops[] = $drops[mt_rand(0, count($drops) - 1)];
                 $event->setDrops($drops);
             }
                 break;
             case 'Coal Ore':
-                $player->addCoal();
+                $player->addBlockCount('CoalOre');
                 if (mt_rand(0, 99) < $player->getBlockDropChance('Coal Ore')) {
                     $drops[] = $drops[mt_rand(0, count($drops) - 1)];
                     $event->setDrops($drops);
                 }
                 break;
             case 'Iron Ore':
-                $player->addIron();
+                $player->addBlockCount('IronOre');
                 if (mt_rand(0, 99) < $player->getBlockDropChance('Iron Ore')) {
                     $drops[] = $drops[mt_rand(0, count($drops) - 1)];
                     $event->setDrops($drops);
                 }
                 break;
             case 'Gold Ore':
-                $player->addGold();
+                $player->addBlockCount('GoldOre');
                 if (mt_rand(0, 99) < $player->getBlockDropChance('Gold Ore')) {
                     $drops[] = $drops[mt_rand(0, count($drops) - 1)];
                     $event->setDrops($drops);
                 }
                 break;
             case 'Diamond Ore':
-                $player->addDiamond();
+                $player->addBlockCount('DiamondOre');
                 if (mt_rand(0, 99) < $player->getBlockDropChance('Diamond Ore')) {
                     $drops[] = $drops[mt_rand(0, count($drops) - 1)];
                     $event->setDrops($drops);
                 }
                 break;
             case 'Lapis Ore':
-                $player->addLapis();
+                $player->addBlockCount('LapisOre');
                 if (mt_rand(0, 99) < $player->getBlockDropChance('Stone')) {
                     $drops[] = $drops[mt_rand(0, count($drops) - 1)];
                     $event->setDrops($drops);
