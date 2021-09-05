@@ -32,11 +32,6 @@ class EventListener implements Listener
     {
         $event->setPlayerClass("TheClimbing\RPGLike\Players\RPGPlayer");
     }
-    public function spawnEvent(PlayerJoinEvent $event){
-        $player = $event->getPlayer();
-        $player->applyDexterityBonus();
-        $player->applyVitalityBonus();
-    }
 
     public function onMove(PlayerMoveEvent $event)
     {

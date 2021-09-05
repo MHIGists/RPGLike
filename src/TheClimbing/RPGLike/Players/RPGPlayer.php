@@ -410,28 +410,28 @@ class RPGPlayer extends Player
         $this->config->setNested('Players', $players);
         $this->config->save();
     }
-    public function restorePlayerVariables(Player $player)
+    public function restorePlayerVariables()
     {
-        $cachedPlayer = $this->getPlayerVariables($player->getName());
-
+        $cachedPlayer = $this->getPlayerVariables($this->getName());
+        RPGLike::getInstance()->getLogger()->info("Restoring player: {$this->getName()}data" . print_r($cachedPlayer));
         if ($cachedPlayer != false) {
             $attributes = $cachedPlayer['attributes'];
-            $player->setDEF($attributes['DEF']);
-            $player->setDEX($attributes['DEX']);
-            $player->setSTR($attributes['STR']);
-            $player->setVIT($attributes['VIT']);
+            $this->setDEF($attributes['DEF']);
+            $this->setDEX($attributes['DEX']);
+            $this->setSTR($attributes['STR']);
+            $this->setVIT($attributes['VIT']);
 
-            $player->xplevel = $cachedPlayer['level'];
+            $this->xplevel = $cachedPlayer['level'];
 
-            $player->calcDEXBonus();
-            $player->calcDEFBonus();
-            $player->calcVITBonus();
-            $player->calcSTRBonus();
+            $this->calcDEXBonus();
+            $this->calcDEFBonus();
+            $this->calcVITBonus();
+            $this->calcSTRBonus();
 
-            $player->setSPleft($cachedPlayer['spleft']);
+            $this->setSPleft($cachedPlayer['spleft']);
             if (!empty($cachedPlayer['skills'])) {
                 foreach ($cachedPlayer['skills'] as $skill) {
-                    $player->getSkill($skill)->unlock();
+                    $this->getSkill($skill)->unlock();
                 }
             }
             $this->blocks = $cachedPlayer['blocks'];
