@@ -17,7 +17,6 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\Player;
 use TheClimbing\RPGLike\Forms\RPGForms;
-use TheClimbing\RPGLike\Players\PlayerManager;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class EventListener implements Listener
@@ -37,9 +36,6 @@ class EventListener implements Listener
         $player = $event->getPlayer();
         $player->applyDexterityBonus();
         $player->applyVitalityBonus();
-        if ($player->getXpLevel() <= 0){
-            $player->setXpLevel(1);
-        }
     }
 
     public function onMove(PlayerMoveEvent $event)

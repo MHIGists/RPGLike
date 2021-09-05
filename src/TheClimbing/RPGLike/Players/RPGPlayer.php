@@ -475,5 +475,15 @@ class RPGPlayer extends Player
     public function getBrokenBlocks() : array{
         return $this->blocks;
     }
+
+    public function getX()
+    {
+        return $this->lastX;
+    }
+
+    public function getZ()
+    {
+        return $this->lastZ;
+    }
 }
     
