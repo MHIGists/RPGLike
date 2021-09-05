@@ -54,9 +54,7 @@ class RPGForms
                     break;
                 case "exit":
                 default:
-                    if ($spleft > 0) {
-                        $player->setSPleft($spleft);
-                    }
+                    $player->setSPleft($spleft);
                     return;
             }
             self::upgradeStatsForm($player, $spleft);

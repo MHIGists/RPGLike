@@ -71,7 +71,6 @@ class RPGPlayer extends Player
     public function __construct($interface, $ip, $port)
     {
         parent::__construct($interface, $ip, $port);
-
         $this->config = RPGLike::getInstance()->getConfig();
         $this->restorePlayerVariables($this);
         $modifiers = $this->getModifiers();
@@ -88,8 +87,6 @@ class RPGPlayer extends Player
         if ($this->getXpLevel() <= 0) {
             $this->setXpLevel(1);
         }
-        $this->applyDexterityBonus();
-        $this->applyVitalityBonus();
 
     }
     public  function addBlockCount(string $type) : void{
