@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Players;
 
-use pocketmine\block\CoalOre;
-use pocketmine\block\Stone;
-use pocketmine\block\Wood;
 use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\Player;
@@ -132,13 +129,16 @@ class RPGPlayer extends Player
     public function getBlocksConfig(){
         return $this->config->getNested('Blocks');
     }
-    public function getBlockLevel(string $blockName){
+    public function getBlockLevel(string $blockName): int
+    {
         return $this->blocks[$blockName]['level'];
     }
-    public function getBlockCount(string $blockName){
+    public function getBlockCount(string $blockName): int
+    {
         return $this->blocks[$blockName]['count'];
     }
-    public function getBlockDropChance(string $blockName){
+    public function getBlockDropChance(string $blockName): int
+    {
         if ($this->getBlockLevel($blockName) == 0){
             return -1;
         }
@@ -270,7 +270,7 @@ class RPGPlayer extends Player
     }
 
     /* @return  BaseSkill[] */
-    public function getSkills()
+    public function getSkills(): array
     {
         return $this->skills;
     }
@@ -453,7 +453,7 @@ class RPGPlayer extends Player
         return $skills;
     }
 
-    public function getSPleft()
+    public function getSPleft(): int
     {
         return $this->spleft;
     }

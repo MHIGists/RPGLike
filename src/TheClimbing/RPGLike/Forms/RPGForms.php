@@ -53,10 +53,6 @@ class RPGForms
                     $player->applyDexterityBonus();
                     break;
                 case "exit":
-                    if ($spleft > 0) {
-                        $player->setSPleft($spleft);
-                    }
-                    return;
                 default:
                     if ($spleft > 0) {
                         $player->setSPleft($spleft);

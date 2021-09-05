@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TheClimbing\RPGLike;
 
 
-use pocketmine\block\Wood;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;

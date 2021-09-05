@@ -101,7 +101,7 @@ class RPGLike extends PluginBase
         ];
     }
 
-    public function getHUD(Player $player)
+    public function getHUD(Player $player): string
     {
         $string = Utils::parseKeywords($this->consts, $this->config['Hud']['message']);
         $item = $player->getInventory()->getItemInHand();

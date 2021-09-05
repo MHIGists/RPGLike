@@ -114,7 +114,7 @@ class BaseSkill
         $this->unlocked = true;
     }
 
-    public function isUnlocked()
+    public function isUnlocked(): bool
     {
         return $this->unlocked;
     }
