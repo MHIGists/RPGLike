@@ -84,9 +84,6 @@ class RPGPlayer extends Player
         $this->calcVITBonus();
         $this->calcDEXBonus();
         $this->addSkills();
-        if ($this->getXpLevel() <= 0) {
-            $this->setXpLevel(1);
-        }
 
     }
     public  function addBlockCount(string $type) : void{

@@ -34,8 +34,12 @@ class EventListener implements Listener
         $event->setPlayerClass("TheClimbing\RPGLike\Players\RPGPlayer");
     }
     public function spawnEvent(PlayerRespawnEvent $event){
-        $event->getPlayer()->applyDexterityBonus();
-        $event->getPlayer()->applyVitalityBonus();
+        $player = $event->getPlayer();
+        $player->applyDexterityBonus();
+        $player->applyVitalityBonus();
+        if ($player->getXpLevel() <= 0){
+            $player->setXpLevel(1);
+        }
     }
 
     public function onMove(PlayerMoveEvent $event)
