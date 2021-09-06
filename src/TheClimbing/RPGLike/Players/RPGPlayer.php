@@ -148,7 +148,7 @@ class RPGPlayer extends Player
 
     public function calcVITBonus(): void
     {
-        $this->vitBonus = $this->getVIT() * $this->getVITModifier();
+        $this->vitBonus = (int)($this->getVIT() * $this->getVITModifier());
     }
 
     public function getVIT(): int
@@ -174,7 +174,7 @@ class RPGPlayer extends Player
 
     public function calcDEXBonus(): void
     {
-        $this->dexBonus = $this->getDex() * $this->getDEXModifier();
+        $this->dexBonus =(int)( $this->getDex() * $this->getDEXModifier());
     }
 
     public function getDEX(): int
