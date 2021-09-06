@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Players;
 
+use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\Pure;
 use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\Player;
@@ -19,24 +21,24 @@ use TheClimbing\RPGLike\Skills\Tank;
 
 class RPGPlayer extends Player
 {
-    public $spleft = 0;
-    public $xplevel = 0;
-    private $skills = [];
-    private $traits = [];
-    private $str = 1;
-    private $strModifier = 0.15;
-    private $strBonus = 0;
-    private $vit = 1;
-    private $vitModifier = 0.175;
-    private $vitBonus = 1;
-    private $def = 1;
-    private $defModifier = 0.1;
-    private $defBonus = 1;
-    private $dex = 1;
-    private $dexModifier = 0.0002;
-    private $dexBonus = 1;
-    private $config;
-    private $blocks = [
+    public int $spleft = 0;
+    public int $xplevel = 0;
+    private array $skills = [];
+    private array $traits = [];
+    private int $str = 1;
+    private float $strModifier = 0.15;
+    private int $strBonus = 0;
+    private int $vit = 1;
+    private float $vitModifier = 0.175;
+    private int $vitBonus = 1;
+    private int $def = 1;
+    private float $defModifier = 0.1;
+    private int $defBonus = 1;
+    private int $dex = 1;
+    private float $dexModifier = 0.0002;
+    private int $dexBonus = 1;
+    private \pocketmine\utils\Config $config;
+    private array $blocks = [
         'Stone' => [
             'level' => 0,
             'count' => 0
@@ -133,7 +135,7 @@ class RPGPlayer extends Player
     }
 
     /* @return array|false */
-    public function getModifiers()
+    public function getModifiers(): bool|array
     {
         $modifiers = $this->config->getNested('modifiers');
         if ($modifiers !== null) {
@@ -235,7 +237,7 @@ class RPGPlayer extends Player
         return $this->dexBonus;
     }
 
-    public function getMovementSpeed()
+    public function getMovementSpeed(): float
     {
         $this->applyDexterityBonus();
         return $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->getValue();
@@ -293,12 +295,12 @@ class RPGPlayer extends Player
         }
     }
 
-    public function getAttribute(string $attribute): int
+    #[Pure] public function getAttribute(string $attribute): int
     {
         return $this->getAttributes()[$attribute];
     }
 
-    public function getAttributes(): array
+    #[Pure] #[ArrayShape(['STR' => "int", 'VIT' => "int", 'DEF' => "int", 'DEX' => "int"])] public function getAttributes(): array
     {
         return [
             'STR' => $this->getSTR(),
@@ -407,7 +409,7 @@ class RPGPlayer extends Player
         return $this->defBonus;
     }
 
-    public function getHealthRegenBonus()
+    #[Pure] public function getHealthRegenBonus()
     {
         return floor($this->getVITBonus() / 3);
     }
@@ -495,12 +497,12 @@ class RPGPlayer extends Player
         return $this->blocks;
     }
 
-    public function getX()
+    public function getX(): float
     {
         return $this->lastX;
     }
 
-    public function getZ()
+    public function getZ(): float
     {
         return $this->lastZ;
     }

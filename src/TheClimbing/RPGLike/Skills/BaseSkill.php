@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Skills;
 
-
+use JetBrains\PhpStorm\Pure;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\level\Level;
@@ -14,6 +14,7 @@ use pocketmine\Player;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Tasks\CooldownTask;
+
 use function array_slice;
 use function call_user_func;
 use function floor;
@@ -29,57 +30,37 @@ class BaseSkill
 
     private $namespace;
 
-    /**
-     * @var string
-     */
-    private $name;
 
-    /**
-     * @var string
-     */
-    private $type;
-    /**
-     * @var array
-     */
-    private $description;
-    /**
-     * @var int
-     */
-    private $cooldown;
+    private string $name;
 
-    private $onCooldown = false;
-    /**
-     * @var int
-     */
-    private $range;
-    /**
-     * @var array
-     */
-    private $skillUpgrades;
+    private string $type;
 
-    private $skillUnlock;
+    private array $description;
+
+    private int $cooldown;
+
+    private bool $onCooldown = false;
+
+    private int $range;
+
+    private mixed $skillUpgrades;
+
+    private mixed $skillUnlock;
 
     /**
      * That's including the source
-     *
-     * @var int
      */
-    private $maxEntInRange;
-
-    /**
-     * @var null
-     */
-    private $effect;
+    private int $maxEntInRange;
 
 
-    /**
-     * @var int
-     */
-    private $skillLevel = 0;
+    private ?int $effect;
 
-    public $cdStartTime = 0.0;
 
-    private $unlocked = false;
+    private int $skillLevel = 0;
+
+    public float $cdStartTime = 0.0;
+
+    private bool $unlocked = false;
 
 
     /**
@@ -93,7 +74,7 @@ class BaseSkill
      * @param int $maxEntInRange
      * @param null $effect
      */
-    public function __construct(RPGPlayer $owner, string $name, string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null)
+    #[Pure] public function __construct(RPGPlayer $owner, string $name, string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null)
     {
 
         $this->owner = $owner;
@@ -423,7 +404,7 @@ class BaseSkill
      *
      * @param callable|int $effect
      */
-    public function setPlayerEffect($effect): void
+    public function setPlayerEffect(callable|int $effect): void
     {
         if (!$this->onCooldown) {
             if (is_callable($effect)) {
@@ -433,8 +414,6 @@ class BaseSkill
                 $this->owner->addEffect($effect);
             }
         }
-
-
     }
 
 }

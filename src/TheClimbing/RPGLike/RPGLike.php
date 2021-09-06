@@ -17,12 +17,12 @@ use TheClimbing\RPGLike\Tasks\HudTask;
 
 class RPGLike extends PluginBase
 {
-    private static $instance;
+    private static RPGLike $instance;
 
-    public $messages;
+    public array $messages;
     public $config;
-    public $consts = [];
-    public $skillUnlocks = [];
+    public array $consts = [];
+    public array $skillUnlocks = [];
 
     private $skills;
 
