@@ -323,7 +323,7 @@ class RPGPlayer extends Player
 
     public function calcSTRBonus(): void
     {
-        $this->strBonus = $this->getSTR() * $this->getSTRModifier();
+        $this->strBonus = (int)($this->getSTR() * $this->getSTRModifier());
     }
 
     public function getSTRModifier(): float
@@ -349,7 +349,7 @@ class RPGPlayer extends Player
 
     public function calcDEFBonus(): void
     {
-        $this->defBonus = $this->getDEF() * $this->getDEFModifier();
+        $this->defBonus = (int)($this->getDEF() * $this->getDEFModifier());
     }
 
     public function getDEFModifier(): float
