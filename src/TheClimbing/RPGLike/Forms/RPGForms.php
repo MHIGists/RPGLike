@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Forms;
 
-use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
+
+use jojoe77777\FormAPI\SimpleForm;
+
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Utils;
 
 class RPGForms
 {
-    private static $main;
+    private static RPGLike $main;
 
     public function __construct(RPGLike $rpg)
     {

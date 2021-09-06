@@ -90,7 +90,9 @@ class RPGPlayer extends Player
         $this->calcVITBonus();
         $this->calcDEXBonus();
         $this->addSkills();
-        foreach ($this->config->getNested("Traits") as $key => $value) {
+        $traits = $this->config->getNested("Traits");
+        print_r($traits);
+        foreach ($traits as $key => $value) {
             $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $this->config->getNested('Players')[$this->getName()]['block_breaks']);
         }
     }
@@ -221,11 +223,6 @@ class RPGPlayer extends Player
         ];
         foreach ($skills as $skill) {
             $this->skills[$skill->getName()] = $skill;
-        }
-        foreach ($this->config->getAll()['Skills'] as $skillName => $skill) {
-            if ($this->getSkill($skillName) === null) {
-                $this->skills[$skillName] = new $skill['namespace']($this);
-            }
         }
     }
 
