@@ -72,7 +72,6 @@ class RPGPlayer extends Player
     {
         parent::__construct($interface, $ip, $port);
         $this->config = RPGLike::getInstance()->getConfig();
-        $this->restorePlayerVariables($this);
         $modifiers = $this->getModifiers();
         if ($modifiers != false) {
             $this->setDEFModifier($modifiers['DEF']);
@@ -410,10 +409,11 @@ class RPGPlayer extends Player
         $this->config->setNested('Players', $players);
         $this->config->save();
     }
+    //TODO finish this
     public function restorePlayerVariables()
     {
         $cachedPlayer = $this->getPlayerVariables($this->getName());
-        RPGLike::getInstance()->getLogger()->info("Restoring player: {$this->getName()}data" . print_r($cachedPlayer));
+        RPGLike::getInstance()->getLogger()->info("Restoring player: {$this->get}data" . print_r($cachedPlayer));
         if ($cachedPlayer != false) {
             $attributes = $cachedPlayer['attributes'];
             $this->setDEF($attributes['DEF']);

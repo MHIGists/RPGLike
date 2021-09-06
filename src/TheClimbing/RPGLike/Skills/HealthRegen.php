@@ -22,7 +22,7 @@ class HealthRegen extends BaseSkill
     public function healthRegen(EntityRegainHealthEvent $event)
     {
         $player = $event->getEntity();
-        if ($player instanceof Player && $event->getRegainReason() == EntityRegainHealthEvent::CAUSE_SATURATION) {
+        if ($event->getRegainReason() == EntityRegainHealthEvent::CAUSE_SATURATION) {
             $event->setAmount($event->getAmount() + $player->getHealthRegenBonus());
         }
     }
