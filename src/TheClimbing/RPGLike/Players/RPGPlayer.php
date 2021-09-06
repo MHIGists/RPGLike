@@ -9,6 +9,7 @@ use JetBrains\PhpStorm\Pure;
 use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\Player;
+
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
@@ -255,15 +256,6 @@ class RPGPlayer extends Player
     {
         return $this->skills;
     }
-
-    public function onPickupXp(int $xpValue): void
-    {
-        if ($this->config->get('keep-xp') == true) {
-            $xpValue = 0;
-        }
-        parent::onPickupXp($xpValue);
-    }
-
     public function checkForSkills()
     {
         foreach ($this->skills as $skill) {
@@ -300,7 +292,8 @@ class RPGPlayer extends Player
         return $this->getAttributes()[$attribute];
     }
 
-    #[Pure] #[ArrayShape(['STR' => "int", 'VIT' => "int", 'DEF' => "int", 'DEX' => "int"])] public function getAttributes(): array
+    #[Pure] #[ArrayShape(['STR' => "int", 'VIT' => "int", 'DEF' => "int", 'DEX' => "int"])]
+    public function getAttributes(): array
     {
         return [
             'STR' => $this->getSTR(),
@@ -505,6 +498,11 @@ class RPGPlayer extends Player
     public function getZ(): float
     {
         return $this->lastZ;
+    }
+    public function setXpLevel(int $level): bool
+    {
+        $this->xplevel = 0;
+        return parent::setXpLevel($level);
     }
 }
     

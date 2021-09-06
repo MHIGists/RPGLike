@@ -10,6 +10,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCreationEvent;
+use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerExperienceChangeEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
@@ -31,11 +32,14 @@ class EventListener implements Listener
     {
         $event->setPlayerClass("TheClimbing\RPGLike\Players\RPGPlayer");
     }
-    public function playerJoin(PlayerJoinEvent $event){
+
+    public function playerJoin(PlayerJoinEvent $event)
+    {
         $player = $event->getPlayer();
         $player->restorePlayerVariables();
 
     }
+
     public function onMove(PlayerMoveEvent $event)
     {
         $player = $event->getPlayer();
@@ -53,24 +57,41 @@ class EventListener implements Listener
         }
     }
 
+    public function playerDeath(PlayerDeathEvent $event)
+    {
+        $player = $event->getPlayer();
+        if ($player instanceof RPGPlayer){
+            if ($this->main->config['keep-xp']) {
+                $event->setXpDropAmount(0);
+            }else{
+                $player->setDEX(1);
+                $player->setSTR(1);
+                $player->setVIT(1);
+                $player->setDEF(1);
+                $player->resetSkills();
+                $player->setXpLevel(0);
+            }
+        }
+    }
+
     public function dealDamageEvent(EntityDamageByEntityEvent $event)
     {
         $player = $event->getDamager();
-        if($player instanceof RPGPlayer){
+        if ($player instanceof RPGPlayer) {
             $coinflip = $player->getSkill('Coinflip');
             $doublestrike = $player->getSkill('DoubleStrike');
             $explosion = $player->getSkill('Explosion');
-                $player->applyDamageBonus($event);
-                $player->applyDefenseBonus($event);
-                if ($coinflip->isUnlocked()) {
-                    $coinflip->setCritChance($event);
-                }
-                if ($doublestrike->isUnlocked()) {
-                    $doublestrike->setPlayerAttackCD($event);
-                }
-                if ($explosion->isUnlocked()) {
-                    $explosion->damageEvent($event);
-                }
+            $player->applyDamageBonus($event);
+            $player->applyDefenseBonus($event);
+            if ($coinflip->isUnlocked()) {
+                $coinflip->setCritChance($event);
+            }
+            if ($doublestrike->isUnlocked()) {
+                $doublestrike->setPlayerAttackCD($event);
+            }
+            if ($explosion->isUnlocked()) {
+                $explosion->damageEvent($event);
+            }
 
         }
     }
@@ -80,10 +101,10 @@ class EventListener implements Listener
         $player = $event->getEntity();
         $new_lvl = $event->getNewLevel();
         $old_level = $event->getOldLevel();
+        if ($player instanceof RPGPlayer) {
+            if ($new_lvl !== null) {
+                if ($new_lvl > $old_level && $new_lvl > $player->xplevel) {
 
-        if ($new_lvl !== null) {
-            if ($new_lvl > $old_level && $new_lvl > $player->xplevel) {
-                if ($player instanceof RPGPlayer) {
                     $player->xplevel = $new_lvl;
                     $spleft = $new_lvl - $old_level;
 
@@ -102,6 +123,7 @@ class EventListener implements Listener
                     $player->setHealth($player->getMaxHealth());
                     $player->setFood($player->getMaxFood());
                     $player->setAirSupplyTicks($player->getMaxAirSupplyTicks());
+
                 }
             }
         }
@@ -111,40 +133,36 @@ class EventListener implements Listener
     public function healthRegen(EntityRegainHealthEvent $event)
     {
         $player = $event->getEntity();
-        if ($player instanceof RPGPlayer){
+        if ($player instanceof RPGPlayer) {
             $healthRegen = $player->getSkill('HealthRegen');
-                if ($healthRegen->isUnlocked()) {
-                    $healthRegen->healthRegen($event);
-                }
+            if ($healthRegen->isUnlocked()) {
+                $healthRegen->healthRegen($event);
+            }
         }
     }
 
     public function onRespawn(PlayerRespawnEvent $event)
     {
         $player = $event->getPlayer();
-        if ($player instanceof RPGPlayer){
-            if ($this->main->config['keep-xp'] != true) {
-                $player->setDEX(1);
-                $player->setSTR(1);
-                $player->setVIT(1);
-                $player->setDEF(1);
-                $player->resetSkills();
-                $player->setXpLevel(1);
+        if ($player instanceof RPGPlayer) {
+            if ($this->main->config['keep-xp'] == true) {
+                $player->setXpLevel($player->xplevel);
             }
-
             $player->applyVitalityBonus();
             $player->applyDexterityBonus();
         }
 
 
     }
-    public function blockDestroy(BlockBreakEvent $event){
+
+    public function blockDestroy(BlockBreakEvent $event)
+    {
         $block = $event->getBlock();
         $player = $event->getPlayer();
         $drops = $event->getDrops();
-        if ($player instanceof RPGPlayer){
+        if ($player instanceof RPGPlayer) {
             $player->checkBlocks();
-            switch ($block->getName()){
+            switch ($block->getName()) {
                 case 'Stone':
                     $player->addBlockCount('Stone');
                     if (mt_rand(0, 99) < $player->getBlockDropChance('Stone')) {
@@ -201,6 +219,7 @@ class EventListener implements Listener
             }
         }
     }
+
     public function onLeave(PlayerQuitEvent $event)
     {
         $event->getPlayer()->savePlayerVariables();

@@ -23,10 +23,11 @@ class RPGForms
     public static function upgradeStatsForm(RPGPlayer $player, int $spleft)
     {
         if ($player->getSPleft() > 0) {
-            $spleft = $player->getSPleft();
+            $spleft += $player->getSPleft();
             $player->setSPleft(0);
         }
         if ($spleft <= 0) {
+            $player->setSPleft(0);
             self::statsForm($player);
             return;
         }
