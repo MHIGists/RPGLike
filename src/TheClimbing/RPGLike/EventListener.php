@@ -11,6 +11,7 @@ use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\event\player\PlayerExperienceChangeEvent;
+use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
@@ -30,7 +31,11 @@ class EventListener implements Listener
     {
         $event->setPlayerClass("TheClimbing\RPGLike\Players\RPGPlayer");
     }
+    public function playerJoin(PlayerJoinEvent $event){
+        $player = $event->getPlayer();
+        $player->restorePlayerVariables();
 
+    }
     public function onMove(PlayerMoveEvent $event)
     {
         $player = $event->getPlayer();
@@ -125,7 +130,7 @@ class EventListener implements Listener
 
         $player->applyVitalityBonus();
         $player->applyDexterityBonus();
-        $player->restorePlayerVariables(); //TODO watchout for this
+
     }
     public function blockDestroy(BlockBreakEvent $event){
         $block = $event->getBlock();

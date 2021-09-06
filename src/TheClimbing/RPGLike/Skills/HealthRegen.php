@@ -5,7 +5,6 @@ namespace TheClimbing\RPGLike\Skills;
 
 
 use pocketmine\event\entity\EntityRegainHealthEvent;
-use pocketmine\Player;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class HealthRegen extends BaseSkill
