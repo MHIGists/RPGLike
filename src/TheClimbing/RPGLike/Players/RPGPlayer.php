@@ -21,7 +21,6 @@ class RPGPlayer extends Player
 {
     public $spleft = 0;
     public $xplevel = 0;
-    /* @var BaseSkill[] */
     private $skills = [];
     private $traits = [];
     private $str = 1;
@@ -209,7 +208,7 @@ class RPGPlayer extends Player
         }
     }
 
-    public function getSkill(string $skillName): ?BaseSkill
+    public function getSkill(string $skillName): Coinflip|DoubleStrike|Explosion|Fortress|HealthRegen|Tank
     {
         return $this->skills[$skillName];
     }
@@ -409,11 +408,9 @@ class RPGPlayer extends Player
         $this->config->setNested('Players', $players);
         $this->config->save();
     }
-    //TODO finish this
     public function restorePlayerVariables()
     {
         $cachedPlayer = $this->getPlayerVariables($this->getName());
-        RPGLike::getInstance()->getLogger()->info("Restoring player: {$this->get}data" . print_r($cachedPlayer));
         if ($cachedPlayer != false) {
             $attributes = $cachedPlayer['attributes'];
             $this->setDEF($attributes['DEF']);

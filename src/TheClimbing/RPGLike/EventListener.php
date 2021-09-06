@@ -20,7 +20,7 @@ use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class EventListener implements Listener
 {
-    private $main;
+    private RPGLike $main;
 
     public function __construct(RPGLike $rpg)
     {
@@ -118,18 +118,20 @@ class EventListener implements Listener
     public function onRespawn(PlayerRespawnEvent $event)
     {
         $player = $event->getPlayer();
+        if ($player instanceof RPGPlayer){
+            if ($this->main->config['keep-xp'] != true) {
+                $player->setDEX(1);
+                $player->setSTR(1);
+                $player->setVIT(1);
+                $player->setDEF(1);
+                $player->resetSkills();
+                $player->setXpLevel(1);
+            }
 
-        if ($this->main->config['keep-xp'] != true) {
-            $player->setDEX(1);
-            $player->setSTR(1);
-            $player->setVIT(1);
-            $player->setDEF(1);
-            $player->resetSkills();
-            $player->setXpLevel(1);
+            $player->applyVitalityBonus();
+            $player->applyDexterityBonus();
         }
 
-        $player->applyVitalityBonus();
-        $player->applyDexterityBonus();
 
     }
     public function blockDestroy(BlockBreakEvent $event){

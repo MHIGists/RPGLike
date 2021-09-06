@@ -101,7 +101,6 @@ class RPGLike extends PluginBase
 
     public function getHUD(Player $player): string
     {
-        $string = Utils::parseKeywords($this->consts, $this->config['Hud']['message']);
         $item = $player->getInventory()->getItemInHand();
         $swordDamage = 0;
         if ($item instanceof Sword) {
@@ -118,8 +117,8 @@ class RPGLike extends PluginBase
             'XPLEVEL' => $player->getXpLevel(),
             'TIME' => date('h:i')
         ];
-        $string = Utils::parseKeywords($playerSpecific, $string);
-        return $string;
+        $keywords = array_merge($playerSpecific,$playerSpecific);
+        return Utils::parseKeywords($keywords, $this->config['Hud']['message']);
     }
 
     public function registerSkill(string $skillName, array $values): void

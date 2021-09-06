@@ -76,14 +76,14 @@ Blocks:
       count: 1000
       dropChance: 5
     2:
-      count: 5000
+      count: 10000
       dropChance: 10
   Wood:
     1:
       count: 1000
       dropChance: 5
     2:
-      count: 5000
+      count: 7500
       dropChance: 10
   Coal Ore:
     1:
@@ -101,24 +101,24 @@ Blocks:
       dropChance: 10
   Gold Ore:
     1:
-      count: 1000
+      count: 500
       dropChance: 5
     2:
-      count: 5000
+      count: 3500
       dropChance: 10
   Diamond Ore:
     1:
-      count: 1000
+      count: 100
       dropChance: 5
     2:
-      count: 5000
+      count: 500
       dropChance: 10
   Lapis Ore:
     1:
-      count: 1000
+      count: 100
       dropChance: 5
     2:
-      count: 5000
+      count: 500
       dropChance: 10
 Modifiers:
   STR : 0.15
