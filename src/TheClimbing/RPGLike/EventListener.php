@@ -123,7 +123,6 @@ class EventListener implements Listener
                     $player->setHealth($player->getMaxHealth());
                     $player->setFood($player->getMaxFood());
                     $player->setAirSupplyTicks($player->getMaxAirSupplyTicks());
-
                 }
             }
         }
@@ -151,72 +150,16 @@ class EventListener implements Listener
             $player->applyVitalityBonus();
             $player->applyDexterityBonus();
         }
-
-
     }
 
     public function blockDestroy(BlockBreakEvent $event)
     {
-        $block = $event->getBlock();
         $player = $event->getPlayer();
-        $drops = $event->getDrops();
         if ($player instanceof RPGPlayer) {
-            $player->checkBlocks();
-            switch ($block->getName()) {
-                case 'Stone':
-                    $player->addBlockCount('Stone');
-                    if (mt_rand(0, 99) < $player->getBlockDropChance('Stone')) {
-                        $drops[] = $drops[mt_rand(0, count($drops) - 1)];
-                        $event->setDrops($drops);
-                        $player->sendMessage('You just got extra drops!');
-                    }
-                    break;
-                case 'Oak Wood':
-                case 'Spruce Wood':
-                case 'Birch Wood':
-                case 'Jungle Wood':
-                    $player->addBlockCount('Wood');
-                    if (mt_rand(0, 99) < $player->getBlockDropChance('Wood')) {
-                        $drops[] = $drops[mt_rand(0, count($drops) - 1)];
-                        $event->setDrops($drops);
-                    }
-                    break;
-                case 'Coal Ore':
-                    $player->addBlockCount('CoalOre');
-                    if (mt_rand(0, 99) < $player->getBlockDropChance('Coal Ore')) {
-                        $drops[] = $drops[mt_rand(0, count($drops) - 1)];
-                        $event->setDrops($drops);
-                    }
-                    break;
-                case 'Iron Ore':
-                    $player->addBlockCount('IronOre');
-                    if (mt_rand(0, 99) < $player->getBlockDropChance('Iron Ore')) {
-                        $drops[] = $drops[mt_rand(0, count($drops) - 1)];
-                        $event->setDrops($drops);
-                    }
-                    break;
-                case 'Gold Ore':
-                    $player->addBlockCount('GoldOre');
-                    if (mt_rand(0, 99) < $player->getBlockDropChance('Gold Ore')) {
-                        $drops[] = $drops[mt_rand(0, count($drops) - 1)];
-                        $event->setDrops($drops);
-                    }
-                    break;
-                case 'Diamond Ore':
-                    $player->addBlockCount('DiamondOre');
-                    if (mt_rand(0, 99) < $player->getBlockDropChance('Diamond Ore')) {
-                        $drops[] = $drops[mt_rand(0, count($drops) - 1)];
-                        $event->setDrops($drops);
-                    }
-                    break;
-                case 'Lapis Ore':
-                    $player->addBlockCount('LapisOre');
-                    if (mt_rand(0, 99) < $player->getBlockDropChance('Stone')) {
-                        $drops[] = $drops[mt_rand(0, count($drops) - 1)];
-                        $event->setDrops($drops);
-                    }
-                    break;
+            foreach ($player->getTraits() as $trait) {
+                $trait->blockBreakEvent($event);
             }
+            $player->checkBlocks();
         }
     }
 

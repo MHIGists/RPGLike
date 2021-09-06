@@ -125,4 +125,14 @@ Modifiers:
   VIT : 0.175
   DEF : 0.1
   DEX : 0.0002
+Traits:
+  WoodCutter:
+    blocks: ["Oak Wood", "Spruce Wood", "Birch Wood", "Jungle Wood"]
+    levels:
+      1:
+        requirment: 10
+        drop_chance: 5
+      2:
+        requirment: 50
+        drop_chance: 10
 ...

@@ -19,12 +19,17 @@ use TheClimbing\RPGLike\Skills\Explosion;
 use TheClimbing\RPGLike\Skills\Fortress;
 use TheClimbing\RPGLike\Skills\HealthRegen;
 use TheClimbing\RPGLike\Skills\Tank;
+use TheClimbing\RPGLike\Traits\BaseTrait;
 
 class RPGPlayer extends Player
 {
     public int $spleft = 0;
     public int $xplevel = 0;
+
     private array $skills = [];
+    /**
+     * @var BaseTrait[]
+     */
     private array $traits = [];
     private int $str = 1;
     private float $strModifier = 0.15;
@@ -85,7 +90,9 @@ class RPGPlayer extends Player
         $this->calcVITBonus();
         $this->calcDEXBonus();
         $this->addSkills();
-
+        foreach ($this->config->getNested("Traits") as $key => $value) {
+            $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $this->config->getNested('Players')[$this->getName()]['block_breaks']);
+        }
     }
 
     public function addBlockCount(string $type): void
@@ -134,6 +141,7 @@ class RPGPlayer extends Player
         $blocks = $this->getBlocksConfig();
         return $blocks[$blockName][$this->getBlockLevel($blockName)]['dropChance'];
     }
+
 
     /* @return array|false */
     public function getModifiers(): bool|array
@@ -393,7 +401,6 @@ class RPGPlayer extends Player
         $receiver = $event->getEntity();
         if ($receiver instanceof RPGPlayer) {
             $receiver->setAbsorption($receiver->getAbsorption() + $receiver->getDEFBonus());
-
         }
     }
 
@@ -420,6 +427,14 @@ class RPGPlayer extends Player
         $players[$this->getName()] = $playerVars;
         $this->config->setNested('Players', $players);
         $this->config->save();
+    }
+    #[Pure] public function getBrokenBlocks() : array
+    {
+        $broken_blocks = [];
+        foreach ($this->traits as $key => $trait) {
+            $broken_blocks[$key] =  $trait->getBlockBreaks();
+        }
+        return $broken_blocks;
     }
 
     public function restorePlayerVariables()
@@ -485,11 +500,6 @@ class RPGPlayer extends Player
         $this->spleft = $spleft;
     }
 
-    public function getBrokenBlocks(): array
-    {
-        return $this->blocks;
-    }
-
     public function getX(): float
     {
         return $this->lastX;
@@ -503,6 +513,11 @@ class RPGPlayer extends Player
     {
         $this->xplevel = 0;
         return parent::setXpLevel($level);
+    }
+
+    public function getTraits(): array
+    {
+        return $this->traits;
     }
 }
     
