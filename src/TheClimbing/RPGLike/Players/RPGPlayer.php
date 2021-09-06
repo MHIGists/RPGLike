@@ -84,17 +84,21 @@ class RPGPlayer extends Player
         $this->addSkills();
 
     }
-    public  function addBlockCount(string $type) : void{
+
+    public function addBlockCount(string $type): void
+    {
         $this->blocks[$type]['count'] += 1;
-}
-    public function checkBlocks(){
+    }
+
+    public function checkBlocks()
+    {
         foreach ($this->getBlocksConfig() as $blockName => $blockArray) {
             foreach ($blockArray as $blockLevel => $blockLevelArray) {
                 foreach ($blockLevelArray as $key => $value) {
-                    if ($key == 'dropChance'){
+                    if ($key == 'dropChance') {
                         continue;
                     }
-                    if ($this->getBlockCount($blockName) >= $value && $this->getBlockLevel($blockName) < $blockLevel){
+                    if ($this->getBlockCount($blockName) >= $value && $this->getBlockLevel($blockName) < $blockLevel) {
                         $this->blocks[$blockName]['level'] += 1;
                         $this->sendMessage('You now have ' . $this->getBlockDropChance($blockName) . '% chance to get bonus drops');
                     }
@@ -103,25 +107,31 @@ class RPGPlayer extends Player
             }
         }
     }
-    public function getBlocksConfig(){
+
+    public function getBlocksConfig()
+    {
         return $this->config->getNested('Blocks');
     }
+
     public function getBlockLevel(string $blockName): int
     {
         return $this->blocks[$blockName]['level'];
     }
+
     public function getBlockCount(string $blockName): int
     {
         return $this->blocks[$blockName]['count'];
     }
+
     public function getBlockDropChance(string $blockName): int
     {
-        if ($this->getBlockLevel($blockName) == 0){
+        if ($this->getBlockLevel($blockName) == 0) {
             return -1;
         }
         $blocks = $this->getBlocksConfig();
         return $blocks[$blockName][$this->getBlockLevel($blockName)]['dropChance'];
     }
+
     /* @return array|false */
     public function getModifiers()
     {
@@ -224,7 +234,9 @@ class RPGPlayer extends Player
     {
         return $this->dexBonus;
     }
-    public function getMovementSpeed(){
+
+    public function getMovementSpeed()
+    {
         $this->applyDexterityBonus();
         return $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->getValue();
     }
@@ -249,26 +261,32 @@ class RPGPlayer extends Player
         }
         parent::onPickupXp($xpValue);
     }
+
     public function checkForSkills()
     {
         foreach ($this->skills as $skill) {
             $skillBaseUnlock = $skill->getBaseUnlock();
-            $firstKey = array_key_first($skillBaseUnlock);
-            if (is_array($skillBaseUnlock[$firstKey])) {
+            $unlockLevel = array_key_first($skillBaseUnlock);
+            if (is_array($skillBaseUnlock[$unlockLevel])) {
                 $req = 0;
-                foreach ($skillBaseUnlock[$firstKey] as $key => $value) {
+                foreach ($skillBaseUnlock[$unlockLevel] as $key => $value) {
                     if ($this->getAttribute($key) >= $value) {
                         $req += 1;
                     }
                 }
-                if ($req == count($skillBaseUnlock[$firstKey])) {
-                    $skill->unlock();
-                    RPGForms::skillHelpForm($this, $skill->getName(), false);
+                if ($req == count($skillBaseUnlock[$unlockLevel])) {
+                    if (!$skill->isUnlocked()) {
+                        $skill->unlock();
+                        RPGForms::skillUnlockForm($this, $skill->getName(), false);
+                    }
                 }
             } else {
-                if ($this->getAttribute($firstKey) >= $skillBaseUnlock[$firstKey]) {
-                    $skill->unlock();
-                    RPGForms::skillHelpForm($this, $skill->getName(), false);
+                if ($this->getAttribute($unlockLevel) >= $skillBaseUnlock[$unlockLevel]) {
+                    if (!$skill->isUnlocked()) {
+                        $skill->unlock();
+                        RPGForms::skillUnlockForm($this, $skill->getName(), false);
+                    }
+
                 }
             }
 
@@ -408,6 +426,7 @@ class RPGPlayer extends Player
         $this->config->setNested('Players', $players);
         $this->config->save();
     }
+
     public function restorePlayerVariables()
     {
         $cachedPlayer = $this->getPlayerVariables($this->getName());
@@ -434,9 +453,10 @@ class RPGPlayer extends Player
             $this->blocks = $cachedPlayer['blocks'];
         }
     }
+
     public function getPlayerVariables(string $playerName)
     {
-        $players =  $this->config->getNested('Players');
+        $players = $this->config->getNested('Players');
         if ($players != null) {
             if (array_key_exists($playerName, $players)) {
                 return $players[$playerName];
@@ -469,7 +489,9 @@ class RPGPlayer extends Player
     {
         $this->spleft = $spleft;
     }
-    public function getBrokenBlocks() : array{
+
+    public function getBrokenBlocks(): array
+    {
         return $this->blocks;
     }
 

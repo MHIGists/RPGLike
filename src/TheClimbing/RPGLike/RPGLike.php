@@ -5,14 +5,13 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike;
 
-use pocketmine\item\Sword;
-use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
+use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\Tasks\HudTask;
 
 
@@ -99,17 +98,14 @@ class RPGLike extends PluginBase
         ];
     }
 
-    public function getHUD(Player $player): string
+    public function getHUD(RPGPlayer $player): string
     {
         $item = $player->getInventory()->getItemInHand();
-        $swordDamage = 0;
-        if ($item instanceof Sword) {
-            $swordDamage = $item->getAttackPoints();
-        }
+
         $playerSpecific = [
             'HEALTH' => $player->getHealth(),
             'MAXHP' => $player->getMaxHealth(),
-            'DAMAGE' => $swordDamage + round($player->getSTRBonus(), 0, PHP_ROUND_HALF_UP),
+            'DAMAGE' => $item->getAttackPoints() + round($player->getSTRBonus(), 0, PHP_ROUND_HALF_UP),
             'MOVEMENTSPEED' => round($player->getMovementSpeed(), 4, PHP_ROUND_HALF_UP),
             'ABSORPTION' => $player->getAbsorption() + $player->getDEFBonus(),
             'TICKS' => $player->getServer()->getTicksPerSecondAverage(),
@@ -117,8 +113,9 @@ class RPGLike extends PluginBase
             'XPLEVEL' => $player->getXpLevel(),
             'TIME' => date('h:i')
         ];
-        $keywords = array_merge($playerSpecific,$playerSpecific);
+        $keywords = array_merge($playerSpecific, $playerSpecific);
         return Utils::parseKeywords($keywords, $this->config['Hud']['message']);
+
     }
 
     public function registerSkill(string $skillName, array $values): void

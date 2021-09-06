@@ -69,7 +69,19 @@ class RPGForms
         $player->sendForm($form);
     }
 
-    public static function skillHelpForm(RPGPlayer $player, string $skillName, bool $unlock = true)
+    public static function skillUnlockForm(RPGPlayer $player, string $skillName)
+    {
+        $skillDescription = Utils::parseArrayKeywords(self::$main->consts, RPGLike::getInstance()->getSkillDescription($skillName));
+        $form = new SimpleForm(function () {
+        });
+        $title = self::$main->getMessages()['Forms']['SkillInfo']['title'];
+        str_replace('{SKILLNAME}', ' ' . $skillName . ' ', $title);
+        $form->setTitle($title);
+        $form->setContent($skillDescription['description'] . TextFormat::EOL . $skillDescription['unlocks']);
+        $player->sendForm($form);
+    }
+
+    public static function skillHelpForm(RPGPlayer $player, string $skillName)
     {
         $skillDescription = Utils::parseArrayKeywords(self::$main->consts, RPGLike::getInstance()->getSkillDescription($skillName));
         $form = new SimpleForm(function (Player $pl, $data) use ($player) {
@@ -80,15 +92,9 @@ class RPGForms
             }
         });
         $title = self::$main->getMessages()['Forms']['SkillInfo']['title'];
-        str_replace(['{', '}'], [' ', ' '], $title);
-        str_replace('SKILLNAME', $skillName, $title);
+        str_replace('{SKILLNAME}', ' ' . $skillName . ' ', $title);
         $form->setTitle($title);
-        if ($unlock) {
-            $form->setContent($skillDescription['description'] . TextFormat::EOL . $skillDescription['unlocks']);
-        } else {
-            $form->setContent($skillDescription['description']);
-
-        }
+        $form->setContent($skillDescription['description']);
         $form->addButton('Back to menu', -1, '', 'Back');
         $player->sendForm($form);
     }

@@ -88,6 +88,7 @@ class EventListener implements Listener
                     $spleft = $new_lvl - $old_level;
 
                     $player->checkForSkills();
+
                     RPGForms::upgradeStatsForm($player, $spleft);
                     $player->applyVitalityBonus();
                     $player->applyDexterityBonus();
@@ -98,6 +99,9 @@ class EventListener implements Listener
                         $player->getSkill('Fortress')->setDefense($player);
                     }
                     $player->checkSkillLevel();
+                    $player->setHealth($player->getMaxHealth());
+                    $player->setFood($player->getMaxFood());
+                    $player->setAirSupplyTicks($player->getMaxAirSupplyTicks());
                 }
             }
         }
