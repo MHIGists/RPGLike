@@ -277,14 +277,14 @@ class RPGPlayer extends Player
                 if ($req == count($skillBaseUnlock[$unlockLevel])) {
                     if (!$skill->isUnlocked()) {
                         $skill->unlock();
-                        RPGForms::skillUnlockForm($this, $skill->getName(), false);
+                        RPGForms::skillUnlockForm($this, $skill->getName());
                     }
                 }
             } else {
                 if ($this->getAttribute($unlockLevel) >= $skillBaseUnlock[$unlockLevel]) {
                     if (!$skill->isUnlocked()) {
                         $skill->unlock();
-                        RPGForms::skillUnlockForm($this, $skill->getName(), false);
+                        RPGForms::skillUnlockForm($this, $skill->getName());
                     }
 
                 }
