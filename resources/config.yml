@@ -161,9 +161,9 @@ Traits:
     blocks: ["Oak Wood", "Spruce Wood", "Birch Wood", "Jungle Wood"]
     levels:
       1:
-        requirment: 10
-        drop_chance: 5
+        requirement: 5
+        drop_chance: 30
       2:
-        requirment: 50
+        requirement: 50
         drop_chance: 10
 ...

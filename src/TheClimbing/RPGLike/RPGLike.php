@@ -52,7 +52,6 @@ class RPGLike extends PluginBase
         if ($this->config['Hud']['on'] == true) {
             $this->getScheduler()->scheduleRepeatingTask(new HudTask($this), $this->config['Hud']['period'] * 20);
         }
-        print_r($this->config['Skills']['Tank']['levels']);
     }
 
 

@@ -59,13 +59,22 @@ class RPGPlayer extends Player
             $this->setSTRModifier($modifiers['STR']);
             $this->setDEXModifier($modifiers['DEX']);
         }
-
         $this->calcVITBonus();
         $this->calcDEXBonus();
         $this->addSkills();
         $traits = $this->config->getNested("Traits");
+        $players = $this->config->getNested('Players');
+        $block_breaks = 0;
+        if (array_key_exists($this->getName(),$players) ){
+            $block_breaks = $players[$this->getName()]['block_breaks'];
+        }
         foreach ($traits as $key => $value) {
-            $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $this->config->getNested('Players')[$this->getName()]['block_breaks']);
+            if ($block_breaks != 0){
+                $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $block_breaks);
+            }else{
+                $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels']);
+            }
+
         }
     }
 
@@ -381,7 +390,9 @@ class RPGPlayer extends Player
                     $this->getSkill($skill)->unlock();
                 }
             }
-            $this->blocks = $cachedPlayer['blocks'];
+            foreach ($cachedPlayer['blocks'] as $trait => $block_count) {
+                $this->traits[$trait]->restorePlayerTrait($block_count);
+            }
         }
     }
 

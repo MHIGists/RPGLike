@@ -157,7 +157,7 @@ class EventListener implements Listener
         $player = $event->getPlayer();
         if ($player instanceof RPGPlayer) {
             foreach ($player->getTraits() as $trait) {
-                $trait->blockBreakEvent($event);
+                $trait->blockBreak($event);
             }
         }
     }
