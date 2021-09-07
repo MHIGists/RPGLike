@@ -9,13 +9,16 @@ use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class HealthRegen extends BaseSkill
 {
+    public array $config;
     public function __construct(RPGPlayer $owner)
     {
+        $this->config = $owner->getConfig()->getNested('Skills')['HealthRegen']['levels'];
+
         $this->setType('active');
         $this->setCooldownTime(30);
         $this->setMaxEntInRange(1);
         $this->setRange(0);
-        parent::__construct($owner, 'HealthRegen');
+        parent::__construct($owner, 'HealthRegen', $this->config);
     }
 
     public function healthRegen(EntityRegainHealthEvent $event)
