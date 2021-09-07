@@ -44,36 +44,6 @@ class RPGPlayer extends Player
     private float $dexModifier = 0.0002;
     private int $dexBonus = 1;
     private \pocketmine\utils\Config $config;
-    private array $blocks = [
-        'Stone' => [
-            'level' => 0,
-            'count' => 0
-        ],
-        'Wood' => [
-            'level' => 0,
-            'count' => 0
-        ],
-        'Coal Ore' => [
-            'level' => 0,
-            'count' => 0
-        ],
-        'Iron Ore' => [
-            'level' => 0,
-            'count' => 0
-        ],
-        'Gold Ore' => [
-            'level' => 0,
-            'count' => 0
-        ],
-        'Diamond Ore' => [
-            'level' => 0,
-            'count' => 0
-        ],
-        'Lapis Ore' => [
-            'level' => 0,
-            'count' => 0
-        ]
-    ];
 
     public function __construct($interface, $ip, $port)
     {
@@ -91,59 +61,10 @@ class RPGPlayer extends Player
         $this->calcDEXBonus();
         $this->addSkills();
         $traits = $this->config->getNested("Traits");
-        print_r($traits);
         foreach ($traits as $key => $value) {
             $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $this->config->getNested('Players')[$this->getName()]['block_breaks']);
         }
     }
-
-    public function addBlockCount(string $type): void
-    {
-        $this->blocks[$type]['count'] += 1;
-    }
-
-    public function checkBlocks()
-    {
-        foreach ($this->getBlocksConfig() as $blockName => $blockArray) {
-            foreach ($blockArray as $blockLevel => $blockLevelArray) {
-                foreach ($blockLevelArray as $key => $value) {
-                    if ($key == 'dropChance') {
-                        continue;
-                    }
-                    if ($this->getBlockCount($blockName) >= $value && $this->getBlockLevel($blockName) < $blockLevel) {
-                        $this->blocks[$blockName]['level'] += 1;
-                        $this->sendMessage('You now have ' . $this->getBlockDropChance($blockName) . '% chance to get bonus drops');
-                    }
-                }
-
-            }
-        }
-    }
-
-    public function getBlocksConfig()
-    {
-        return $this->config->getNested('Blocks');
-    }
-
-    public function getBlockLevel(string $blockName): int
-    {
-        return $this->blocks[$blockName]['level'];
-    }
-
-    public function getBlockCount(string $blockName): int
-    {
-        return $this->blocks[$blockName]['count'];
-    }
-
-    public function getBlockDropChance(string $blockName): int
-    {
-        if ($this->getBlockLevel($blockName) == 0) {
-            return -1;
-        }
-        $blocks = $this->getBlocksConfig();
-        return $blocks[$blockName][$this->getBlockLevel($blockName)]['dropChance'];
-    }
-
 
     /* @return array|false */
     public function getModifiers(): bool|array

@@ -14,14 +14,13 @@ class BaseTrait
     private array $levels;
     private int $count = 0;
     private int $currentLevel = 0;
+
     public function __construct(string $name, array $blocks, array $levels, int $blockBreaks)
     {
         $this->name = $name;
         $this->blocks = $blocks;
         $this->levels = $levels;
-
-            $this->restorePlayerTrait($blockBreaks);
-
+        $this->restorePlayerTrait($blockBreaks);
     }
 
     public function getName(): string
@@ -43,31 +42,39 @@ class BaseTrait
     {
         $this->levels = $levels; //TODO maybe add command to change settings on-demand
     }
+
     public function getBlocks(): array
     {
         return $this->blocks;
     }
-    public function setBlocks(array $blocks){
+
+    public function setBlocks(array $blocks)
+    {
         $this->blocks = $blocks;
     }
-    public function blockBreak(BlockBreakEvent $event){
-        if (array_key_exists($event->getBlock()->getName(), $this->blocks)){
+
+    public function blockBreak(BlockBreakEvent $event)
+    {
+        if (array_search($event->getBlock()->getName(), $this->blocks) != false) {
             $this->count += 1;
             $drops = $event->getDrops();
-            $drops[] = $drops[mt_rand(0,99) < $this->getBlockDropChance()];
+            $drops[] = $drops[mt_rand(0, 99) < $this->getBlockDropChance()];
             $event->setDrops($drops);
             $event->getPlayer()->sendMessage('You just got 1 additional drop!');
         }
     }
+
     public function getBlockBreaks(): int
     {
         return $this->count; //TODO add block saves
     }
+
     public function getCurrentLevel(): int
     {
         return $this->currentLevel;
     }
-    #[Pure] public function getBlockDropChance() : int
+
+    #[Pure] public function getBlockDropChance(): int
     {
         return $this->levels[$this->getCurrentLevel()]['drop_chance'];
     }
@@ -76,7 +83,7 @@ class BaseTrait
     {
         $this->count = $blockBreaks;
         foreach ($this->levels as $key => $level) {
-            if ($this->count > $level['requirement']){
+            if ($this->count > $level['requirement']) {
                 $this->currentLevel = $key;
             }
         }

@@ -159,7 +159,6 @@ class EventListener implements Listener
             foreach ($player->getTraits() as $trait) {
                 $trait->blockBreakEvent($event);
             }
-            $player->checkBlocks();
         }
     }
 

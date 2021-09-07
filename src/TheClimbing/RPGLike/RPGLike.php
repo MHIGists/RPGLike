@@ -37,7 +37,6 @@ class RPGLike extends PluginBase
 
         $this->config = $this->getConfig()->getAll();
         date_default_timezone_set($this->config['Hud']['timezone']);
-
         new RPGForms($this);
     }
 
