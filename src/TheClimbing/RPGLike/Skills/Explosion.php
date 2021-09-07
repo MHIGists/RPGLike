@@ -6,18 +6,19 @@ namespace TheClimbing\RPGLike\Skills;
 
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-
+use TheClimbing\RPGLike\Skills\BaseSkill;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 
 class Explosion extends BaseSkill
 {
     protected RPGPlayer $owner;
-
+    public  array $config = [];
     public function __construct(RPGPlayer $owner)
     {
         $this->owner = $owner;
-        parent::__construct($owner, 'Explosion');
+        $this->config = $owner->getConfig()->getNested('Skills')['Explosion']['levels'];
+        parent::__construct($owner, 'Explosion', $this->config);
         $this->setCooldownTime(400);
     }
 

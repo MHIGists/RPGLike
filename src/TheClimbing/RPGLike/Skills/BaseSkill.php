@@ -70,7 +70,7 @@ class BaseSkill
      * @param int $maxEntInRange
      * @param null $effect
      */
-    #[Pure] public function __construct(RPGPlayer $owner, string $name,array $config, string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null)
+    #[Pure] public function __construct(RPGPlayer $owner, string $name, array $config, string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null)
     {
 
         $this->owner = $owner;
