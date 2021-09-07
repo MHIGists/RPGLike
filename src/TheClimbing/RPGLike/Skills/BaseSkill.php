@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace TheClimbing\RPGLike\Skills;
 
 use JetBrains\PhpStorm\Pure;
-use pocketmine\entity\Effect;
-use pocketmine\entity\EffectInstance;
+use pocketmine\entity\effect\Effect;
+use pocketmine\entity\effect\EffectInstance;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
@@ -26,10 +26,7 @@ use function is_callable;
  */
 class BaseSkill
 {
-    protected $owner;
-
-    private $namespace;
-
+    protected RPGPlayer $owner;
 
     private string $name;
 
@@ -43,9 +40,7 @@ class BaseSkill
 
     private int $range;
 
-    private mixed $skillUpgrades;
-
-    private mixed $skillUnlock;
+    private array $skillLevels = [];
 
     /**
      * That's including the source
@@ -68,13 +63,14 @@ class BaseSkill
      *
      * @param RPGPlayer $owner
      * @param string $name
+     * @param array $config
      * @param string $type
      * @param int $cooldown
      * @param int $range
      * @param int $maxEntInRange
      * @param null $effect
      */
-    #[Pure] public function __construct(RPGPlayer $owner, string $name, string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null)
+    #[Pure] public function __construct(RPGPlayer $owner, string $name,array $config, string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null)
     {
 
         $this->owner = $owner;
@@ -85,9 +81,7 @@ class BaseSkill
         $this->maxEntInRange = $maxEntInRange;
         $this->effect = $effect;
 
-        $this->skillUpgrades = RPGLike::getInstance()->skillUnlocks[$this->getName()]['upgrades'];
-        $this->skillUnlock = RPGLike::getInstance()->skillUnlocks[$this->getName()]['unlock'];
-
+        $this->skillLevels = $config;
     }
 
     public function unlock(): void
@@ -108,28 +102,18 @@ class BaseSkill
 
     public function checkLevel()
     {
-        foreach ($this->skillUpgrades as $key => $value) {
-            if (is_array($value)) {
-                $req = 0;
-                foreach ($value as $key1 => $value1) {
-                    if ($this->owner->getAttribute($key1) >= $value1) {
-                        $req += 1;
-                    }
-                }
-                if ($req == count($value)) {
-                    $this->skillLevel += 1;
-                }
-            } else {
-                if ($this->owner->getAttribute($key) >= $value) {
-                    $this->skillLevel += 1;
+        foreach ($this->skillLevels as $key => $value) {
+            $criteria = count($value['unlock']);
+            $met_criteria = 0;
+            foreach ($value['unlock'] as $key1 => $item) {
+                if ($this->owner->getAttribute($key1) >= $item){
+                    $met_criteria++;
                 }
             }
+            if ($criteria <= $met_criteria){
+                $this->skillLevel = $key;
+            }
         }
-    }
-
-    public function getNamespace(): string
-    {
-        return $this->namespace;
     }
 
     public function isActive(): bool
@@ -258,32 +242,10 @@ class BaseSkill
         return $this->range;
     }
 
-    /**
-     * @param array $baseUnlock
-     */
-    protected function setBaseUnlock(array $baseUnlock): void
-    {
-        $this->skillUnlock = $baseUnlock;
-    }
 
     public function getBaseUnlock(): array
     {
-        return $this->skillUnlock;
-    }
-
-    public function getSkillUpgrades(): array
-    {
-        return $this->skillUpgrades;
-    }
-
-    /**
-     * Reqired array see reademe for more info on the required array model
-     *
-     * @param array $upgrades
-     */
-    protected function setUpgrades(array $upgrades): void
-    {
-        $this->skillUpgrades = $upgrades;
+        return $this->skillLevels[1]['unlock'];
     }
 
     /**
@@ -316,14 +278,6 @@ class BaseSkill
     public function getEffect(): ?int
     {
         return $this->effect;
-    }
-
-    /**
-     * @param int $skillLevel
-     */
-    public function setSkillLevel(int $skillLevel): void
-    {
-        $this->skillLevel = $skillLevel;
     }
 
     /**

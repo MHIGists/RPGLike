@@ -1,6 +1,6 @@
 Forms:
   UpgradeForm:
-    title: "Click to upgrade"
+    title: 'Click to upgrade'
     content: '{NL}{RED}Your Stats:{NL}{AQUA}Strength: {STR}{NL}{GREEN}Vitality: {VIT}{NL}{GOLD}Defense: {DEF}{NL}{GRAY}Dexterity: {DEX} {NL} {DARK_RED} SP-Left: {SPLEFT}'
     buttons:
       strength: '§b Upgrade Strength'
@@ -17,11 +17,11 @@ Forms:
     title: "Menu"
     content: ''
     buttons:
-      skills: "Skills help"
-      stats: "Your Stats"
-      upgrade: "Upgrade stats"
+      skills: 'Skills help'
+      stats: 'Your Stats'
+      upgrade: 'Upgrade stats'
   SkillInfo:
-    title: "{SKILLNAME}"
+    title: '{SKILLNAME}'
 Skills:
   Tank:
     description: 'The Tank skill increases your HP by 10 percent.'
@@ -30,14 +30,14 @@ Skills:
     description: 'The Coinflip skill gives you a 10 percent chance to deal 1.5 bonus dmg.'
     unlocks: 'You can unlock the coinflip skill once your STR has reached level 10'
   DoubleStrike:
-    description: 'The Double Strike skill has a 15 percent chance to reset your attack cooldown'
+    description: 'The Double Strike skill has a 15 percent chance to reset your attack cool-down'
     unlocks: 'You can unlock the double strike skill once your DEX has reached level 10'
   Fortress:
     description: 'The Tank skill increases your absorption by 20 percent.'
     unlocks: 'You can unlock the tank skill once your DEF has reached level 10'
   HealthRegen:
-    description: 'Health regen increases the total amount of health regened from one tick of saturation'
-    unlocks: 'You can unlock the health regen skill once your dexterity and vitality has reached 20 and 10'
+    description: 'Health regen increases the total amount of health gained from one tick of saturation'
+    unlocks: 'You can unlock the health regen skill once your dexterity and vitality has reached respectively 20 and 10'
   Explosion:
     description: 'Creates explosion when tapped with item on certain block'
     unlocks: 'You can unlock it once you have your strength on lvl 20 and your dexterity on lvl 10'

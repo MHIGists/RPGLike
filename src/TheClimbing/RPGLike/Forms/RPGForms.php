@@ -11,6 +11,7 @@ use jojoe77777\FormAPI\SimpleForm;
 
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
+use TheClimbing\RPGLike\Skills\BaseSkill;
 use TheClimbing\RPGLike\Utils;
 
 class RPGForms
@@ -72,21 +73,21 @@ class RPGForms
         $player->sendForm($form);
     }
 
-    public static function skillUnlockForm(RPGPlayer $player, string $skillName)
+    public static function skillUnlockForm(RPGPlayer $player, ?BaseSkill $skill)
     {
-        $skillDescription = Utils::parseArrayKeywords(self::$main->consts, RPGLike::getInstance()->getSkillDescription($skillName));
+        $skillDescription = Utils::parseArrayKeywords(self::$main->consts, $skill->getDescription());
         $form = new SimpleForm(function () {
         });
-        $title = self::$main->getMessages()['Forms']['SkillInfo']['title'];
-        str_replace('{SKILLNAME}', ' ' . $skillName . ' ', $title);
+        $title = $skill->getTitle();
+        str_replace('{SKILLNAME}', ' ' . $skill->getName() . ' ', $title);
         $form->setTitle($title);
         $form->setContent($skillDescription['description'] . TextFormat::EOL . $skillDescription['unlocks']);
         $player->sendForm($form);
     }
 
-    public static function skillHelpForm(RPGPlayer $player, string $skillName)
+    public static function skillHelpForm(RPGPlayer $player, ?BaseSkill $skill)
     {
-        $skillDescription = Utils::parseArrayKeywords(self::$main->consts, RPGLike::getInstance()->getSkillDescription($skillName));
+        $skillDescription = Utils::parseArrayKeywords(self::$main->consts, $skill->getDescription());
         $form = new SimpleForm(function (Player $pl, $data) use ($player) {
             switch ($data) {
                 case 'Back':
@@ -94,8 +95,8 @@ class RPGForms
                     break;
             }
         });
-        $title = self::$main->getMessages()['Forms']['SkillInfo']['title'];
-        str_replace('{SKILLNAME}', ' ' . $skillName . ' ', $title);
+        $title = $skill->getTitle();
+        str_replace('{SKILLNAME}', ' ' . $skill->getName() . ' ', $title);
         $form->setTitle($title);
         $form->setContent($skillDescription['description']);
         $form->addButton('Back to menu', -1, '', 'Back');

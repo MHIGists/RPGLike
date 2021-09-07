@@ -26,6 +26,9 @@ class RPGPlayer extends Player
     public int $spleft = 0;
     public int $xplevel = 0;
 
+    /**
+     * @var BaseSkill[]
+     */
     private array $skills = [];
     /**
      * @var BaseTrait[]
@@ -147,7 +150,7 @@ class RPGPlayer extends Player
         }
     }
 
-    public function getSkill(string $skillName): Coinflip|DoubleStrike|Explosion|Fortress|HealthRegen|Tank
+    public function getSkill(string $skillName): ?BaseSkill
     {
         return $this->skills[$skillName];
     }
@@ -197,14 +200,14 @@ class RPGPlayer extends Player
                 if ($req == count($skillBaseUnlock[$unlockLevel])) {
                     if (!$skill->isUnlocked()) {
                         $skill->unlock();
-                        RPGForms::skillUnlockForm($this, $skill->getName());
+                        RPGForms::skillUnlockForm($this, $skill);
                     }
                 }
             } else {
                 if ($this->getAttribute($unlockLevel) >= $skillBaseUnlock[$unlockLevel]) {
                     if (!$skill->isUnlocked()) {
                         $skill->unlock();
-                        RPGForms::skillUnlockForm($this, $skill->getName());
+                        RPGForms::skillUnlockForm($this, $skill);
                     }
 
                 }
@@ -436,6 +439,10 @@ class RPGPlayer extends Player
     public function getTraits(): array
     {
         return $this->traits;
+    }
+    public function getConfig(): \pocketmine\utils\Config
+    {
+        return $this->config;
     }
 }
     

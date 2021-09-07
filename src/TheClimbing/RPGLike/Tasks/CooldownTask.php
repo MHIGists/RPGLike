@@ -9,8 +9,8 @@ use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class CooldownTask extends Task
 {
-    private $player;
-    private $skillName;
+    private RPGPlayer $player;
+    private string $skillName;
 
     public function __construct(RPGPlayer $player, string $skillName)
     {

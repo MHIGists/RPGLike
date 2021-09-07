@@ -12,35 +12,20 @@ use function rand;
 
 class DoubleStrike extends BaseSkill
 {
+    public array $config = [];
     public function __construct(RPGPlayer $owner)
     {
+        $this->config = $owner->getConfig()->getNested('Skills')['DoubleStrike']['levels'];
         $this->setType('active');
-        $this->setCooldownTime(0);
         $this->setMaxEntInRange(1);
         $this->setRange(0);
-        parent::__construct($owner, 'DoubleStrike');
+        parent::__construct($owner, 'DoubleStrike', $this->config);
     }
 
     public function setPlayerAttackCD(EntityDamageByEntityEvent $event)
     {
-        $level = $this->getSkillLevel();
-        switch ($level) {
-            case 0:
-                if (rand(0, 99) < 10) {
-                    $event->setAttackCooldown(0);
-                }
-                break;
-            case 1:
-                if (rand(0, 99) < 15) {
-                    $event->setAttackCooldown(0);
-                }
-                break;
-            case 2:
-                if (rand(0, 99) < 30) {
-                    $event->setAttackCooldown(0);
-                }
-                break;
+        if (rand(0, 99) < $this->config[$this->getSkillLevel()]['chance']) {
+            $event->setAttackCooldown(0);
         }
-
     }
 }

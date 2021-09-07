@@ -22,9 +22,6 @@ class RPGLike extends PluginBase
     public array $messages;
     public $config;
     public array $consts = [];
-    public array $skillUnlocks = [];
-
-    private $skills;
 
     public function onLoad()
     {
@@ -50,15 +47,12 @@ class RPGLike extends PluginBase
 
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 
-        $this->getSkillUnlocks();
         self::$instance = $this;
 
         if ($this->config['Hud']['on'] == true) {
             $this->getScheduler()->scheduleRepeatingTask(new HudTask($this), $this->config['Hud']['period'] * 20);
         }
-        foreach ($this->config['Skills'] as $key => $skill) {
-            $this->registerSkill($key, $skill);
-        }
+        print_r($this->config['Skills']['Tank']['levels']);
     }
 
 
@@ -115,36 +109,6 @@ class RPGLike extends PluginBase
         $keywords = array_merge($playerSpecific, $playerSpecific);
         return Utils::parseKeywords($keywords, $this->config['Hud']['message']);
 
-    }
-
-    public function registerSkill(string $skillName, array $values): void
-    {
-        $this->skills[$skillName] = $values;
-
-        if (array_key_exists("namespace", $values)) {
-            if (!empty($values['namespace'])) {
-                $this->skills[$skillName]['namespace'] = $values['namespace'];
-            }
-        }
-        if (array_key_exists($skillName, $this->getMessages()['Skills'])) {
-            $this->skills[$skillName]["description"] = $this->getMessages()['Skills'][$skillName];
-        }
-    }
-
-    public function getSkillDescription(string $skillName)
-    {
-        return $this->skills[$skillName]['description'];
-    }
-
-    public function getAvailableSkills(): array
-    {
-        return array_keys($this->skills);
-    }
-
-
-    public function getSkillUnlocks(): void
-    {
-        $this->skillUnlocks = $this->config['SkillUpgrades'];
     }
 
     public function getMessages(): array
