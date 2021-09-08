@@ -161,9 +161,37 @@ Traits:
     blocks: ["Oak Wood", "Spruce Wood", "Birch Wood", "Jungle Wood"]
     levels:
       1:
-        requirement: 5
-        drop_chance: 30
-      2:
         requirement: 50
-        drop_chance: 10
+        drop_chance: 15
+      2:
+        requirement: 150
+        drop_chance: 30
+  Miner:
+    blocks: [ "Stone", "Coal Ore", "Gravel", "Granite", "Andesite", "Cobblestone", "Iron Ore", "Sandstone"]
+    levels:
+      1:
+        requirement: 500
+        drop_chance: 15
+      2:
+        requirement: 1000
+        drop_chance: 30
+    PreciousMaterialsHunter:
+      blocks: [ "Gold Ore", "Diamond Ore", "Lapis Lazuli Ore", "Redstone Ore", "Emerald Ore"]
+      levels:
+        1:
+          requirement: 100
+          drop_chance: 15
+        2:
+          requirement: 300
+          drop_chance: 30
+    DiamondHunter:
+      blocks: ["Diamond Ore"]
+      levels:
+        1:
+          requirement: 20
+          drop_chance: 15
+        2:
+          requirement: 50
+          drop_chance: 30
+
 ...

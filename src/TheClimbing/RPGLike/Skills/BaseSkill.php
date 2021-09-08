@@ -32,7 +32,7 @@ class BaseSkill
 
     private string $type;
 
-    private array $description;
+    private array $description = [];
 
     private int $cooldown;
 

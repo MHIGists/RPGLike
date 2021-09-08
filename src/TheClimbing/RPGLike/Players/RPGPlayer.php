@@ -198,30 +198,16 @@ class RPGPlayer extends Player
     {
         foreach ($this->skills as $skill) {
             $skillBaseUnlock = $skill->getBaseUnlock();
-            $unlockLevel = array_key_first($skillBaseUnlock);
-            if (is_array($skillBaseUnlock[$unlockLevel])) {
-                $req = 0;
-                foreach ($skillBaseUnlock[$unlockLevel] as $key => $value) {
-                    if ($this->getAttribute($key) >= $value) {
-                        $req += 1;
-                    }
-                }
-                if ($req == count($skillBaseUnlock[$unlockLevel])) {
-                    if (!$skill->isUnlocked()) {
-                        $skill->unlock();
-                        RPGForms::skillUnlockForm($this, $skill);
-                    }
-                }
-            } else {
-                if ($this->getAttribute($unlockLevel) >= $skillBaseUnlock[$unlockLevel]) {
-                    if (!$skill->isUnlocked()) {
-                        $skill->unlock();
-                        RPGForms::skillUnlockForm($this, $skill);
-                    }
-
+            $met_criteria = 0;
+            foreach ($skillBaseUnlock as $key => $value) {
+                if ($this->getAttribute($key) >= $value){
+                    $met_criteria++;
                 }
             }
-
+            if ($met_criteria == count($skillBaseUnlock)){
+                $skill->unlock();
+                RPGForms::skillUnlockForm($this,$skill);
+            }
         }
     }
 
