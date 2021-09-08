@@ -295,7 +295,7 @@ class BaseSkill
     public function checkRange(array $func = []): void
     {
         if ($this->range > 0) {
-            $level = $this->owner->getLevel();
+            $level = $this->owner->getWorld();
             $players = $this->getNearestEntities($this->owner->getPosition()->asVector3(), $this->range, $level, $this->getMaxEntInRange());
             if (!empty($players)) {
                 foreach ($players as $player) {
@@ -338,7 +338,7 @@ class BaseSkill
                     $entities = array_slice($entities, 0, $maxEntities);
                 }
                 foreach ($entities as $entity) {
-                    if (!($entity instanceof Player) or $entity->isClosed() or $entity->isFlaggedForDespawn() or (!$includeDead and !$entity->isAlive())) {
+                    if (!($entity instanceof RPGPlayer) or $entity->isClosed() or $entity->isFlaggedForDespawn() or (!$includeDead and !$entity->isAlive())) {
                         continue;
                     }
                     $distSq = $entity->distanceSquared($pos);
@@ -364,8 +364,8 @@ class BaseSkill
             if (is_callable($effect)) {
                 call_user_func($effect['objAndFunc'], $effect['params']);
             } else {
-                $effect = new EffectInstance(Effect::getEffect($effect), 2, $this->getSkillLevel());
-                $this->owner->addEffect($effect);
+                $effect = new EffectInstance(new $effect(), 2, $this->getSkillLevel());
+                $this->owner->getEffects()->add($effect);
             }
         }
     }

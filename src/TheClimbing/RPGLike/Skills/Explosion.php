@@ -6,7 +6,6 @@ namespace TheClimbing\RPGLike\Skills;
 
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use TheClimbing\RPGLike\Skills\BaseSkill;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 
@@ -33,9 +32,9 @@ class Explosion extends BaseSkill
                 }
                 $pos = $event->getEntity()->getPosition();
                 $explosion = match ($this->getSkillLevel()) {
-                    1 => new \pocketmine\level\Explosion($pos, 4),
-                    2 => new \pocketmine\level\Explosion($pos, 3),
-                    default => new \pocketmine\level\Explosion($pos, 5),
+                    1 => new \pocketmine\world\Explosion($pos, 4),
+                    2 => new \pocketmine\world\Explosion($pos, 3),
+                    default => new \pocketmine\world\Explosion($pos, 5),
                 };
                 $explosion->explodeB();
                 $this->setOnCooldown();

@@ -8,8 +8,9 @@ use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\Player;
 
+
+use pocketmine\player\Player;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
@@ -48,9 +49,9 @@ class RPGPlayer extends Player
     private int $dexBonus = 1;
     private \pocketmine\utils\Config $config;
 
-    public function __construct($interface, $ip, $port)
+    public function __construct($server, $session, $playerinfo,$authenticated, $spawnlocation, $namedtag)
     {
-        parent::__construct($interface, $ip, $port);
+        parent::__construct($server, $session, $playerinfo,$authenticated, $spawnlocation, $namedtag);
         $this->config = RPGLike::getInstance()->getConfig();
         $modifiers = $this->getModifiers();
         if ($modifiers != false) {
@@ -167,7 +168,7 @@ class RPGPlayer extends Player
     public function applyDexterityBonus()
     {
         $dex = $this->getDEXBonus();
-        $movement = $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+        $movement = $this->getAttributeMap()->get(Attribute::MOVEMENT_SPEED);
         $movement->setValue($movement->getValue() * (1 + $dex));
     }
 
@@ -179,7 +180,7 @@ class RPGPlayer extends Player
     public function getMovementSpeed(): float
     {
         $this->applyDexterityBonus();
-        return $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->getValue();
+        return $this->getAttributeMap()->get(Attribute::MOVEMENT_SPEED)->getValue();
     }
 
     public function checkSkillLevel()
@@ -350,7 +351,7 @@ class RPGPlayer extends Player
             'attributes' => $this->getAttributes(),
             'skills' => $this->getSkillNames(),
             'spleft' => $this->getSPleft(),
-            'level' => $this->getXPLevel(),
+            'level' => $this->getXpManager()->getXPLevel(),
             'blocks' => $this->getBrokenBlocks()
         ];
         $players = $this->config->getNested('Players');
@@ -431,20 +432,10 @@ class RPGPlayer extends Player
     {
         $this->spleft = $spleft;
     }
-
-    public function getX(): float
-    {
-        return $this->lastX;
-    }
-
-    public function getZ(): float
-    {
-        return $this->lastZ;
-    }
     public function setXpLevel(int $level): bool
     {
         $this->xplevel = 0;
-        return parent::setXpLevel($level);
+        return $this->getXpManager()->setXpLevel($level);
     }
 
     public function getTraits(): array

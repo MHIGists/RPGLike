@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Forms;
 
-use pocketmine\Player;
 use pocketmine\utils\TextFormat;
-
+//use PMMP Form
 use jojoe77777\FormAPI\SimpleForm;
 
 use TheClimbing\RPGLike\Players\RPGPlayer;
@@ -36,7 +35,7 @@ class RPGForms
         }
         $messages = self::parseMessages($player, 'UpgradeForm', $spleft);
 
-        $form = new SimpleForm(function (Player $pl, $data) use ($player, $spleft) {
+        $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($player, $spleft) {
             switch ($data) {
                 case "strength":
                     $player->setSTR($player->getSTR() + 1);
@@ -88,7 +87,7 @@ class RPGForms
     public static function skillHelpForm(RPGPlayer $player, ?BaseSkill $skill)
     {
         $skillDescription = Utils::parseArrayKeywords(self::$main->consts, $skill->getDescription());
-        $form = new SimpleForm(function (Player $pl, $data) use ($player) {
+        $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($player) {
             switch ($data) {
                 case 'Back':
                     self::skillsHelpForm($player);

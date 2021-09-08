@@ -5,6 +5,7 @@ namespace TheClimbing\RPGLike\Tasks;
 
 
 use pocketmine\scheduler\Task;
+use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 
 class HudTask extends Task
@@ -19,13 +20,13 @@ class HudTask extends Task
     /**
      * Actions to execute when run
      *
-     * @param int $currentTick
      * @return void
      */
-    public function onRun(int $currentTick)
+    public function onRun() : void
     {
         $players = $this->main->getServer()->getOnlinePlayers();
         foreach ($players as $player) {
+            if ($player instanceof RPGPlayer)
             $player->sendPopup($this->main->getHUD($player));
         }
     }

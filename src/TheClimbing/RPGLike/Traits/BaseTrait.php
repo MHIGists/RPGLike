@@ -6,7 +6,6 @@ namespace TheClimbing\RPGLike\Traits;
 
 use JetBrains\PhpStorm\Pure;
 use pocketmine\event\block\BlockBreakEvent;
-use pocketmine\utils\TextFormat;
 
 class BaseTrait
 {

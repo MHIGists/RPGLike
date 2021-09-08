@@ -2,5 +2,5 @@
 name: RPGLike
 version: 0.0.1
 main: TheClimbing\RPGLike\RPGLike
-api: 3.11.6
+api: 4.0.0
 ...

@@ -36,24 +36,27 @@ class EventListener implements Listener
     public function playerJoin(PlayerJoinEvent $event)
     {
         $player = $event->getPlayer();
-        $player->restorePlayerVariables();
-
+        if ($player instanceof RPGPlayer){
+            $player->restorePlayerVariables();
+        }
     }
 
     public function onMove(PlayerMoveEvent $event)
     {
         $player = $event->getPlayer();
-        $playerSkills = $player->getSkills();
-        if (!empty($playerSkills)) {
-            foreach ($playerSkills as $playerSkill) {
-                if ($playerSkill->getMaxEntInRange() > 1) {
-                    $playerSkill->checkRange();
+        if ($player instanceof RPGPlayer){
+            $playerSkills = $player->getSkills();
+            if (!empty($playerSkills)) {
+                foreach ($playerSkills as $playerSkill) {
+                    if ($playerSkill->getMaxEntInRange() > 1) {
+                        $playerSkill->checkRange();
+                    }
                 }
             }
-        }
 
-        if ($player->getXpLevel() < $player->xplevel) {
-            $player->setXpLevel($player->xplevel);
+            if ($player->getXpLevel() < $player->xplevel) {
+                $player->setXpLevel($player->xplevel);
+            }
         }
     }
 

@@ -23,7 +23,7 @@ class RPGLike extends PluginBase
     public $config;
     public array $consts = [];
 
-    public function onLoad()
+    public function onLoad() : void
     {
         $this->saveDefaultConfig();
         $this->saveResource('messages.yml');
@@ -37,7 +37,7 @@ class RPGLike extends PluginBase
         new RPGForms($this);
     }
 
-    public function onEnable()
+    public function onEnable() : void
     {
         $rpg = new RPGCommand($this);
         $this->getServer()->getCommandMap()->register('rpg', $rpg);
@@ -101,8 +101,8 @@ class RPGLike extends PluginBase
             'MOVEMENTSPEED' => round($player->getMovementSpeed(), 4, PHP_ROUND_HALF_UP),
             'ABSORPTION' => $player->getAbsorption() + $player->getDEFBonus(),
             'TICKS' => $player->getServer()->getTicksPerSecondAverage(),
-            'LEVEL' => $player->getLevel()->getName(),
-            'XPLEVEL' => $player->getXpLevel(),
+            'LEVEL' => $player->getWorld()->getDisplayName(),
+            'XPLEVEL' => $player->getXpManager()->getXpLevel(),
             'TIME' => date('h:i')
         ];
         $keywords = array_merge($playerSpecific, $playerSpecific);
