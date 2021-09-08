@@ -154,7 +154,7 @@ class RPGForms
 
     public static function skillsHelpForm(RPGPlayer $player)
     {
-        $skills = RPGLike::getInstance()->getAvailableSkills();
+        $skills = $player->getSkills();
         $form = new SimpleForm(function (Player $pl, $data) use ($skills, $player) {
             foreach ($skills as $skill) {
                 if ($skill == $data) {
