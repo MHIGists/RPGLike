@@ -75,10 +75,9 @@ class RPGForms
 
     public static function skillUnlockForm(RPGPlayer $player, ?BaseSkill $skill)
     {
-        $skillUnlockConditions = $skill->getSkillUnlockConditions();
         $form = new SimpleForm(function () {});
-        $form->setTitle($skill->getName() . ' just go unlocked!');
-        $form->setContent($skill->getSkillDescription() . TextFormat::EOL . $skillUnlockConditions);
+        $form->setTitle($skill->getName() . ' just got unlocked!');
+        $form->setContent($skill->getSkillDescription());
         $player->sendForm($form);
     }
 
@@ -92,7 +91,7 @@ class RPGForms
             }
         });
         $form->setTitle($skill->getName() . ' info.');
-        $form->setContent($skill->getSkillDescription());
+        $form->setContent("Description: " . TextFormat::EOL . $skill->getSkillDescription() . TextFormat::EOL . "Unlock conditions" . $skill->getSkillUnlockConditions());
         $form->addButton('Back to menu', -1, '', 'Back');
         $player->sendForm($form);
     }
