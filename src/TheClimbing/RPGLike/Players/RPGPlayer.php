@@ -319,7 +319,7 @@ class RPGPlayer extends Player
     {
         $receiver = $event->getEntity();
         if ($receiver instanceof RPGPlayer) {
-            $receiver->setAbsorption($receiver->getAbsorption() + $receiver->getDEFBonus());
+            $event->setBaseDamage($event->getBaseDamage() - $receiver->getDEFBonus());
         }
     }
 
