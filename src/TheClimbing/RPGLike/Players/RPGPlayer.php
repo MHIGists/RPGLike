@@ -197,16 +197,19 @@ class RPGPlayer extends Player
     public function checkForSkills()
     {
         foreach ($this->skills as $skill) {
-            $skillBaseUnlock = $skill->getBaseUnlock();
-            $met_criteria = 0;
-            foreach ($skillBaseUnlock as $key => $value) {
-                if ($this->getAttribute($key) >= $value){
-                    $met_criteria++;
+            if (!$skill->isUnlocked()){
+                $skillBaseUnlock = $skill->getBaseUnlock();
+                $met_criteria = 0;
+                foreach ($skillBaseUnlock as $key => $value) {
+
+                    if ($this->getAttribute($key) >= $value){
+                        $met_criteria++;
+                    }
                 }
-            }
-            if ($met_criteria == count($skillBaseUnlock)){
-                $skill->unlock();
-                RPGForms::skillUnlockForm($this,$skill);
+                if ($met_criteria == count($skillBaseUnlock)){
+                    $skill->unlock();
+                    RPGForms::skillUnlockForm($this,$skill);
+                }
             }
         }
     }

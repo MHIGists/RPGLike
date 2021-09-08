@@ -32,6 +32,14 @@ class RPGForms
         if ($spleft <= 0) {
             $player->setSPleft(0);
             self::statsForm($player);
+            $player->checkForSkills();
+            if ($player->getSkill('Tank')->isUnlocked()) {
+                $player->getSkill('Tank')->setPlayerHealth($player);
+            }
+            if ($player->getSkill('Fortress')->isUnlocked()) {
+                $player->getSkill('Fortress')->setDefense($player);
+            }
+            $player->checkSkillLevel();
             return;
         }
         $messages = self::parseMessages($player, 'UpgradeForm', $spleft);

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Skills;
 
-
-use pocketmine\level\biome\UnknownBiome;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class Tank extends BaseSkill

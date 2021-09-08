@@ -111,14 +111,6 @@ class EventListener implements Listener
                     RPGForms::upgradeStatsForm($player, $spleft);
                     $player->applyVitalityBonus();
                     $player->applyDexterityBonus();
-                    if ($player->getSkill('Tank')->isUnlocked()) {
-                        $player->getSkill('Tank')->setPlayerHealth($player);
-                    }
-                    if ($player->getSkill('Fortress')->isUnlocked()) {
-                        $player->getSkill('Fortress')->setDefense($player);
-                    }
-                    $player->checkForSkills();
-                    $player->checkSkillLevel();
                     $player->setHealth($player->getMaxHealth());
                     $player->setFood($player->getMaxFood());
                     $player->setAirSupplyTicks($player->getMaxAirSupplyTicks());
