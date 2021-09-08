@@ -2,7 +2,7 @@
 keep-xp : true
 Hud:
    on: true
-   message: '{HEALTH}/{MAXHP} MS: {MOVEMENTSPEED} | DMG: {DAMAGE}{NL}Absorption: {ABSORPTION}'
+   message: '{HEALTH}/{MAXHP} MS: {MOVEMENTSPEED} | DMG: {DAMAGE} {NL}Absorption: {ABSORPTION}'
    period: 3
    timezone: 'UTC'
 Skills:

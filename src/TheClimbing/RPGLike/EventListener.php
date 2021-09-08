@@ -108,8 +108,6 @@ class EventListener implements Listener
                     $player->xplevel = $new_lvl;
                     $spleft = $new_lvl - $old_level;
 
-                    $player->checkForSkills();
-
                     RPGForms::upgradeStatsForm($player, $spleft);
                     $player->applyVitalityBonus();
                     $player->applyDexterityBonus();
@@ -119,6 +117,7 @@ class EventListener implements Listener
                     if ($player->getSkill('Fortress')->isUnlocked()) {
                         $player->getSkill('Fortress')->setDefense($player);
                     }
+                    $player->checkForSkills();
                     $player->checkSkillLevel();
                     $player->setHealth($player->getMaxHealth());
                     $player->setFood($player->getMaxFood());
