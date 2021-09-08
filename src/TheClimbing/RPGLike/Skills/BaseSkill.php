@@ -6,8 +6,10 @@ declare(strict_types=1);
 namespace TheClimbing\RPGLike\Skills;
 
 use JetBrains\PhpStorm\Pure;
+use pocketmine\entity\Effect;
 use pocketmine\entity\effect\Effect;
 use pocketmine\entity\effect\EffectInstance;
+use pocketmine\entity\EffectInstance;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
@@ -32,7 +34,7 @@ class BaseSkill
 
     private string $type;
 
-    private array $description = [];
+    private array $form = [];
 
     private int $cooldown;
 
@@ -63,14 +65,14 @@ class BaseSkill
      *
      * @param RPGPlayer $owner
      * @param string $name
-     * @param array $config
+     * @param array $skillLevels
      * @param string $type
      * @param int $cooldown
      * @param int $range
      * @param int $maxEntInRange
      * @param null $effect
      */
-    #[Pure] public function __construct(RPGPlayer $owner, string $name, array $config, string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null)
+    #[Pure] public function __construct(RPGPlayer $owner, string $name, array $skillLevels, string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null)
     {
 
         $this->owner = $owner;
@@ -81,7 +83,8 @@ class BaseSkill
         $this->maxEntInRange = $maxEntInRange;
         $this->effect = $effect;
 
-        $this->skillLevels = $config;
+        $this->skillLevels = $skillLevels;
+        $this->form = RPGLike::getInstance()->getMessages()['Skills'][$this->getName()];
     }
 
     public function unlock(): void
@@ -131,7 +134,6 @@ class BaseSkill
     public function setName(string $name): void
     {
         $this->name = $name;
-        $this->setDescription();
     }
 
     /**
@@ -158,19 +160,6 @@ class BaseSkill
         return $this->type;
     }
 
-    public function setDescription(): void
-    {
-        $description = RPGLike::getInstance()->getMessages()['Skills'][$this->getName()];
-        $this->description = $description;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDescription(): array
-    {
-        return $this->description;
-    }
 
     public function setCooldownTime(int $cooldown): void
     {
@@ -368,6 +357,14 @@ class BaseSkill
                 $this->owner->addEffect($effect);
             }
         }
+    }
+    public function getSkillDescription() : string
+    {
+        return $this->form['description'];
+    }
+    public function getSkillUnlockConditions() : string
+    {
+        return $this->form['unlocks'];
     }
 
 }

@@ -94,63 +94,6 @@ Skills:
           DEX: 15
         chance: 0
 Players: []
-Blocks:
-  Stone:
-    levels:
-      1:
-        count: 1000
-        dropChance: 5
-        2:
-          count: 10000
-          dropChance: 10
-  Wood:
-    levels:
-      1:
-        count: 1000
-        dropChance: 5
-        2:
-          count: 7500
-          dropChance: 10
-  Coal Ore:
-    levels:
-      1:
-        count: 1000
-        dropChance: 5
-        2:
-          count: 5000
-          dropChance: 10
-  Iron Ore:
-    levels:
-      1:
-        count: 1000
-        dropChance: 5
-        2:
-          count: 5000
-          dropChance: 10
-  Gold Ore:
-    levels:
-      1:
-        count: 500
-        dropChance: 5
-        2:
-          count: 3500
-          dropChance: 10
-  Diamond Ore:
-    levels:
-      1:
-        count: 100
-        dropChance: 5
-        2:
-          count: 500
-          dropChance: 10
-  Lapis Ore:
-    levels:
-      1:
-        count: 100
-        dropChance: 5
-        2:
-          count: 500
-          dropChance: 10
 Modifiers:
   STR : 0.15
   VIT : 0.175
