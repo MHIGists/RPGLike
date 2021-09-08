@@ -75,18 +75,15 @@ class RPGForms
 
     public static function skillUnlockForm(RPGPlayer $player, ?BaseSkill $skill)
     {
-        $skillDescription = $skill->getSkillDescription();
         $skillUnlockConditions = $skill->getSkillUnlockConditions();
-        $form = new SimpleForm(function () {
-        });
+        $form = new SimpleForm(function () {});
         $form->setTitle($skill->getName() . ' just go unlocked!');
-        $form->setContent($skillDescription . TextFormat::EOL . $skillUnlockConditions);
+        $form->setContent($skill->getSkillDescription() . TextFormat::EOL . $skillUnlockConditions);
         $player->sendForm($form);
     }
 
     public static function skillHelpForm(RPGPlayer $player, ?BaseSkill $skill)
     {
-        $skillDescription = $skill->getSkillDescription();
         $form = new SimpleForm(function (Player $pl, $data) use ($player) {
             switch ($data) {
                 case 'Back':
@@ -95,7 +92,7 @@ class RPGForms
             }
         });
         $form->setTitle($skill->getName() . ' info.');
-        $form->setContent($skillDescription);
+        $form->setContent($skill->getSkillDescription());
         $form->addButton('Back to menu', -1, '', 'Back');
         $player->sendForm($form);
     }
@@ -153,8 +150,8 @@ class RPGForms
     {
         $skills = $player->getSkills();
         $form = new SimpleForm(function (Player $pl, $data) use ($skills, $player) {
-            foreach ($skills as $skill) {
-                if ($skill == $data) {
+            foreach ($skills as $key => $skill) {
+                if ($key == $data) {
                     self::skillHelpForm($player, $skill);
                 }
             }
@@ -162,9 +159,9 @@ class RPGForms
                 self::menuForm($player);
             }
         });
-        $form->setTitle("All available skills");
-        foreach ($skills as $skill) {
-            $form->addButton($skill, -1, '', $skill);
+        $form->setTitle("All available skills:");
+        foreach ($skills as $key => $skill) {
+            $form->addButton($key, -1, '', $key);
         }
         $form->addButton("Back to main menu", -1, '', 'back');
         $player->sendForm($form);
