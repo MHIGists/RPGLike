@@ -7,8 +7,6 @@ namespace TheClimbing\RPGLike\Skills;
 
 use JetBrains\PhpStorm\Pure;
 use pocketmine\entity\Effect;
-use pocketmine\entity\effect\Effect;
-use pocketmine\entity\effect\EffectInstance;
 use pocketmine\entity\EffectInstance;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
