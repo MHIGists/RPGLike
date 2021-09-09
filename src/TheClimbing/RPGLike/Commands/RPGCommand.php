@@ -4,10 +4,8 @@ namespace TheClimbing\RPGLike\Commands;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\plugin\Plugin;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\Players\RPGPlayer;
-use TheClimbing\RPGLike\RPGLike;
 
 class RPGCommand extends Command
 {
@@ -16,9 +14,7 @@ class RPGCommand extends Command
     {
         parent::__construct('rpg');
         $this->setDescription('Opens RPG Menu');
-        $this->setPermission('rpgcommand');
         $this->setUsage('rpg stats|skills|upgrade or rpg help <skillName>');
-        $this->setPermissionMessage('You dont have permission to use this command');
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args)
