@@ -32,7 +32,7 @@ class BaseSkill
 
     private string $type;
 
-    private array $form = [];
+    private array $messages;
 
     private int $cooldown;
 
@@ -40,16 +40,11 @@ class BaseSkill
 
     private int $range;
 
-    private array $skillLevels = [];
+    private array $skillLevels;
 
-    /**
-     * That's including the source
-     */
-    private int $maxEntInRange;
-
+    private bool $isAOE = false;
 
     private ?int $effect;
-
 
     private int $skillLevel = 0;
 
@@ -67,22 +62,21 @@ class BaseSkill
      * @param string $type
      * @param int $cooldown
      * @param int $range
-     * @param int $maxEntInRange
+     * @param bool $isAOE
      * @param null $effect
      */
-    #[Pure] public function __construct(RPGPlayer $owner, string $name, array $skillLevels, string $type = '', int $cooldown = 0, int $range = 0, int $maxEntInRange = 1, $effect = null)
+    #[Pure] public function __construct(RPGPlayer $owner, string $name, array $skillLevels, string $type = '', int $cooldown = 0, int $range = 0, bool $isAOE = false, $effect = null)
     {
-
+        $messages = RPGLike::getInstance()->getMessages()['Skills'];
         $this->owner = $owner;
         $this->name = $name;
         $this->type = $type;
         $this->cooldown = $cooldown;
         $this->range = $range;
-        $this->maxEntInRange = $maxEntInRange;
         $this->effect = $effect;
 
         $this->skillLevels = $skillLevels;
-        $this->form = RPGLike::getInstance()->getMessages()['Skills'][$this->getName()];
+        $this->messages = $messages[$this->getName()];
     }
 
     public function unlock(): void
@@ -215,7 +209,9 @@ class BaseSkill
         }
         return implode('', $format);
     }
-
+    public function isAOE() : bool{
+        return $this->isAOE;
+    }
     protected function setRange(int $range): void
     {
         $this->range = $range;
@@ -233,22 +229,6 @@ class BaseSkill
     public function getBaseUnlock(): array
     {
         return $this->skillLevels[1]['unlock'];
-    }
-
-    /**
-     * @param int $maxEnt
-     */
-    protected function setMaxEntInRange(int $maxEnt): void
-    {
-        $this->maxEntInRange = $maxEnt;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaxEntInRange(): int
-    {
-        return $this->maxEntInRange;
     }
 
     /**
@@ -358,11 +338,17 @@ class BaseSkill
     }
     public function getSkillDescription() : string
     {
-        return $this->form['description'];
+        return $this->messages['description'];
     }
     public function getSkillUnlockConditions() : string
     {
-        return $this->form['unlocks'];
+        return $this->messages['unlocks'];
+    }
+    public function getSkillProcMessage(){
+        return $this->messages['proc_message'];
+    }
+    public function transmitProcMessage(RPGPlayer $player){
+        $player->sendMessage($this->getSkillProcMessage());
     }
 
 }

@@ -16,7 +16,6 @@ class HealthRegen extends BaseSkill
 
         $this->setType('active');
         $this->setCooldownTime(30);
-        $this->setMaxEntInRange(1);
         $this->setRange(0);
         parent::__construct($owner, 'HealthRegen', $this->config);
     }

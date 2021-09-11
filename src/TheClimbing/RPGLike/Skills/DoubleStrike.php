@@ -17,15 +17,16 @@ class DoubleStrike extends BaseSkill
     {
         $this->config = $owner->getConfig()->getNested('Skills')['DoubleStrike']['levels'];
         $this->setType('active');
-        $this->setMaxEntInRange(1);
         $this->setRange(0);
         parent::__construct($owner, 'DoubleStrike', $this->config);
     }
 
     public function setPlayerAttackCD(EntityDamageByEntityEvent $event)
     {
+        $player = $event->getEntity();
         if (rand(0, 99) < $this->config[$this->getSkillLevel()]['chance']) {
-            $event->setAttackCooldown(0);
+            $player->setAttackCooldown(0);
+            $this->transmitProcMessage($player);
         }
     }
 }

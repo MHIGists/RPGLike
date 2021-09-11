@@ -438,6 +438,10 @@ class RPGPlayer extends Player
         $this->xplevel = 0;
         return parent::setXpLevel($level);
     }
+    public function getXpLvl(): int
+    {
+        return $this->xplevel;
+    }
 
     public function getTraits(): array
     {

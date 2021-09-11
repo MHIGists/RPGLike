@@ -28,6 +28,11 @@ class Coinflip extends BaseSkill
         $damage = $event->getBaseDamage();
         if (rand(0, 99) < $this->config[$this->getSkillLevel()]) {
             $event->setBaseDamage($damage * 1.5);
+            $player = $event->getDamager();
+            if ($player instanceof RPGPlayer){
+                $this->transmitProcMessage($player);
+            }
+
         }
     }
 }

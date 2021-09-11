@@ -99,7 +99,7 @@ class RPGForms
             }
         });
         $form->setTitle($skill->getName() . ' info.');
-        $form->setContent("Description: " . TextFormat::EOL . $skill->getSkillDescription() . TextFormat::EOL . "Unlock conditions" . $skill->getSkillUnlockConditions());
+        $form->setContent("Description: " . TextFormat::EOL . $skill->getSkillDescription() . TextFormat::EOL . "Unlock conditions:" . TextFormat::EOL . $skill->getSkillUnlockConditions());
         $form->addButton('Back to menu', -1, '', 'Back');
         $player->sendForm($form);
     }

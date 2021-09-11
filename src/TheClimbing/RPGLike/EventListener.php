@@ -43,17 +43,13 @@ class EventListener implements Listener
     public function onMove(PlayerMoveEvent $event)
     {
         $player = $event->getPlayer();
-        $playerSkills = $player->getSkills();
-        if (!empty($playerSkills)) {
+        if ($player instanceof RPGPlayer){
+            $playerSkills = $player->getSkills();
             foreach ($playerSkills as $playerSkill) {
-                if ($playerSkill->getMaxEntInRange() > 1) {
+                if ($playerSkill->isAOE()){
                     $playerSkill->checkRange();
                 }
             }
-        }
-
-        if ($player->getXpLevel() < $player->xplevel) {
-            $player->setXpLevel($player->xplevel);
         }
     }
 
@@ -100,7 +96,7 @@ class EventListener implements Listener
     {
         $player = $event->getEntity();
         $new_lvl = $event->getNewLevel();
-        $old_level = $event->getOldLevel();
+        $old_level = $player->getXpLvl();
         if ($player instanceof RPGPlayer) {
             if ($new_lvl !== null) {
                 if ($new_lvl > $old_level && $new_lvl > $player->xplevel) {

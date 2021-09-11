@@ -15,7 +15,6 @@ class Fortress extends BaseSkill
         $this->config = $owner->getConfig()->getNested('Skills')['Fortress']['levels'];
         $this->setType('passive');
         $this->setCooldownTime(0);
-        $this->setMaxEntInRange(1);
         $this->setRange(0);
         parent::__construct($owner, 'Fortress', $this->config);
     }
