@@ -8,6 +8,7 @@ use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\Player;
 
 use TheClimbing\RPGLike\Forms\RPGForms;
@@ -293,8 +294,7 @@ class RPGPlayer extends Player
     {
         $damager = $event->getDamager();
         if ($damager instanceof RPGPlayer) {
-            $baseDamage = $event->getBaseDamage();
-            $event->setBaseDamage($baseDamage + $damager->getSTRBonus());
+            $event->setModifier($this->getSTRBonus() + $event->getBaseDamage(), EntityDamageEvent::CAUSE_ENTITY_ATTACK);
         }
 
     }
@@ -378,6 +378,9 @@ class RPGPlayer extends Player
                 foreach ($cachedPlayer['skills'] as $skill) {
                     $this->getSkill($skill)->unlock();
                 }
+            }
+            foreach ($this->skills as $skill){
+                $skill->checkLevel();
             }
             foreach ($cachedPlayer['blocks'] as $trait => $block_count) {
                 $this->traits[$trait]->restorePlayerTrait($block_count);
