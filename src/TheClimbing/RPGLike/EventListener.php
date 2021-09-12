@@ -16,6 +16,7 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\utils\TextFormat;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
@@ -95,11 +96,13 @@ class EventListener implements Listener
     public function onLevelUp(PlayerExperienceChangeEvent $event)
     {
         $player = $event->getEntity();
-        $new_lvl = $event->getNewLevel();
-        $old_level = $player->getXpLvl();
         if ($player instanceof RPGPlayer) {
+            $new_lvl = $event->getNewLevel();
+            echo 'New level is: ' . $new_lvl . PHP_EOL;
+            $old_level = $player->getXpLvl();
+            echo 'Old level is: ' . $old_level . PHP_EOL;
             if ($new_lvl !== null) {
-                if ($new_lvl > $old_level && $new_lvl > $player->xplevel) {
+                if ($new_lvl > $old_level) {
 
                     $player->xplevel = $new_lvl;
                     $spleft = $new_lvl - $old_level;

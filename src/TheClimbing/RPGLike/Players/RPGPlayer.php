@@ -296,6 +296,8 @@ class RPGPlayer extends Player
         if ($damager instanceof RPGPlayer) {
             $event->setModifier($this->getSTRBonus() + $event->getBaseDamage(), EntityDamageEvent::CAUSE_ENTITY_ATTACK);
         }
+        $origial_knockback = $event->getKnockBack();
+        $event->setKnockBack($origial_knockback);
 
     }
 
