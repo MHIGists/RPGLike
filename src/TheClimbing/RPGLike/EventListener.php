@@ -16,7 +16,7 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
-use pocketmine\utils\TextFormat;
+
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
@@ -50,6 +50,9 @@ class EventListener implements Listener
                 if ($playerSkill->isAOE()){
                     $playerSkill->checkRange();
                 }
+            }
+            if ($this->main->config['keep-xp'] === true) {
+                $player->setExperienceLevel($player->xplevel);
             }
         }
     }
@@ -132,9 +135,6 @@ class EventListener implements Listener
     {
         $player = $event->getPlayer();
         if ($player instanceof RPGPlayer) {
-            if ($this->main->config['keep-xp'] === true) {
-                $player->setExperienceLevel($player->xplevel);
-            }
             $player->applyVitalityBonus();
             $player->applyDexterityBonus();
         }

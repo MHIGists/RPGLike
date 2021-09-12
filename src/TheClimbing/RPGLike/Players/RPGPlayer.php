@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Players;
 
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
+
 use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -215,12 +214,12 @@ class RPGPlayer extends Player
         }
     }
 
-    #[Pure] public function getAttribute(string $attribute): int
+    public function getAttribute(string $attribute): int
     {
         return $this->getAttributes()[$attribute];
     }
 
-    #[Pure] #[ArrayShape(['STR' => "int", 'VIT' => "int", 'DEF' => "int", 'DEX' => "int"])]
+
     public function getAttributes(): array
     {
         return [
@@ -330,7 +329,7 @@ class RPGPlayer extends Player
         return $this->defBonus;
     }
 
-    #[Pure] public function getHealthRegenBonus()
+    public function getHealthRegenBonus()
     {
         return floor($this->getVITBonus() / 3);
     }
@@ -349,7 +348,7 @@ class RPGPlayer extends Player
         $this->config->setNested('Players', $players);
         $this->config->save();
     }
-    #[Pure] public function getBrokenBlocks() : array
+    public function getBrokenBlocks() : array
     {
         $broken_blocks = [];
         foreach ($this->traits as $key => $trait) {
@@ -437,7 +436,7 @@ class RPGPlayer extends Player
     }
     public function setExperienceLevel(int $level){
         $this->xplevel = $level;
-        $this>$this->setXpLevel($level);
+        $this->setXpLevel($level);
     }
     public function getXpLvl(): int
     {
