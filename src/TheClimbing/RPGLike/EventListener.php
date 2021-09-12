@@ -58,7 +58,7 @@ class EventListener implements Listener
     {
         $player = $event->getPlayer();
         if ($player instanceof RPGPlayer){
-            if ($this->main->config['keep-xp']) {
+            if ($this->main->config['keep-xp'] === true) {
                 $event->setXpDropAmount(0);
             }else{
                 $player->setDEX(1);
@@ -134,7 +134,7 @@ class EventListener implements Listener
     {
         $player = $event->getPlayer();
         if ($player instanceof RPGPlayer) {
-            if ($this->main->config['keep-xp'] == true) {
+            if ($this->main->config['keep-xp'] === true) {
                 $player->setXpLevel($player->xplevel);
             }
             $player->applyVitalityBonus();
