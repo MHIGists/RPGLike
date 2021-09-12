@@ -66,7 +66,7 @@ class EventListener implements Listener
                 $player->setVIT(1);
                 $player->setDEF(1);
                 $player->resetSkills();
-                $player->setXpLevel(0);
+                $player->setExperienceLevel(0);
             }
         }
     }
@@ -98,9 +98,7 @@ class EventListener implements Listener
         $player = $event->getEntity();
         if ($player instanceof RPGPlayer) {
             $new_lvl = $event->getNewLevel();
-            echo 'New level is: ' . $new_lvl . PHP_EOL;
             $old_level = $player->getXpLvl();
-            echo 'Old level is: ' . $old_level . PHP_EOL;
             if ($new_lvl !== null) {
                 if ($new_lvl > $old_level) {
 
@@ -135,7 +133,7 @@ class EventListener implements Listener
         $player = $event->getPlayer();
         if ($player instanceof RPGPlayer) {
             if ($this->main->config['keep-xp'] === true) {
-                $player->setXpLevel($player->xplevel);
+                $player->setExperienceLevel($player->xplevel);
             }
             $player->applyVitalityBonus();
             $player->applyDexterityBonus();

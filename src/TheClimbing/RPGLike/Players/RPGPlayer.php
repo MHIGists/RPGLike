@@ -435,10 +435,9 @@ class RPGPlayer extends Player
     {
         return $this->lastZ;
     }
-    public function setXpLevel(int $level): bool
-    {
-        $this->xplevel = 0;
-        return parent::setXpLevel($level);
+    public function setExperienceLevel(int $level){
+        $this->xplevel = $level;
+        $this>$this->setXpLevel($level);
     }
     public function getXpLvl(): int
     {

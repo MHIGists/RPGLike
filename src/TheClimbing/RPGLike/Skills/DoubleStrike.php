@@ -24,7 +24,7 @@ class DoubleStrike extends BaseSkill
     public function setPlayerAttackCD(EntityDamageByEntityEvent $event)
     {
         $player = $event->getEntity();
-        if (rand(0, 99) > $this->config[$this->getSkillLevel()]['chance']) {
+        if (mt_rand(0, 99) < $this->config[$this->getSkillLevel()]['chance']) {
             $player->setAttackCooldown(0);
             $this->transmitProcMessage($player);
         }

@@ -92,7 +92,7 @@ class BaseSkill
     public function reset()
     {
         $this->unlocked = false;
-        $this->skillLevel = 0;
+        $this->skillLevel = 1;
     }
 
     public function checkLevel()
