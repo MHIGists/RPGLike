@@ -66,12 +66,12 @@ class BaseSkill
     public function __construct(RPGPlayer $owner, string $name, $effect = null)
     {
         $messages = RPGLike::getInstance()->getMessages()['Skills'];
-        $this->skillConfig = $owner->getConfig()->getNested('Skills')[$this->getName()];
         $this->owner = $owner;
         $this->name = $name;
         $this->effect = $effect;
         $this->messages = $messages[$this->getName()];
         $this->getSkillConfig();
+        $this->skillConfig = $owner->getConfig()->getNested('Skills')[$this->getName()];
     }
 
     public function unlock(): void
