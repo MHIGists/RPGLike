@@ -1,7 +1,7 @@
 Forms:
   UpgradeForm:
     title: 'Click to upgrade'
-    content: '{NL}{RED}Your Stats:{NL}{AQUA}Strength: {STR}{NL}{GREEN}Vitality: {VIT}{NL}{GOLD}Defense: {DEF}{NL}{GRAY}Dexterity: {DEX} {NL} {DARK_RED} SP-Left: {SPLEFT}'
+    content: '{NL}{RED}Your Stats:{NL}{AQUA}Strength: {STR}{NL}{GREEN}Vitality: {VIT}{NL}{GOLD}Defense: {DEF}{NL}{GRAY}Dexterity: {DEX} {NL} {DARK_RED} Skill Points Left: {SPLEFT}'
     buttons:
       strength: '§b Upgrade Strength'
       vitality: '§b Upgrade Vitality'
@@ -22,26 +22,31 @@ Forms:
       upgrade: 'Upgrade stats'
 Skills:
   Tank:
-    description: 'The Tank skill increases your HP by 10 percent.'
-    unlocks: 'You can unlock the tank skill once your VIT has reached level 10'
+    prefix: '{AQUA}[Tank]'
+    description: 'The Tank skill increases your max HP by 10 percent.'
+    unlocks: 'You can unlock the tank skill once your Vitality (VIT) has reached level 10'
     proc_message: ''
   Coinflip:
-    description: 'The Coinflip skill gives you a 10 percent chance to deal 1.5 bonus dmg.'
-    unlocks: 'You can unlock the coinflip skill once your STR has reached level 10'
-    proc_message: 'Coinflip just proced for 50% more damage!'
+    prefix: '{AQUA}[Coinflip]'
+    description: 'The Coinflip skill gives you a percent chance to deal 1.5x damage'
+    unlocks: 'You can unlock the coinflip skill once your Strength (STR) has reached level 10'
+    proc_message: ' just proced for 50% more damage!'
   DoubleStrike:
+    prefix: '{AQUA}[DoubleStrike]'
     description: 'The Double Strike skill has a 15 percent chance to reset your attack cool-down'
-    unlocks: 'You can unlock the double strike skill once your DEX has reached level 10'
-    proc_message: 'The attack cooldown got reset'
+    unlocks: 'You can unlock the double strike skill once your Dexterity (DEX) has reached level 10'
+    proc_message: ' attack cooldown got reset'
   Fortress:
-    description: 'The Tank skill increases your absorption by 20 percent.'
-    unlocks: 'You can unlock the tank skill once your DEF has reached level 10'
+    prefix: '{AQUA}[Fortress]'
+    description: 'The Tank skill increases your damage absorption by 20 percent.'
+    unlocks: 'You can unlock the tank skill once your Defense (DEF) has reached level 10'
     proc_message: ''
   HealthRegen:
+    prefix: '{AQUA}[Health regen]'
     description: 'Health regen increases the total amount of health gained from one tick of saturation'
     unlocks: 'You can unlock the health regen skill once your dexterity and vitality has reached respectively 20 and 10'
     proc_message: ''
   Explosion:
-    description: 'Creates explosion when tapped with item on certain block'
-    unlocks: 'You can unlock it once you have your strength on lvl 20 and your dexterity on lvl 10'
+    description: 'Creates explosion when attacking an entity'
+    unlocks: 'You can unlock the Explosion skill once you have your strength on lvl 20 and your dexterity on lvl 10'
     proc_message: ''
