@@ -7,7 +7,7 @@ namespace TheClimbing\RPGLike\Skills;
 
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
-class Fortress extends BaseSkill
+class Fortress extends BaseSkill implements PassiveSkill
 {
     public function __construct(RPGPlayer $owner)
     {

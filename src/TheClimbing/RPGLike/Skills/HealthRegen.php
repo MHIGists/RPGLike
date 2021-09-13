@@ -7,7 +7,7 @@ namespace TheClimbing\RPGLike\Skills;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
-class HealthRegen extends BaseSkill
+class HealthRegen extends BaseSkill implements AreaOfEffect,PassiveSkill
 {
     public function __construct(RPGPlayer $owner)
     {

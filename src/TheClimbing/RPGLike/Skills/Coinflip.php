@@ -13,7 +13,7 @@ use function rand;
 
 
 
-class Coinflip extends BaseSkill
+class Coinflip extends BaseSkill implements PassiveSkill
 {
 
     public function __construct(RPGPlayer $owner)

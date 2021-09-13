@@ -11,7 +11,7 @@ use TheClimbing\RPGLike\Skills\BaseSkill;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 
-class Explosion extends BaseSkill
+class Explosion extends BaseSkill implements ActiveSkill
 {
     protected RPGPlayer $owner;
     public function __construct(RPGPlayer $owner)

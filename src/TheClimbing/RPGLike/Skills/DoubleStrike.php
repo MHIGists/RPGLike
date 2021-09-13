@@ -9,7 +9,7 @@ namespace TheClimbing\RPGLike\Skills;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
-class DoubleStrike extends BaseSkill
+class DoubleStrike extends BaseSkill implements PassiveSkill
 {
     public function __construct(RPGPlayer $owner)
     {
