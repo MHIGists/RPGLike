@@ -292,10 +292,10 @@ class RPGPlayer extends Player
     public function applyDamageBonus(EntityDamageByEntityEvent $event): void
     {
         $damager = $event->getDamager();
+        $origial_knockback = $event->getKnockBack();
         if ($damager instanceof RPGPlayer) {
             $event->setModifier($this->getSTRBonus() + $event->getBaseDamage(), EntityDamageEvent::CAUSE_ENTITY_ATTACK);
         }
-        $origial_knockback = $event->getKnockBack();
         $event->setKnockBack($origial_knockback);
 
     }
