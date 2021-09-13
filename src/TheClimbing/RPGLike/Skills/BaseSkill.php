@@ -5,17 +5,17 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Skills;
 
-use JetBrains\PhpStorm\Pure;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
+
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Tasks\CooldownTask;
-
 use TheClimbing\RPGLike\Utils;
+
 use function array_slice;
 use function call_user_func;
 use function floor;
@@ -66,7 +66,7 @@ class BaseSkill
      * @param bool $isAOE
      * @param null $effect
      */
-    #[Pure] public function __construct(RPGPlayer $owner, string $name, array $skillLevels, string $type = '', int $cooldown = 0, int $range = 0, bool $isAOE = false, $effect = null)
+    public function __construct(RPGPlayer $owner, string $name, array $skillLevels, string $type = '', int $cooldown = 0, int $range = 0, bool $isAOE = false, $effect = null)
     {
         $messages = RPGLike::getInstance()->getMessages()['Skills'];
         $this->owner = $owner;

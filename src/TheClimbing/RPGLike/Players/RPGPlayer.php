@@ -78,8 +78,7 @@ class RPGPlayer extends Player
         }
     }
 
-    /* @return array|false */
-    public function getModifiers(): bool|array
+    public function getModifiers()
     {
         $modifiers = $this->config->getNested('modifiers');
         if ($modifiers !== null) {

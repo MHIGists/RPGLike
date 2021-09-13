@@ -3,10 +3,7 @@
 
 namespace TheClimbing\RPGLike\Traits;
 
-
-use JetBrains\PhpStorm\Pure;
 use pocketmine\event\block\BlockBreakEvent;
-use pocketmine\utils\TextFormat;
 
 class BaseTrait
 {
@@ -81,7 +78,7 @@ class BaseTrait
         return $this->currentLevel;
     }
 
-    #[Pure] public function getBlockDropChance(): int
+    public function getBlockDropChance(): int
     {
         if ($this->getCurrentLevel() == 0){
             return 0;
