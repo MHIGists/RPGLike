@@ -1,10 +1,10 @@
 ---
-keep-xp : true
+keep-xp: true
 Hud:
-   on: true
-   message: '{HEALTH}/{MAXHP} MS: {MOVEMENTSPEED} | DMG: {DAMAGE} {NL}Absorption: {ABSORPTION}'
-   period: 3
-   timezone: 'UTC'
+  on: true
+  message: '{HEALTH}/{MAXHP} MS: {MOVEMENTSPEED} | DMG: {DAMAGE} Absorption: {ABSORPTION}'
+  period: 3
+  timezone: 'UTC'
 Skills:
   Tank:
     levels:
@@ -21,7 +21,11 @@ Skills:
           VIT: 30
           DEX: 15
         chance: 20
-    max_entities_in_range : 0
+    range: 0
+    max_entities_in_range: 0
+    is_aoe: false
+    cooldown: 0
+    is_active: false
   Coinflip:
     levels:
       1:
@@ -38,7 +42,11 @@ Skills:
           STR: 35
           DEX: 20
         chance: 20
-    max_entities_in_range : 0
+    range: 0
+    max_entities_in_range: 0
+    is_aoe: false
+    cooldown: 0
+    is_active: false
   DoubleStrike:
     levels:
       1:
@@ -55,7 +63,11 @@ Skills:
           DEX: 35
           STR: 20
         chance: 30
-    max_entities_in_range : 0
+    range: 0
+    max_entities_in_range: 0
+    is_aoe: false
+    cooldown: 0
+    is_active: false
   Fortress:
     levels:
       1:
@@ -72,7 +84,11 @@ Skills:
           DEF: 35
           VIT: 20
         chance: 30
-    max_entities_in_range : 0
+    range: 0
+    max_entities_in_range: 0
+    is_aoe: false
+    cooldown: 0
+    is_active: false
   Explosion:
     levels:
       1:
@@ -85,7 +101,11 @@ Skills:
           STR: 40
           DEX: 10
         chance: 0
-    max_entities_in_range : 0
+    range: 0
+    max_entities_in_range: 0
+    is_aoe: false
+    cooldown: 10
+    is_active: true
   HealthRegen:
     levels:
       1:
@@ -98,16 +118,20 @@ Skills:
           VIT: 40
           DEX: 15
         chance: 0
-    max_entities_in_range : 0
-Players: []
+    range: 10
+    max_entities_in_range: 0
+    is_aoe: true
+    cooldown: 0
+    is_active: false
+Players: [ ]
 Modifiers:
-  STR : 0.15
-  VIT : 0.175
-  DEF : 0.1
-  DEX : 0.0002
+  STR: 0.15
+  VIT: 0.175
+  DEF: 0.1
+  DEX: 0.0002
 Traits:
   WoodCutter:
-    blocks: ["Oak Wood", "Spruce Wood", "Birch Wood", "Jungle Wood"]
+    blocks: [ "Oak Wood", "Spruce Wood", "Birch Wood", "Jungle Wood" ]
     levels:
       1:
         requirement: 50
@@ -116,7 +140,7 @@ Traits:
         requirement: 150
         drop_chance: 30
   Miner:
-    blocks: [ "Stone", "Coal Ore", "Gravel", "Granite", "Andesite", "Cobblestone", "Iron Ore", "Sandstone"]
+    blocks: [ "Stone", "Coal Ore", "Gravel", "Granite", "Andesite", "Cobblestone", "Iron Ore", "Sandstone" ]
     levels:
       1:
         requirement: 500
@@ -124,23 +148,23 @@ Traits:
       2:
         requirement: 1000
         drop_chance: 30
-    PreciousMaterialsHunter:
-      blocks: [ "Gold Ore", "Diamond Ore", "Lapis Lazuli Ore", "Redstone Ore", "Emerald Ore"]
-      levels:
-        1:
-          requirement: 100
-          drop_chance: 15
-        2:
-          requirement: 300
-          drop_chance: 30
-    DiamondHunter:
-      blocks: ["Diamond Ore"]
-      levels:
-        1:
-          requirement: 20
-          drop_chance: 15
-        2:
-          requirement: 50
-          drop_chance: 30
+  PreciousMaterialsHunter:
+    blocks: [ "Gold Ore", "Diamond Ore", "Lapis Lazuli Ore", "Redstone Ore", "Emerald Ore" ]
+    levels:
+      1:
+        requirement: 100
+        drop_chance: 15
+      2:
+        requirement: 300
+        drop_chance: 30
+  DiamondHunter:
+    blocks: [ "Diamond Ore" ]
+    levels:
+      1:
+        requirement: 20
+        drop_chance: 15
+      2:
+        requirement: 50
+        drop_chance: 30
 
 ...

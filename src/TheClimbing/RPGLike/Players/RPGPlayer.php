@@ -76,6 +76,7 @@ class RPGPlayer extends Player
             }
 
         }
+
     }
 
     public function getModifiers()

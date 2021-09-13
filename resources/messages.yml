@@ -26,6 +26,7 @@ Skills:
     description: 'The Tank skill increases your max HP by 10 percent.'
     unlocks: 'You can unlock the tank skill once your Vitality (VIT) has reached level 10'
     proc_message: ''
+    level_up: 'Tank skill just leveled up!'
   Coinflip:
     prefix: '{AQUA}[Coinflip]'
     description: 'The Coinflip skill gives you a percent chance to deal 1.5x damage'

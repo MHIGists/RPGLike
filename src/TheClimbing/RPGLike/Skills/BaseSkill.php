@@ -29,9 +29,11 @@ class BaseSkill
 {
     protected RPGPlayer $owner;
 
+    private $skillConfig = [];
+
     private string $name;
 
-    private string $type;
+    private bool $is_active = false;
 
     private array $messages;
 
@@ -59,25 +61,17 @@ class BaseSkill
      *
      * @param RPGPlayer $owner
      * @param string $name
-     * @param array $skillLevels
-     * @param string $type
-     * @param int $cooldown
-     * @param int $range
-     * @param bool $isAOE
      * @param null $effect
      */
-    public function __construct(RPGPlayer $owner, string $name, array $skillLevels, string $type = '', int $cooldown = 0, int $range = 0, bool $isAOE = false, $effect = null)
+    public function __construct(RPGPlayer $owner, string $name, $effect = null)
     {
         $messages = RPGLike::getInstance()->getMessages()['Skills'];
+        $this->skillConfig = $owner->getConfig()->getNested('Skills')[$this->getName()];
         $this->owner = $owner;
         $this->name = $name;
-        $this->type = $type;
-        $this->cooldown = $cooldown;
-        $this->range = $range;
         $this->effect = $effect;
-
-        $this->skillLevels = $skillLevels;
         $this->messages = $messages[$this->getName()];
+        $this->getSkillConfig();
     }
 
     public function unlock(): void
@@ -114,11 +108,7 @@ class BaseSkill
 
     public function isActive(): bool
     {
-        if ($this->type = 'active') {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->is_active;
     }
 
     /**
@@ -136,23 +126,6 @@ class BaseSkill
     {
         return $this->name;
     }
-
-    /**
-     * @param string $type
-     */
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
 
     public function setCooldownTime(int $cooldown): void
     {
@@ -233,7 +206,7 @@ class BaseSkill
     }
 
     /**
-     * @param $id
+     * @param $id int
      */
     protected function setEffect($id): void
     {
@@ -356,6 +329,13 @@ class BaseSkill
     }
     public function getMaximumEntitiesInRange(){
         return 1 + $this->owner->getConfig()->getNested($this->getName())['max_entities_in_range'];
+    }
+    public function getSkillConfig(){
+        $this->skillLevels = $this->skillConfig['levels'];
+        $this->isAOE = $this->skillConfig['is_aoe'];
+        $this->cooldown = $this->skillConfig['cooldown'];
+        $this->is_active = $this->skillConfig['is_active'];
+        $this->range = $this->skillConfig['range'];
     }
 
 }
