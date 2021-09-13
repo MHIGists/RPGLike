@@ -328,7 +328,7 @@ class BaseSkill
         $player->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getSkillProcMessage()));
     }
     public function getMaximumEntitiesInRange(){
-        return 1 + $this->owner->getConfig()->getNested($this->getName())['max_entities_in_range'];
+        return 1 + $this->skillConfig['max_entities_in_range'];
     }
     public function getSkillConfig(){
         $this->skillLevels = $this->skillConfig['levels'];
