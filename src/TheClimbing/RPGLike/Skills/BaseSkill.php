@@ -70,8 +70,8 @@ class BaseSkill
         $this->name = $name;
         $this->effect = $effect;
         $this->messages = $messages[$this->getName()];
-        $this->getSkillConfig();
         $this->skillConfig = $owner->getConfig()->getNested('Skills')[$this->getName()];
+        $this->getSkillConfig();
     }
 
     public function unlock(): void
