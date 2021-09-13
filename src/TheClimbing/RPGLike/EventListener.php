@@ -48,8 +48,10 @@ class EventListener implements Listener
         if ($player instanceof RPGPlayer){
             $playerSkills = $player->getSkills();
             foreach ($playerSkills as $playerSkill) {
-                if ($playerSkill->isAOE()){
-                    $playerSkill->checkRange();
+                if ($playerSkill->isUnlocked()){
+                    if ($playerSkill->isAOE()){
+                        $playerSkill->checkRange();
+                    }
                 }
             }
             if ($this->main->config['keep-xp'] === true) {
