@@ -26,7 +26,6 @@ class Explosion extends BaseSkill
     public function damageEvent(Entity $damager, Entity $hit_entity)
     {
         if ($damager instanceof RPGPlayer) {
-            if ($damager->getInventory()->getItemInHand()->getId() == 433) {
                 if ($this->isOnCooldown()) {
                     $damager->sendMessage('Skill on cooldown: ' . $this->getRemainingCooldown('M:S') . ' left');
                     return;
@@ -35,7 +34,7 @@ class Explosion extends BaseSkill
                 $explosion = new \pocketmine\level\Explosion($pos, 2 + $this->getSkillLevel());
                 $explosion->explodeB();
                 $this->setOnCooldown();
-            }
+
         }
     }
 }
