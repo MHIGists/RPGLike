@@ -347,8 +347,11 @@ class BaseSkill
     public function getSkillProcMessage(){
         return $this->messages['proc_message'];
     }
+    public function getSkillPrefix(){
+        return $this->messages['prefix'];
+    }
     public function transmitProcMessage(RPGPlayer $player){
-        $player->sendMessage($this->getSkillProcMessage());
+        $player->sendMessage($this->getSkillPrefix() . $this->getSkillProcMessage());
     }
 
 }

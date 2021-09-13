@@ -8,6 +8,8 @@ namespace TheClimbing\RPGLike;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
+use pocketmine\event\entity\EntityShootBowEvent;
+use pocketmine\event\entity\ProjectileHitEntityEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\event\player\PlayerDeathEvent;
@@ -73,7 +75,16 @@ class EventListener implements Listener
             }
         }
     }
-
+    public function arrowHit(ProjectileHitEntityEvent $event){
+        $player = $event->getEntity()->getOwningEntity();
+        $entity_hit = $event->getEntityHit();
+        if ($player instanceof RPGPlayer){
+            $explosion = $player->getSkill('Explosion');
+            if($explosion->isUnlocked()){
+                $explosion->damageEvent($player, $entity_hit);
+            }
+        }
+    }
     public function dealDamageEvent(EntityDamageByEntityEvent $event)
     {
         $player = $event->getDamager();
@@ -88,9 +99,6 @@ class EventListener implements Listener
             }
             if ($doublestrike->isUnlocked()) {
                 $doublestrike->setPlayerAttackCD($event);
-            }
-            if ($explosion->isUnlocked()) {
-                $explosion->damageEvent($event);
             }
 
         }

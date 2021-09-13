@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TheClimbing\RPGLike\Skills;
 
 
+use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use TheClimbing\RPGLike\Skills\BaseSkill;
 use TheClimbing\RPGLike\Players\RPGPlayer;
@@ -22,21 +23,16 @@ class Explosion extends BaseSkill
         $this->setCooldownTime(400);
     }
 
-    public function damageEvent(EntityDamageByEntityEvent $event)
+    public function damageEvent(Entity $damager, Entity $hit_entity)
     {
-        $damager = $event->getDamager();
         if ($damager instanceof RPGPlayer) {
             if ($damager->getInventory()->getItemInHand()->getId() == 433) {
                 if ($this->isOnCooldown()) {
                     $damager->sendMessage('Skill on cooldown: ' . $this->getRemainingCooldown('M:S') . ' left');
                     return;
                 }
-                $pos = $event->getEntity()->getPosition();
-                $explosion = match ($this->getSkillLevel()) {
-                    1 => new \pocketmine\level\Explosion($pos, 4),
-                    2 => new \pocketmine\level\Explosion($pos, 3),
-                    default => new \pocketmine\level\Explosion($pos, 5),
-                };
+                $pos = $hit_entity->getPosition();
+                $explosion = new \pocketmine\level\Explosion($pos, 2 + $this->getSkillLevel());
                 $explosion->explodeB();
                 $this->setOnCooldown();
             }

@@ -47,6 +47,6 @@ Skills:
     unlocks: 'You can unlock the health regen skill once your dexterity and vitality has reached respectively 20 and 10'
     proc_message: ''
   Explosion:
-    description: 'Creates explosion when attacking an entity'
+    description: 'Creates explosion on arrow hit'
     unlocks: 'You can unlock the Explosion skill once you have your strength on lvl 20 and your dexterity on lvl 10'
     proc_message: ''
