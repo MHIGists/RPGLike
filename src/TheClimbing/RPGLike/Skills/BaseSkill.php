@@ -15,6 +15,7 @@ use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Tasks\CooldownTask;
 
+use TheClimbing\RPGLike\Utils;
 use function array_slice;
 use function call_user_func;
 use function floor;
@@ -351,7 +352,7 @@ class BaseSkill
         return $this->messages['prefix'];
     }
     public function transmitProcMessage(RPGPlayer $player){
-        $player->sendMessage($this->getSkillPrefix() . $this->getSkillProcMessage());
+        $player->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getSkillProcMessage()));
     }
 
 }
