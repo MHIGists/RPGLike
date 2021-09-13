@@ -21,6 +21,7 @@ Skills:
           VIT: 30
           DEX: 15
         chance: 20
+    max_entities_in_range : 0
   Coinflip:
     levels:
       1:
@@ -37,6 +38,7 @@ Skills:
           STR: 35
           DEX: 20
         chance: 20
+    max_entities_in_range : 0
   DoubleStrike:
     levels:
       1:
@@ -53,6 +55,7 @@ Skills:
           DEX: 35
           STR: 20
         chance: 30
+    max_entities_in_range : 0
   Fortress:
     levels:
       1:
@@ -69,6 +72,7 @@ Skills:
           DEF: 35
           VIT: 20
         chance: 30
+    max_entities_in_range : 0
   Explosion:
     levels:
       1:
@@ -81,6 +85,7 @@ Skills:
           STR: 40
           DEX: 10
         chance: 0
+    max_entities_in_range : 0
   HealthRegen:
     levels:
       1:
@@ -93,6 +98,7 @@ Skills:
           VIT: 40
           DEX: 15
         chance: 0
+    max_entities_in_range : 0
 Players: []
 Modifiers:
   STR : 0.15

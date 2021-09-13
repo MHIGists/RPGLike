@@ -264,7 +264,7 @@ class BaseSkill
     {
         if ($this->range > 0) {
             $level = $this->owner->getLevel();
-            $players = $this->getNearestEntities($this->owner->getPosition()->asVector3(), $this->range, $level, $this->getMaxEntInRange());
+            $players = $this->getNearestEntities($this->owner->getPosition()->asVector3(), $this->range, $level, $this->getMaximumEntitiesInRange());
             if (!empty($players)) {
                 foreach ($players as $player) {
                     if (!empty($func)) {
@@ -326,7 +326,7 @@ class BaseSkill
      *
      * @param callable|int $effect
      */
-    public function setPlayerEffect(callable|int $effect): void
+    public function setPlayerEffect($effect): void
     {
         if (!$this->onCooldown) {
             if (is_callable($effect)) {
@@ -345,14 +345,17 @@ class BaseSkill
     {
         return $this->messages['unlocks'];
     }
-    public function getSkillProcMessage(){
+    public function getSkillProcMessage() : string{
         return $this->messages['proc_message'];
     }
-    public function getSkillPrefix(){
+    public function getSkillPrefix() : string{
         return $this->messages['prefix'];
     }
-    public function transmitProcMessage(RPGPlayer $player){
+    public function transmitProcMessage(RPGPlayer $player) : void{
         $player->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getSkillProcMessage()));
+    }
+    public function getMaximumEntitiesInRange(){
+        return 1 + $this->owner->getConfig()->getNested($this->getName())['max_entities_in_range'];
     }
 
 }
