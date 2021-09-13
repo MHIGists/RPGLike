@@ -14,13 +14,9 @@ use TheClimbing\RPGLike\Players\RPGPlayer;
 class Explosion extends BaseSkill
 {
     protected RPGPlayer $owner;
-    public  array $config = [];
     public function __construct(RPGPlayer $owner)
     {
-        $this->owner = $owner;
-        $this->config = $owner->getConfig()->getNested('Skills')['Explosion']['levels'];
-        parent::__construct($owner, 'Explosion', $this->config);
-        $this->setCooldownTime(400);
+        parent::__construct($owner, 'Explosion');
     }
 
     public function damageEvent(Entity $damager, Entity $hit_entity)

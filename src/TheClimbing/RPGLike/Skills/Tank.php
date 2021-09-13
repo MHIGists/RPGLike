@@ -8,15 +8,10 @@ use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class Tank extends BaseSkill
 {
-    public array $config = [];
+
     public function __construct(RPGPlayer $owner)
     {
-        $this->config = $owner->getConfig()->getNested('Skills')['Tank']['levels'];
-
-        $this->setType('passive');
-        $this->setCooldownTime(0);
-        $this->setRange(0);
-        parent::__construct($owner, 'Tank', $this->config);
+        parent::__construct($owner, 'Tank');
     }
 
     public function setPlayerHealth(RPGPlayer $player)

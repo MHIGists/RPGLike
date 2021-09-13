@@ -29,7 +29,7 @@ class BaseSkill
 {
     protected RPGPlayer $owner;
 
-    private $skillConfig = [];
+    protected $skillConfig = [];
 
     private string $name;
 

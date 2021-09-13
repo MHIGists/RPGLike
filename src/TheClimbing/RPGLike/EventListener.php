@@ -8,7 +8,6 @@ namespace TheClimbing\RPGLike;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
-use pocketmine\event\entity\EntityShootBowEvent;
 use pocketmine\event\entity\ProjectileHitEntityEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCreationEvent;
