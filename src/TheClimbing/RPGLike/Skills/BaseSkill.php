@@ -90,7 +90,7 @@ class BaseSkill
         $this->skillLevel = 1;
     }
 
-    public function checkLevel()
+    public function checkLevel(bool $restore = false)
     {
         foreach ($this->skillLevels as $key => $value) {
             $criteria = count($value['unlock']);
@@ -103,7 +103,9 @@ class BaseSkill
             if ($criteria <= $met_criteria){
                 if($this->skillLevel < $key){
                     $this->skillLevel = $key;
-                    $this->transmitLevelUpMessage();
+                    if (!$restore){
+                        $this->transmitLevelUpMessage();
+                    }
                 }
             }
         }

@@ -92,7 +92,7 @@ class RPGPlayer extends Player
 
     public function calcVITBonus(): void
     {
-        $this->vitBonus = (int)($this->getVIT() * $this->getVITModifier());
+        $this->vitBonus = (int)($this->getVIT() * $this->getVITModifier()); //TODO why cats it to int?
     }
 
     public function getVIT(): int
@@ -118,7 +118,7 @@ class RPGPlayer extends Player
 
     public function calcDEXBonus(): void
     {
-        $this->dexBonus =(int)( $this->getDex() * $this->getDEXModifier());
+        $this->dexBonus = $this->getDex() * $this->getDEXModifier();
     }
 
     public function getDEX(): int

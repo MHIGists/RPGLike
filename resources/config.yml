@@ -127,7 +127,7 @@ Modifiers:
   STR: 0.15
   VIT: 0.175
   DEF: 0.1
-  DEX: 0.0002
+  DEX: 0.1
 Traits:
   WoodCutter:
     blocks: [ "Oak Wood", "Spruce Wood", "Birch Wood", "Jungle Wood" ]
