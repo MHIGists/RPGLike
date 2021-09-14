@@ -28,7 +28,7 @@ class Coinflip extends BaseSkill implements PassiveSkill
             $event->setModifier($damage * 1.5, EntityDamageEvent::CAUSE_ENTITY_ATTACK);
             $player = $event->getDamager();
             if ($player instanceof RPGPlayer){
-                $this->transmitProcMessage($player);
+                $this->transmitProcMessage();
             }
         }
     }

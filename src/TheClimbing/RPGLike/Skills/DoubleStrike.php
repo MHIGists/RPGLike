@@ -22,7 +22,7 @@ class DoubleStrike extends BaseSkill implements PassiveSkill
         if ($player instanceof RPGPlayer){
             if (mt_rand(0, 99) < $this->skillConfig[$this->getSkillLevel()]['chance']) {
                 $event->setAttackCooldown(0);
-                $this->transmitProcMessage($player);
+                $this->transmitProcMessage();
             }
         }
     }
