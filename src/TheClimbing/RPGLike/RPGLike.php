@@ -21,6 +21,7 @@ class RPGLike extends PluginBase
     private static RPGLike $instance;
 
     public array $messages;
+    public array $players;
     public $config;
     public array $consts = [];
 
@@ -31,7 +32,10 @@ class RPGLike extends PluginBase
         $this->setConsts();
 
         $messages = (new Config($this->getDataFolder() . 'messages.yml', Config::YAML))->getAll();
+        $players = (new Config($this->getDataFolder() . 'players.yml', Config::YAML))->getAll();
+
         $this->messages = $messages;
+        $this->players = $players;
 
         $this->config = $this->getConfig()->getAll();
         date_default_timezone_set($this->config['Hud']['timezone']);
@@ -100,7 +104,7 @@ class RPGLike extends PluginBase
             'MAXHP' => $player->getMaxHealth(),
             'DAMAGE' => $item->getAttackPoints() + round($player->getSTRBonus(), 0, PHP_ROUND_HALF_UP),
             'MOVEMENTSPEED' => round($player->getMovementSpeed(), 4, PHP_ROUND_HALF_UP),
-            'ABSORPTION' => $player->getAbsorption() + $player->getDEFBonus(),
+            'DEFENSE' => $player->getArmorPoints() + $player->getDEFBonus(),
             'TICKS' => $player->getServer()->getTicksPerSecondAverage(),
             'LEVEL' => $player->getLevel()->getName(),
             'XPLEVEL' => $player->getXpLevel(),
@@ -114,6 +118,9 @@ class RPGLike extends PluginBase
     public function getMessages(): array
     {
         return $this->messages;
+    }
+    public function getPlayers() : array{
+        return $this->players;
     }
 
     public static function getInstance(): RPGLike
