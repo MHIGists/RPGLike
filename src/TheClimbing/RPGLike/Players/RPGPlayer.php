@@ -63,7 +63,7 @@ class RPGPlayer extends Player
         $this->calcDEXBonus();
         $this->addSkills();
         $traits = $this->config->getNested("Traits");
-        $players = RPGLike::getInstance()->getPlayers()['Players'];
+        $players = RPGLike::getInstance()->getPlayers();
         $block_breaks = 0;
         if (array_key_exists($this->getName(),$players) ){
             $block_breaks = $players[$this->getName()]['block_breaks'];
