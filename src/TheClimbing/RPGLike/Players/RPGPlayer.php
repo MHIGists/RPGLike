@@ -178,7 +178,6 @@ class RPGPlayer extends Player
 
     public function getMovementSpeed(): float
     {
-        $this->applyDexterityBonus();
         return $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->getValue();
     }
 
