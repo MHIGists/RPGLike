@@ -101,8 +101,10 @@ class BaseSkill
                 }
             }
             if ($criteria <= $met_criteria){
-                $this->skillLevel = $key;
-                $this->transmitLevelUpMessage();
+                if($this->skillLevel < $key){
+                    $this->skillLevel = $key;
+                    $this->transmitLevelUpMessage();
+                }
             }
         }
     }
