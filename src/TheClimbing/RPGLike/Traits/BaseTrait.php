@@ -18,7 +18,7 @@ class BaseTrait
     private int $currentLevel = 0;
     private string $trait_action ;
 
-    public function __construct(string $name, array $blocks, array $levels,string $trait_action, int $blockBreaks = 0)
+    public function __construct(string $name, array $blocks, array $levels, string $trait_action, int $blockBreaks = 0)
     {
         $this->name = $name;
         $this->blocks = $blocks;

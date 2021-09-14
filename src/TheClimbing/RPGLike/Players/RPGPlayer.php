@@ -70,9 +70,9 @@ class RPGPlayer extends Player
         }
         foreach ($traits as $key => $value) {
             if ($block_breaks != 0){
-                $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $block_breaks);
+                $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $value['action'] , $block_breaks);
             }else{
-                $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels']);
+                $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $value['action']);
             }
 
         }
