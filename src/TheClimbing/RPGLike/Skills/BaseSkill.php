@@ -102,6 +102,7 @@ class BaseSkill
             }
             if ($criteria <= $met_criteria){
                 $this->skillLevel = $key;
+                $this->transmitLevelUpMessage();
             }
         }
     }
@@ -324,8 +325,14 @@ class BaseSkill
     public function getSkillPrefix() : string{
         return $this->messages['prefix'];
     }
-    public function transmitProcMessage(RPGPlayer $player) : void{
-        $player->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getSkillProcMessage()));
+    public function getSkillLevelUpMessage(){
+        return $this->messages['level_up'];
+    }
+    public function transmitProcMessage() : void{
+        $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getSkillProcMessage()));
+    }
+    public function transmitLevelUpMessage(){
+        $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getSkillLevelUpMessage()));
     }
     public function getMaximumEntitiesInRange(){
         return 1 + $this->skillConfig['max_entities_in_range'];
