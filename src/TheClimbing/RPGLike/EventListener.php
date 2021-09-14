@@ -134,8 +134,6 @@ class EventListener implements Listener
                     $spleft = $new_lvl - $old_level;
 
                     RPGForms::upgradeStatsForm($player, $spleft);
-                    $player->applyVitalityBonus();
-                    $player->applyDexterityBonus();
                     $player->setHealth($player->getMaxHealth());
                     $player->setFood($player->getMaxFood());
                     $player->setAirSupplyTicks($player->getMaxAirSupplyTicks());

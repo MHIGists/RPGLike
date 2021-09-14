@@ -62,7 +62,6 @@ class RPGForms
                 case "dexterity":
                     $player->setDEX($player->getDEX() + 1);
                     $spleft--;
-                    $player->applyDexterityBonus();
                     break;
                 case "exit":
                 default:
