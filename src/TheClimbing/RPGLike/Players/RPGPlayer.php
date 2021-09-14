@@ -45,7 +45,7 @@ class RPGPlayer extends Player
     private int $defBonus = 1;
     private int $dex = 1;
     private float $dexModifier = 0.0002;
-    private mixed $dexBonus = 1;
+    private $dexBonus = 1;
     private \pocketmine\utils\Config $config;
 
     public function __construct($interface, $ip, $port)
