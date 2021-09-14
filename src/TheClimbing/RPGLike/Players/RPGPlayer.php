@@ -44,7 +44,7 @@ class RPGPlayer extends Player
     private float $defModifier = 0.1;
     private int $defBonus = 1;
     private int $dex = 1;
-    private float $dexModifier = 0.0002;
+    private float $dexModifier = 0.1;
     private $dexBonus = 1;
     private \pocketmine\utils\Config $config;
 
