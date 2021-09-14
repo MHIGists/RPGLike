@@ -173,6 +173,12 @@ class RPGForms
         $form->addButton("Back to main menu", -1, '', 'back');
         $player->sendForm($form);
     }
+    public static function welcomeForm(RPGPLayer $player){
+        $form = new SimpleForm(function (Player $pl, $data) use ($player){
+
+        });
+        // TODO finish this add option to see skills and traits after they are unlocked
+}
 
     public static function parseMessages(RPGPlayer $player, string $type, int $spleft = 0): array
     {

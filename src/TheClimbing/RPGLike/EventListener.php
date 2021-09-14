@@ -39,9 +39,12 @@ class EventListener implements Listener
     public function playerJoin(PlayerJoinEvent $event)
     {
         $player = $event->getPlayer();
-        $this->main->getLogger()->warning($player->getFirstPlayed());
-        $player->restorePlayerVariables();
-
+        if ($player instanceof RPGPlayer){
+            if (microtime(true) - $player->getFirstPlayed()){
+                RPGForms::welcomeForm($player);
+            }
+            $player->restorePlayerVariables();
+        }
     }
     public function blockPickup(PlayerBlockPickEvent $event){
         $player = $event->getPlayer();
