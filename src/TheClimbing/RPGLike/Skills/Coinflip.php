@@ -24,7 +24,7 @@ class Coinflip extends BaseSkill implements PassiveSkill
     public function setCritChance(EntityDamageByEntityEvent $event)
     {
         $damage = $event->getBaseDamage();
-        if (rand(0, 99) < $this->skillConfig[$this->getSkillLevel()]['chance']) {
+        if (rand(0, 99) < $this->skillConfig['levels'][$this->getSkillLevel()]['chance']) {
             $event->setModifier($damage * 1.5, EntityDamageEvent::CAUSE_ENTITY_ATTACK);
             $player = $event->getDamager();
             if ($player instanceof RPGPlayer){
