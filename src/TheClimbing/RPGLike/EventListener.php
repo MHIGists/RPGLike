@@ -39,14 +39,16 @@ class EventListener implements Listener
     public function playerJoin(PlayerJoinEvent $event)
     {
         $player = $event->getPlayer();
-        if ($player instanceof RPGPlayer){
-            if (microtime(true) - $player->getFirstPlayed()){
+        if ($player instanceof RPGPlayer) {
+            if (microtime(true) - $player->getFirstPlayed()) {
                 RPGForms::welcomeForm($player);
             }
             $player->restorePlayerVariables();
         }
     }
-    public function blockPickup(PlayerBlockPickEvent $event){
+
+    public function blockPickup(PlayerBlockPickEvent $event)
+    {
         $player = $event->getPlayer();
         if ($player instanceof RPGPlayer) {
             foreach ($player->getTraits() as $trait) {
@@ -58,11 +60,11 @@ class EventListener implements Listener
     public function onMove(PlayerMoveEvent $event)
     {
         $player = $event->getPlayer();
-        if ($player instanceof RPGPlayer){
+        if ($player instanceof RPGPlayer) {
             $playerSkills = $player->getSkills();
             foreach ($playerSkills as $playerSkill) {
-                if ($playerSkill->isUnlocked()){
-                    if ($playerSkill->isAOE()){
+                if ($playerSkill->isUnlocked()) {
+                    if ($playerSkill->isAOE()) {
                         $playerSkill->checkRange();
                     }
                 }
@@ -76,10 +78,10 @@ class EventListener implements Listener
     public function playerDeath(PlayerDeathEvent $event)
     {
         $player = $event->getPlayer();
-        if ($player instanceof RPGPlayer){
+        if ($player instanceof RPGPlayer) {
             if ($this->main->config['keep-xp'] === true) {
                 $event->setXpDropAmount(0);
-            }else{
+            } else {
                 $player->setDEX(1);
                 $player->setSTR(1);
                 $player->setVIT(1);
@@ -89,23 +91,25 @@ class EventListener implements Listener
             }
         }
     }
-    public function arrowHit(ProjectileHitEntityEvent $event){
+
+    public function arrowHit(ProjectileHitEntityEvent $event)
+    {
         $player = $event->getEntity()->getOwningEntity();
         $entity_hit = $event->getEntityHit();
-        if ($player instanceof RPGPlayer){
+        if ($player instanceof RPGPlayer) {
             $explosion = $player->getSkill('Explosion');
-            if($explosion->isUnlocked()){
+            if ($explosion->isUnlocked()) {
                 $explosion->damageEvent($player, $entity_hit);
             }
         }
     }
+
     public function dealDamageEvent(EntityDamageByEntityEvent $event)
     {
         $player = $event->getDamager();
         if ($player instanceof RPGPlayer) {
             $coinflip = $player->getSkill('Coinflip');
             $doublestrike = $player->getSkill('DoubleStrike');
-            $explosion = $player->getSkill('Explosion');
             $player->applyDamageBonus($event);
             $player->applyDefenseBonus($event);
             if ($coinflip->isUnlocked()) {
@@ -114,10 +118,9 @@ class EventListener implements Listener
             if ($doublestrike->isUnlocked()) {
                 $doublestrike->setPlayerAttackCD($event);
             }
-
-                foreach ($player->getTraits() as $trait) {
-                    $trait->entityKill($event);
-                }
+            foreach ($player->getTraits() as $trait) {
+                $trait->entityKill($event);
+            }
         }
     }
 

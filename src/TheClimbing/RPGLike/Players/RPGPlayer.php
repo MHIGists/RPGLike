@@ -9,6 +9,7 @@ use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\Player;
+use pocketmine\utils\Config;
 
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\RPGLike;
@@ -41,12 +42,12 @@ class RPGPlayer extends Player
     private float $vitModifier = 0.175;
     private int $vitBonus = 1;
     private int $def = 1;
-    private float $defModifier = 0.1;
+    private float $defModifier = 0.5;
     private int $defBonus = 1;
     private int $dex = 1;
-    private float $dexModifier = 0.001;
+    private float $dexModifier = 0.005;
     private $dexBonus = 1;
-    private \pocketmine\utils\Config $config;
+    private Config $config;
 
     public function __construct($interface, $ip, $port)
     {
@@ -319,7 +320,7 @@ class RPGPlayer extends Player
     {
         $receiver = $event->getEntity();
         if ($receiver instanceof RPGPlayer) {
-            $event->setBaseDamage($event->getBaseDamage() - $receiver->getDEFBonus());
+            $event->setBaseDamage($event->getFinalDamage() - $receiver->getDEFBonus());
         }
     }
 
@@ -446,7 +447,7 @@ class RPGPlayer extends Player
     {
         return $this->traits;
     }
-    public function getConfig(): \pocketmine\utils\Config
+    public function getConfig(): Config
     {
         return $this->config;
     }

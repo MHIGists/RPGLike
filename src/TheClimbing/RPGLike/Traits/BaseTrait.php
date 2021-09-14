@@ -5,7 +5,6 @@ namespace TheClimbing\RPGLike\Traits;
 
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\event\entity\EntityDeathEvent;
 use pocketmine\event\player\PlayerBlockPickEvent;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 

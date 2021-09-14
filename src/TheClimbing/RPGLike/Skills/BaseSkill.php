@@ -96,14 +96,14 @@ class BaseSkill
             $criteria = count($value['unlock']);
             $met_criteria = 0;
             foreach ($value['unlock'] as $key1 => $item) {
-                if ($this->owner->getAttribute($key1) >= $item){
+                if ($this->owner->getAttribute($key1) >= $item) {
                     $met_criteria++;
                 }
             }
-            if ($criteria <= $met_criteria){
-                if($this->skillLevel < $key){
+            if ($criteria <= $met_criteria) {
+                if ($this->skillLevel < $key) {
                     $this->skillLevel = $key;
-                    if (!$restore){
+                    if (!$restore) {
                         $this->transmitLevelUpMessage();
                     }
                 }
@@ -188,9 +188,12 @@ class BaseSkill
         }
         return implode('', $format);
     }
-    public function isAOE() : bool{
+
+    public function isAOE(): bool
+    {
         return $this->isAOE;
     }
+
     protected function setRange(int $range): void
     {
         $this->range = $range;
@@ -315,33 +318,49 @@ class BaseSkill
             }
         }
     }
-    public function getSkillDescription() : string
+
+    public function getSkillDescription(): string
     {
         return $this->messages['description'];
     }
-    public function getSkillUnlockConditions() : string
+
+    public function getSkillUnlockConditions(): string
     {
         return $this->messages['unlocks'];
     }
-    public function getSkillProcMessage() : string{
+
+    public function getSkillProcMessage(): string
+    {
         return $this->messages['proc_message'];
     }
-    public function getSkillPrefix() : string{
+
+    public function getSkillPrefix(): string
+    {
         return $this->messages['prefix'];
     }
-    public function getSkillLevelUpMessage(){
+
+    public function getSkillLevelUpMessage()
+    {
         return $this->messages['level_up'];
     }
-    public function transmitProcMessage() : void{
+
+    public function transmitProcMessage(): void
+    {
         $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getSkillProcMessage()));
     }
-    public function transmitLevelUpMessage(){
-        $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getSkillLevelUpMessage(). 'to level ' . $this->getSkillLevel()));
+
+    public function transmitLevelUpMessage()
+    {
+        $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getSkillLevelUpMessage() . 'to level ' . $this->getSkillLevel()));
     }
-    public function getMaximumEntitiesInRange(){
+
+    public function getMaximumEntitiesInRange()
+    {
         return 1 + $this->skillConfig['max_entities_in_range'];
     }
-    public function getSkillConfig(){
+
+    public function getSkillConfig()
+    {
         $this->skillLevels = $this->skillConfig['levels'];
         $this->isAOE = $this->skillConfig['is_aoe'];
         $this->cooldown = $this->skillConfig['cooldown'];

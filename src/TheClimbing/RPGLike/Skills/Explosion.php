@@ -6,8 +6,6 @@ namespace TheClimbing\RPGLike\Skills;
 
 
 use pocketmine\entity\Entity;
-use pocketmine\event\entity\EntityDamageByEntityEvent;
-use TheClimbing\RPGLike\Skills\BaseSkill;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 
