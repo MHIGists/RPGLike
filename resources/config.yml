@@ -132,6 +132,7 @@ Modifiers:
 Traits:
   WoodCutter:
     blocks: [ "Oak Wood", "Spruce Wood", "Birch Wood", "Jungle Wood" ]
+    action: "break"
     levels:
       1:
         requirement: 50
@@ -141,6 +142,7 @@ Traits:
         drop_chance: 30
   Miner:
     blocks: [ "Stone", "Coal Ore", "Gravel", "Granite", "Andesite", "Cobblestone", "Iron Ore", "Sandstone" ]
+    action: "break"
     levels:
       1:
         requirement: 500
@@ -150,6 +152,7 @@ Traits:
         drop_chance: 30
   PreciousMaterialsHunter:
     blocks: [ "Gold Ore", "Diamond Ore", "Lapis Lazuli Ore", "Redstone Ore", "Emerald Ore" ]
+    action: "break"
     levels:
       1:
         requirement: 100
@@ -159,6 +162,7 @@ Traits:
         drop_chance: 30
   DiamondHunter:
     blocks: [ "Diamond Ore" ]
+    action: "break"
     levels:
       1:
         requirement: 20

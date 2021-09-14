@@ -10,6 +10,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\entity\ProjectileHitEntityEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerBlockPickEvent;
 use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerExperienceChangeEvent;
@@ -38,8 +39,17 @@ class EventListener implements Listener
     public function playerJoin(PlayerJoinEvent $event)
     {
         $player = $event->getPlayer();
+        $this->main->getLogger()->warning($player->getFirstPlayed());
         $player->restorePlayerVariables();
 
+    }
+    public function blockPickup(PlayerBlockPickEvent $event){
+        $player = $event->getPlayer();
+        if ($player instanceof RPGPlayer) {
+            foreach ($player->getTraits() as $trait) {
+                $trait->blockPickup($event);
+            }
+        }
     }
 
     public function onMove(PlayerMoveEvent $event)
@@ -102,6 +112,9 @@ class EventListener implements Listener
                 $doublestrike->setPlayerAttackCD($event);
             }
 
+                foreach ($player->getTraits() as $trait) {
+                    $trait->entityKill($event);
+                }
         }
     }
 

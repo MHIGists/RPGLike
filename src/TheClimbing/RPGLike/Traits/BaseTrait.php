@@ -4,6 +4,10 @@
 namespace TheClimbing\RPGLike\Traits;
 
 use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDeathEvent;
+use pocketmine\event\player\PlayerBlockPickEvent;
+use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class BaseTrait
 {
@@ -12,12 +16,14 @@ class BaseTrait
     private array $levels;
     private int $count = 0;
     private int $currentLevel = 0;
+    private string $trait_action ;
 
-    public function __construct(string $name, array $blocks, array $levels, int $blockBreaks = 0)
+    public function __construct(string $name, array $blocks, array $levels,string $trait_action, int $blockBreaks = 0)
     {
         $this->name = $name;
         $this->blocks = $blocks;
         $this->levels = $levels;
+        $this->trait_action = $trait_action;
         $this->restorePlayerTrait($blockBreaks);
     }
 
@@ -38,7 +44,7 @@ class BaseTrait
 
     public function setLevels(array $levels): void
     {
-        $this->levels = $levels; //TODO maybe add command to change settings on-demand
+        $this->levels = $levels;
     }
 
     public function getBlocks(): array
@@ -53,16 +59,54 @@ class BaseTrait
 
     public function blockBreak(BlockBreakEvent $event)
     {
-        if (array_search($event->getBlock()->getName(), $this->blocks) !== false) {
-            $this->count += 1;
-            $this->checkLevel();
-            $drops = $event->getDrops();
-            $drop_chance = $this->getBlockDropChance();
-            if ($drop_chance > 0){
-                if ($this->tryChance($drop_chance)){
-                    $drops[] = $drops[0];
-                    $event->setDrops($drops);
-                    $event->getPlayer()->sendMessage('You just got 1 additional drop!');
+        if ($this->trait_action == 'break'){
+            if (array_search($event->getBlock()->getName(), $this->blocks) !== false) {
+                $this->count += 1;
+                $this->checkLevel();
+                $drops = $event->getDrops();
+                $drop_chance = $this->getBlockDropChance();
+                if ($drop_chance > 0 && $this->tryChance($drop_chance)){
+
+                        $drops[] = $drops[0];
+                        $event->setDrops($drops);
+                        $event->getPlayer()->sendMessage('You just got 1 additional drop!');
+
+                }
+            }
+        }
+    }
+    public function blockPickup(PlayerBlockPickEvent $event){
+        if ($this->trait_action == "pickup"){
+            $player = $event->getPlayer();
+            if ($player instanceof RPGPlayer){
+                if (array_search($event->getBlock()->getName(), $this->blocks) !== false) {
+                    $this->count += 1;
+                    $this->checkLevel();
+                    $drop_chance = $this->getBlockDropChance();
+                    if ($drop_chance > 0 && $this->tryChance($drop_chance)){
+                            $event->getResultItem()->setCount($event->getResultItem()->getCount() + 1);
+                            $event->getPlayer()->sendMessage('You just got 1 additional drop!');
+
+                    }
+                }
+            }
+        }
+    }
+    public function entityKill(EntityDamageByEntityEvent $event){
+        if ($this->trait_action == "kill"){
+            $damager = $event->getDamager();
+            $damaged_target = $event->getEntity();
+            $damaged_target_health = $damaged_target->getHealth();
+            $damage = $event->getFinalDamage();
+            if (($damaged_target_health - $damage) <= 0){
+                if ($damager instanceof RPGPlayer){
+                    $this->count += 1;
+                    $this->checkLevel();
+                    $drop_chance = $this->getBlockDropChance();
+                    if ($drop_chance > 0 && $this->tryChance($drop_chance)){
+                        $damager->spleft += 1;
+                        $damager->sendMessage("You just got 1 skill point"); // TODO add economy support??
+                    }
                 }
             }
         }
