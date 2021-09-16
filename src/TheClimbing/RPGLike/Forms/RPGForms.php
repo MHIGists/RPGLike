@@ -195,7 +195,7 @@ class RPGForms
         $player->sendForm($form);
     }
     public static function traitHelpForm(RPGPlayer $player, BaseTrait $trait){
-        $messages = self::parseMessages($player,'TraitsHelpForm');
+        $messages = self::parseMessages($player,'TraitHelpForm');
         $form = new SimpleForm(function (Player $pl, $data) use ($player) {
             switch ($data) {
                 case 'Back':

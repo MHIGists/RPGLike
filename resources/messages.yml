@@ -27,8 +27,12 @@ Forms:
     title: 'Available traits:'
     buttons:
       back: 'Back'
-  TraitsHelpForm:
+  TraitHelpForm:
     title: '{NAME}'
+  SkillsHelpForm:
+    title: 'Available Skills:'
+    buttons:
+      back: 'Back to main menu'
 Skills:
   Tank:
     SkillHelpForm:
@@ -96,3 +100,4 @@ Skills:
     unlock_message: ' skill just got unlocked use /rpg to find out more!'
     proc_message: ''
     level_up: ' skill just leveled up!'
+Traits: []
