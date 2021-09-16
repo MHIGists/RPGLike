@@ -196,7 +196,7 @@ class RPGForms
         foreach ($traits as $key => $trait) {
             $form->addButton($key,-1,'', $key);
         }
-        $form->addButton($messages['back'],-1,'','back');
+        $form->addButton($messages['buttons']['back'],-1,'','back');
         $player->sendForm($form);
     }
     public static function traitHelpForm(RPGPlayer $player, BaseTrait $trait){
