@@ -77,7 +77,7 @@ class BaseSkill
     public function unlock(): void
     {
         $this->unlocked = true;
-        $this->owner->sendMessage($this->getSkillPrefix() . $this->getUnlockMessage());
+        $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts,$this->getSkillPrefix() . $this->getUnlockMessage()));
     }
 
     public function isUnlocked(): bool
