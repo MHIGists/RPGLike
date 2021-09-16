@@ -171,7 +171,7 @@ class RPGForms
         $messages = self::parseMessages($player, 'WelcomeForm');
         $form = new SimpleForm(function (Player $pl, $data) use ($player){});
         $form->setTitle($messages['title']);
-        $form->setContents($messages['content']);
+        $form->setContent($messages['content']);
         $player->sendForm($form);
     }
     public static function traitsForm(RPGPlayer $player){
