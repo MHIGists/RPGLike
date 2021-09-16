@@ -20,6 +20,7 @@ Forms:
       skills: 'Skills help'
       stats: 'Your Stats'
       upgrade: 'Upgrade stats'
+      traits: 'Available Traits'
   WelcomeForm:
     title: 'Welcome {NAME}!'
     content: 'Welcome to the world of Minecraft!{NL}I wish you the best of luck on your quest to defeat the Black Dragon!'

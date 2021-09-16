@@ -132,6 +132,8 @@ class RPGForms
                 case "upgrade":
                     self::upgradeStatsForm($player, 0);
                     break;
+                case "traits":
+                    self::traitsForm($player);
             }
         });
         $form->setTitle($menuStrings['title']);
