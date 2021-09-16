@@ -363,6 +363,10 @@ class BaseSkill
     {
         return $this->messages;
     }
+    public function getUnlockMessage() : string
+    {
+        return $this->messages['unlock_message'];
+    }
 
     public function getSkillConfig()
     {
