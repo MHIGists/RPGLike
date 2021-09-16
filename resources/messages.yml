@@ -48,7 +48,7 @@ Skills:
   Coinflip:
     SkillHelpForm:
       title: 'Coinflip skill info'
-      content: 'The "Coinflip" skill you HP by 10%'
+      content: 'The "Coinflip" skill increases your HP by 10%'
       back_button: 'Back to main menu'
     prefix: '{AQUA}[Coinflip]'
     description: 'The "Coinflip" skill gives you a percent chance to deal 1.5x damage'
@@ -59,7 +59,7 @@ Skills:
   DoubleStrike:
     SkillHelpForm:
       title: 'Double Strike skill info'
-      content: 'The "Double Strike" skill you HP by 10%'
+      content: 'The "Double Strike" gives you a 15% chance to reset attack cooldown'
       back_button: 'Back to main menu'
     prefix: '{AQUA}[DoubleStrike]'
     description: 'The "Double Strike" skill has a 15 percent chance to reset your attack cool-down'
@@ -70,7 +70,7 @@ Skills:
   Fortress:
     SkillHelpForm:
       title: 'Fortress skill info'
-      content: 'The "Fortress" skill you HP by 10%'
+      content: 'The "Fortress" skill increases your Defense by 10%'
       back_button: 'Back to main menu'
     prefix: '{AQUA}[Fortress]'
     description: 'The "Fortress" skill increases your damage absorption by 20 percent.'
@@ -81,7 +81,7 @@ Skills:
   HealthRegen:
     SkillHelpForm:
       title: 'Health Regen skill info'
-      content: 'The "Health Regen" skill you HP by 10%'
+      content: 'The "Health Regen" skill is an AOE constantly healing party members in range'
       back_button: 'Back to main menu'
     prefix: '{AQUA}[Health regen]'
     description: '"Health Regen" is an AOE skill which constantly heals party members'
@@ -92,7 +92,7 @@ Skills:
   Explosion:
     SkillHelpForm:
       title: 'Explosion skill info'
-      content: 'The "Explosion" skill you HP by 10%'
+      content: 'The "Explosion" skill makes your arrow explosive on hit with a living'
       back_button: 'Back to main menu'
     prefix: '{AQUA}[Explosion]'
     description: 'Creates explosion on arrow hit'
