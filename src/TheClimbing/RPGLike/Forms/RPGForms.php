@@ -93,7 +93,7 @@ class RPGForms
         });
         $form->setTitle($skill->getName() . $messages['title']);
         $form->setContent($messages['content']);
-        $form->addButton($messages['button'], -1, '', 'Back');
+        $form->addButton($messages['back_button'], -1, '', 'Back');
         $player->sendForm($form);
     }
 

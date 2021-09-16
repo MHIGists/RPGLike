@@ -40,7 +40,7 @@ class EventListener implements Listener
     {
         $player = $event->getPlayer();
         if ($player instanceof RPGPlayer) {
-            if (microtime(true) - $player->getFirstPlayed()) {
+            if ((microtime(true) - $player->getFirstPlayed() > 240)) {
                 RPGForms::welcomeForm($player);
             }
             $player->restorePlayerVariables();
