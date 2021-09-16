@@ -11,7 +11,6 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\Player;
 use pocketmine\utils\Config;
 
-use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
 use TheClimbing\RPGLike\Skills\Coinflip;
@@ -93,7 +92,7 @@ class RPGPlayer extends Player
 
     public function calcVITBonus(): void
     {
-        $this->vitBonus = (int)($this->getVIT() * $this->getVITModifier()); //TODO why cats it to int?
+        $this->vitBonus = (int)($this->getVIT() * $this->getVITModifier());
     }
 
     public function getVIT(): int
@@ -376,11 +375,11 @@ class RPGPlayer extends Player
             $this->setSPleft($cachedPlayer['spleft']);
             if (!empty($cachedPlayer['skills'])) {
                 foreach ($cachedPlayer['skills'] as $skill) {
-                    $this->getSkill($skill)->unlock();
+                    $this->getSkill($skill)->unlock(true);
                 }
             }
             foreach ($this->skills as $skill){
-                $skill->checkLevel();
+                $skill->checkLevel(true);
             }
             foreach ($cachedPlayer['blocks'] as $trait => $block_count) {
                 $this->traits[$trait]->restorePlayerTrait($block_count);

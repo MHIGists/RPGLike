@@ -74,10 +74,12 @@ class BaseSkill
         $this->getSkillConfig();
     }
 
-    public function unlock(): void
+    public function unlock(bool $restore = false): void
     {
         $this->unlocked = true;
-        $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts,$this->getSkillPrefix() . $this->getUnlockMessage()));
+        if(!$restore){
+            $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts,$this->getSkillPrefix() . $this->getUnlockMessage()));
+        }
     }
 
     public function isUnlocked(): bool
