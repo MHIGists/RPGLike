@@ -100,6 +100,7 @@ class RPGLike extends PluginBase
         $item = $player->getInventory()->getItemInHand();
 
         $playerSpecific = [
+            'NAME' => $player->getName(),
             'HEALTH' => $player->getHealth(),
             'MAXHP' => $player->getMaxHealth(),
             'DAMAGE' => $item->getAttackPoints() + round($player->getSTRBonus(), 0, PHP_ROUND_HALF_UP),

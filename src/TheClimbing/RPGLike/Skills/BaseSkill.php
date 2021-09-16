@@ -77,6 +77,7 @@ class BaseSkill
     public function unlock(): void
     {
         $this->unlocked = true;
+        $this->owner->sendMessage($this->getSkillPrefix() . $this->getUnlockMessage());
     }
 
     public function isUnlocked(): bool
@@ -357,6 +358,10 @@ class BaseSkill
     public function getMaximumEntitiesInRange()
     {
         return 1 + $this->skillConfig['max_entities_in_range'];
+    }
+    public function getMessages() : array
+    {
+        return $this->messages;
     }
 
     public function getSkillConfig()

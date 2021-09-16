@@ -12,6 +12,7 @@ use jojoe77777\FormAPI\SimpleForm;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
+use TheClimbing\RPGLike\Traits\BaseTrait;
 use TheClimbing\RPGLike\Utils;
 
 class RPGForms
@@ -80,16 +81,9 @@ class RPGForms
         $player->sendForm($form);
     }
 
-    public static function skillUnlockForm(RPGPlayer $player, ?BaseSkill $skill)
-    {
-        $form = new SimpleForm(function () {});
-        $form->setTitle($skill->getName() . ' just got unlocked!');
-        $form->setContent($skill->getSkillDescription());
-        $player->sendForm($form);
-    }
-
     public static function skillHelpForm(RPGPlayer $player, ?BaseSkill $skill)
     {
+        $messages = $skill->getMessages()['SkillHelpForm'];
         $form = new SimpleForm(function (Player $pl, $data) use ($player) {
             switch ($data) {
                 case 'Back':
@@ -97,9 +91,9 @@ class RPGForms
                     break;
             }
         });
-        $form->setTitle($skill->getName() . ' info.');
-        $form->setContent("Description: " . TextFormat::EOL . $skill->getSkillDescription() . TextFormat::EOL . "Unlock conditions:" . TextFormat::EOL . $skill->getSkillUnlockConditions());
-        $form->addButton('Back to menu', -1, '', 'Back');
+        $form->setTitle($skill->getName() . $messages['title']);
+        $form->setContent($messages['content']);
+        $form->addButton($messages['button'], -1, '', 'Back');
         $player->sendForm($form);
     }
 
@@ -155,6 +149,7 @@ class RPGForms
     public static function skillsHelpForm(RPGPlayer $player)
     {
         $skills = $player->getSkills();
+        $messages = self::parseMessages($player, 'SkillsHelpForm');
         $form = new SimpleForm(function (Player $pl, $data) use ($skills, $player) {
             foreach ($skills as $key => $skill) {
                 if ($key == $data) {
@@ -165,19 +160,54 @@ class RPGForms
                 self::menuForm($player);
             }
         });
-        $form->setTitle("All available skills:");
+        $form->setTitle($messages['title']);
         foreach ($skills as $key => $skill) {
             $form->addButton($key, -1, '', $key);
         }
-        $form->addButton("Back to main menu", -1, '', 'back');
+        $form->addButton($messages['buttons']['back'], -1, '', 'back');
         $player->sendForm($form);
     }
     public static function welcomeForm(RPGPLayer $player){
-        $form = new SimpleForm(function (Player $pl, $data) use ($player){
-
+        $messages = self::parseMessages($player, 'WelcomeForm');
+        $form = new SimpleForm(function (Player $pl, $data) use ($player){});
+        $form->setTitle($messages['title']);
+        $form->setContents($messages['content']);
+        $player->sendForm($form);
+    }
+    public static function traitsForm(RPGPlayer $player){
+        $traits = $player->getTraits();
+        $messages = self::parseMessages($player, 'TraitsForm');
+        $form = new SimpleForm(function (Player $pl, $data) use ($traits, $player){
+            foreach ($traits as $key => $trait) {
+                if ($key == $data){
+                    self::traitHelpForm($player, $trait);
+                }
+            }
+            if ($data == 'back') {
+                self::menuForm($player);
+            }
         });
-        // TODO finish this add option to see skills and traits after they are unlocked
-}
+        $form->setTitle($messages['title']);
+        foreach ($traits as $key => $trait) {
+            $form->addButton($key,-1,'', $key);
+        }
+        $form->addButton($messages['back'],-1,'','back');
+        $player->sendForm($form);
+    }
+    public static function traitHelpForm(RPGPlayer $player, BaseTrait $trait){
+        $messages = self::parseMessages($player,'TraitsHelpForm');
+        $form = new SimpleForm(function (Player $pl, $data) use ($player) {
+            switch ($data) {
+                case 'Back':
+                    self::traitsForm($player);
+                    break;
+            }
+        });
+        $form->setTitle($trait->getName() . $messages['title']);
+        $form->setContent($messages['content']);
+        $form->addButton($messages['buttons']['back'], -1, '', 'Back');
+        $player->sendForm($form);
+    }
 
     public static function parseMessages(RPGPlayer $player, string $type, int $spleft = 0): array
     {

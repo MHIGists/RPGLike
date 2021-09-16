@@ -208,7 +208,6 @@ class RPGPlayer extends Player
                 }
                 if ($met_criteria == count($skillBaseUnlock)){
                     $skill->unlock();
-                    RPGForms::skillUnlockForm($this,$skill);
                 }
             }
         }
