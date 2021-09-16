@@ -22,6 +22,8 @@ class RPGLike extends PluginBase
 
     public array $messages;
     public array $players;
+    public bool $discovery;
+
     public $config;
     public array $consts = [];
 
@@ -36,6 +38,7 @@ class RPGLike extends PluginBase
 
         $this->messages = $messages;
         $this->players = $players;
+        $this->discovery = $this->getConfig()->get('discovery');
 
         $this->config = $this->getConfig()->getAll();
         date_default_timezone_set($this->config['Hud']['timezone']);
@@ -124,6 +127,9 @@ class RPGLike extends PluginBase
         return $this->players;
     }
 
+    public function getDiscovery() : bool{
+        return $this->discovery;
+    }
     public static function getInstance(): RPGLike
     {
         return self::$instance;

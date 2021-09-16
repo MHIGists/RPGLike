@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TheClimbing\RPGLike\Forms;
 
 use pocketmine\Player;
-use pocketmine\utils\TextFormat;
 
 use jojoe77777\FormAPI\SimpleForm;
 
@@ -18,7 +17,7 @@ use TheClimbing\RPGLike\Utils;
 class RPGForms
 {
     private static RPGLike $main;
-
+    //TODO add more check for array keys to ensure no server braking errors occur
     public function __construct(RPGLike $rpg)
     {
         self::$main = $rpg;
@@ -138,12 +137,13 @@ class RPGForms
         });
         $form->setTitle($menuStrings['title']);
         foreach ($menuStrings['buttons'] as $key => $buttonText) {
+            if ($key == 'skills' && !$player->isSkillsUnlocked() || $key == 'traits' && !$player->isTraitsUnlocked()){
+                continue;
+            }
             $form->addButton($buttonText, -1, '', $key);
         }
         if (array_key_exists('content', $menuStrings)) {
             $form->setContent($menuStrings['content']);
-        } else {
-            self::$main->getLogger()->alert('Please check messages.yml Menu Form contents are empty');
         }
         $player->sendForm($form);
     }
@@ -164,6 +164,9 @@ class RPGForms
         });
         $form->setTitle($messages['title']);
         foreach ($skills as $key => $skill) {
+            if (!$skill->isUnlocked()){
+                continue;
+            }
             $form->addButton($key, -1, '', $key);
         }
         $form->addButton($messages['buttons']['back'], -1, '', 'back');

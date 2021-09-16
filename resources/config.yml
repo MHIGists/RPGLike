@@ -1,5 +1,6 @@
 ---
 keep-xp: true
+discovery: false
 Hud:
   on: true
   message: '{HEALTH}/{MAXHP} MS: {MOVEMENTSPEED}| DMG: {DAMAGE} Defense: {DEFENSE}'

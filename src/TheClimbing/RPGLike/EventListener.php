@@ -19,6 +19,7 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 
+use pocketmine\utils\TextFormat;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
@@ -135,11 +136,11 @@ class EventListener implements Listener
 
                     $player->xplevel = $new_lvl;
                     $spleft = $new_lvl - $old_level;
-
-                    RPGForms::upgradeStatsForm($player, $spleft);
+                    $player->setSPleft($spleft);
                     $player->setHealth($player->getMaxHealth());
                     $player->setFood($player->getMaxFood());
                     $player->setAirSupplyTicks($player->getMaxAirSupplyTicks());
+                    $player->sendMessage(TextFormat::GREEN . "You just leveled up and got 1 skill point, use /rpg to use it.");
                 }
             }
         }
