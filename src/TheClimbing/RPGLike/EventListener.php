@@ -136,7 +136,7 @@ class EventListener implements Listener
 
                     $player->xplevel = $new_lvl;
                     $spleft = $new_lvl - $old_level;
-                    $player->setSPleft($spleft);
+                    $player->setSPleft($player->getSPleft() + $spleft);
                     $player->setHealth($player->getMaxHealth());
                     $player->setFood($player->getMaxFood());
                     $player->setAirSupplyTicks($player->getMaxAirSupplyTicks());

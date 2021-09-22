@@ -23,12 +23,10 @@ class RPGForms
         self::$main = $rpg;
     }
 
-    public static function upgradeStatsForm(RPGPlayer $player, int $spleft)
+    public static function upgradeStatsForm(RPGPlayer $player)
     {
-        if ($player->getSPleft() > 0) {
-            $spleft += $player->getSPleft();
-            $player->setSPleft(0);
-        }
+            $spleft = $player->getSPleft();
+
         if ($spleft <= 0) {
             $player->setSPleft(0);
             self::statsForm($player);
@@ -68,7 +66,7 @@ class RPGForms
                     $player->setSPleft($spleft);
                     return;
             }
-            self::upgradeStatsForm($player, $spleft);
+            self::upgradeStatsForm($player);
 
         });
 
@@ -129,7 +127,7 @@ class RPGForms
                     self::statsForm($player, true);
                     break;
                 case "upgrade":
-                    self::upgradeStatsForm($player, 0);
+                    self::upgradeStatsForm($player);
                     break;
                 case "traits":
                     self::traitsForm($player);
@@ -137,7 +135,7 @@ class RPGForms
         });
         $form->setTitle($menuStrings['title']);
         foreach ($menuStrings['buttons'] as $key => $buttonText) {
-            if ($key == 'skills' && !$player->isSkillsUnlocked() || $key == 'traits' && !$player->isTraitsUnlocked()){
+            if (($key == 'skills' && !$player->isSkillsUnlocked()) || ($key == 'traits' && !$player->isTraitsUnlocked())){
                 continue;
             }
             $form->addButton($buttonText, -1, '', $key);

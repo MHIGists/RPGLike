@@ -46,11 +46,9 @@ class RPGCommand extends Command implements PluginIdentifiableCommand
                         }
                         break;
                     case "upgrade":
-                        RPGForms::upgradeStatsForm($sender, 0);
+                        RPGForms::upgradeStatsForm($sender);
                 }
             }
-        } else {
-            $sender->sendMessage($this->getPermissionMessage());
         }
     }
 
