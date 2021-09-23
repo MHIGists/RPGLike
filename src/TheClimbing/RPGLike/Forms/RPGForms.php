@@ -135,9 +135,6 @@ class RPGForms
         });
         $form->setTitle($menuStrings['title']);
         foreach ($menuStrings['buttons'] as $key => $buttonText) {
-            if (($key == 'skills' && !$player->isSkillsUnlocked()) || ($key == 'traits' && !$player->isTraitsUnlocked())){
-                continue;
-            }
             $form->addButton($buttonText, -1, '', $key);
         }
         if (array_key_exists('content', $menuStrings)) {

@@ -30,6 +30,8 @@ Forms:
       back: 'Back'
   TraitHelpForm:
     title: '{NAME}'
+    buttons:
+      back: 'Back to main menu'
   SkillsHelpForm:
     title: 'Available Skills:'
     buttons:

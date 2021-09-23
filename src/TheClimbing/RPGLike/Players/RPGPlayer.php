@@ -30,12 +30,10 @@ class RPGPlayer extends Player
      * @var BaseSkill[]
      */
     private array $skills = [];
-    private bool $skills_unlocked = false;
     /**
      * @var BaseTrait[]
      */
     private array $traits = [];
-    private bool $traits_unlocked = false;
     private int $str = 1;
     private float $strModifier = 0.15;
     private int $strBonus = 0;
@@ -453,38 +451,6 @@ class RPGPlayer extends Player
     public function getConfig(): Config
     {
         return $this->config;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isTraitsUnlocked(): bool
-    {
-        return $this->traits_unlocked;
-    }
-
-    /**
-     * @param bool $traits_unlocked
-     */
-    public function setTraitsUnlocked(bool $traits_unlocked): void
-    {
-        $this->traits_unlocked = $traits_unlocked;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSkillsUnlocked(): bool
-    {
-        return $this->skills_unlocked;
-    }
-
-    /**
-     * @param bool $skills_unlocked
-     */
-    public function setSkillsUnlocked(bool $skills_unlocked): void
-    {
-        $this->skills_unlocked = $skills_unlocked;
     }
 }
     
