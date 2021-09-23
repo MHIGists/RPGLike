@@ -25,9 +25,7 @@ class RPGForms
 
     public static function upgradeStatsForm(RPGPlayer $player)
     {
-            $spleft = $player->getSPleft();
-
-        if ($spleft <= 0) {
+        if ($player->spleft <= 0) {
             $player->setSPleft(0);
             self::statsForm($player);
             $player->checkForSkills();
@@ -38,32 +36,32 @@ class RPGForms
                 $player->getSkill('Fortress')->setDefense($player);
             }
             $player->checkSkillLevel();
+            $player->setSPleft($player->spleft);
             return;
         }
-        $messages = self::parseMessages($player, 'UpgradeForm', $spleft);
+        $messages = self::parseMessages($player, 'UpgradeForm', $player->spleft);
 
-        $form = new SimpleForm(function (Player $pl, $data) use ($player, $spleft) {
+        $form = new SimpleForm(function (Player $pl, $data) use ($player) {
             switch ($data) {
                 case "strength":
                     $player->setSTR($player->getSTR() + 1);
-                    $spleft--;
+                    $player->spleft--;
                     break;
                 case "vitality":
                     $player->setVIT($player->getVIT() + 1);
-                    $spleft--;
+                    $player->spleft--;
                     $player->applyVitalityBonus();
                     break;
                 case "defense":
                     $player->setDEF($player->getDEF() + 1);
-                    $spleft--;
+                    $player->spleft--;
                     break;
                 case "dexterity":
                     $player->setDEX($player->getDEX() + 1);
-                    $spleft--;
+                    $player->spleft--;
                     break;
                 case "exit":
                 default:
-                    $player->setSPleft($spleft);
                     return;
             }
             self::upgradeStatsForm($player);

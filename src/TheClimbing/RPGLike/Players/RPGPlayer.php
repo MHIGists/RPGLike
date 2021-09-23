@@ -46,6 +46,7 @@ class RPGPlayer extends Player
     private int $dex = 1;
     private float $dexModifier = 0.005;
     private $dexBonus = 1;
+
     private Config $config;
 
     public function __construct($interface, $ip, $port)
@@ -343,7 +344,7 @@ class RPGPlayer extends Player
         ];
         $players = $this->config->getNested('Players');
         $players[$this->getName()] = $playerVars;
-        $this->config->setNested('Players', $players);
+        (new Config(RPGLike::getInstance()->getDataFolder() . 'players.yml', Config::YAML))->setNested('Players', $players);
         $this->config->save();
     }
     public function getBrokenBlocks() : array
@@ -389,7 +390,7 @@ class RPGPlayer extends Player
 
     public function getPlayerVariables(string $playerName)
     {
-        $players = $this->config->getNested('Players');
+        $players = (new Config(RPGLike::getInstance()->getDataFolder() . 'players.yml', Config::YAML))->getNested('Players');
         if ($players != null) {
             if (array_key_exists($playerName, $players)) {
                 return $players[$playerName];
