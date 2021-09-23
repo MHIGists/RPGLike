@@ -71,10 +71,8 @@ class RPGPlayer extends Player
         foreach ($traits as $key => $value) {
             if ($block_breaks != 0){
                 $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $value['action'] , $block_breaks);
-                $this->setTraitsUnlocked(true);
             }else{
                 $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $value['action']);
-                $this->setTraitsUnlocked(true);
             }
 
         }
@@ -209,7 +207,6 @@ class RPGPlayer extends Player
                 }
                 if ($met_criteria == count($skillBaseUnlock)){
                     $skill->unlock();
-                    $this->setSkillsUnlocked(true);
                 }
             }
         }
