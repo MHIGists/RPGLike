@@ -189,7 +189,9 @@ class RPGForms
         });
         $form->setTitle($messages['title']);
         foreach ($traits as $key => $trait) {
-            $form->addButton($key,-1,'', $key);
+            if($trait->isUnlocked()){
+                $form->addButton($key,-1,'', $key);
+            }
         }
         $form->addButton($messages['buttons']['back'],-1,'','back');
         $player->sendForm($form);

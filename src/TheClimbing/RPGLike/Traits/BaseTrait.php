@@ -16,6 +16,7 @@ class BaseTrait
     private int $count = 0;
     private int $currentLevel = 0;
     private string $trait_action ;
+    private bool $unlocked = false;
 
     public function __construct(string $name, array $blocks, array $levels, string $trait_action, int $blockBreaks = 0)
     {
@@ -138,6 +139,9 @@ class BaseTrait
         foreach ($this->levels as $key => $level) {
             if ($this->count > $level['requirement']) {
                 $this->currentLevel = $key;
+                if (!$this->unlocked){
+                    $this->setIsUnlocked(true);
+                }
             }
         }
     }
@@ -147,5 +151,21 @@ class BaseTrait
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUnlocked(): bool
+    {
+        return $this->unlocked;
+    }
+
+    /**
+     * @param bool $unlocked
+     */
+    public function setIsUnlocked(bool $unlocked): void
+    {
+        $this->unlocked = $unlocked;
     }
 }
