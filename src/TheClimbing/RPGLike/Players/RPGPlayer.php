@@ -66,7 +66,7 @@ class RPGPlayer extends Player
         $traits = $this->config->getNested("Traits");
         $players = RPGLike::getInstance()->getPlayers();
         $block_breaks = 0;
-        if (array_key_exists($this->getName(),$players) ){
+        if (array_key_exists($this->getName(),$players->getAll()) ){
             $block_breaks = $players[$this->getName()]['block_breaks'];
         }
         foreach ($traits as $key => $value) {
@@ -344,7 +344,7 @@ class RPGPlayer extends Player
         ];
         $players = $this->config->getNested('Players');
         $players[$this->getName()] = $playerVars;
-        (new Config(RPGLike::getInstance()->getDataFolder() . 'players.yml', Config::YAML))->setNested('Players', $players);
+        RPGLike::getInstance()->getPlayers()->setNested('Players', $players);
         $this->config->save();
     }
     public function getBrokenBlocks() : array
@@ -390,7 +390,7 @@ class RPGPlayer extends Player
 
     public function getPlayerVariables(string $playerName)
     {
-        $players = (new Config(RPGLike::getInstance()->getDataFolder() . 'players.yml', Config::YAML))->getNested('Players');
+        $players = RPGLike::getInstance()->getPlayers()->getNested('Players');
         if ($players != null) {
             if (array_key_exists($playerName, $players)) {
                 return $players[$playerName];

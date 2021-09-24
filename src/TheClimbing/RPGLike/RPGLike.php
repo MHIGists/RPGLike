@@ -20,8 +20,8 @@ class RPGLike extends PluginBase
 {
     private static RPGLike $instance;
 
-    public array $messages;
-    public array $players;
+    public Config $messages;
+    public Config $players;
     public bool $discovery;
 
     public $config;
@@ -33,8 +33,8 @@ class RPGLike extends PluginBase
         $this->saveResource('messages.yml');
         $this->setConsts();
 
-        $messages = (new Config($this->getDataFolder() . 'messages.yml', Config::YAML))->getAll();
-        $players = (new Config($this->getDataFolder() . 'players.yml', Config::YAML))->getAll();
+        $messages = (new Config($this->getDataFolder() . 'messages.yml', Config::YAML));
+        $players = (new Config($this->getDataFolder() . 'players.yml', Config::YAML));
 
         $this->messages = $messages;
         $this->players = $players;
@@ -119,14 +119,14 @@ class RPGLike extends PluginBase
 
     }
 
-    public function getMessages(): array
+    public function getMessages(): Config
     {
         return $this->messages;
     }
-    public function getPlayers() : array{
+    public function getPlayers() : Config
+    {
         return $this->players;
     }
-
     public function getDiscovery() : bool{
         return $this->discovery;
     }
