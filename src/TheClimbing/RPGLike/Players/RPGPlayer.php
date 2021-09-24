@@ -66,14 +66,14 @@ class RPGPlayer extends Player
         $traits = $this->config->getNested("Traits");
         $players = RPGLike::getInstance()->getPlayers();
         $block_breaks = 0;
-        if (array_key_exists($this->getName(),$players->getAll()) ){
+        if (array_key_exists($this->getName(), $players->getAll())) {
             $block_breaks = $players[$this->getName()]['block_breaks'];
         }
         foreach ($traits as $key => $value) {
-            if ($block_breaks != 0){
-                $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $value['action'] , $block_breaks);
-            }else{
-                $this->traits[$key] = new BaseTrait($key,$value['blocks'], $value['levels'], $value['action']);
+            if ($block_breaks != 0) {
+                $this->traits[$key] = new BaseTrait($key, $value['blocks'], $value['levels'], $value['action'], $block_breaks);
+            } else {
+                $this->traits[$key] = new BaseTrait($key, $value['blocks'], $value['levels'], $value['action']);
             }
 
         }
@@ -194,19 +194,20 @@ class RPGPlayer extends Player
     {
         return $this->skills;
     }
+
     public function checkForSkills()
     {
         foreach ($this->skills as $skill) {
-            if (!$skill->isUnlocked()){
+            if (!$skill->isUnlocked()) {
                 $skillBaseUnlock = $skill->getBaseUnlock();
                 $met_criteria = 0;
                 foreach ($skillBaseUnlock as $key => $value) {
 
-                    if ($this->getAttribute($key) >= $value){
+                    if ($this->getAttribute($key) >= $value) {
                         $met_criteria++;
                     }
                 }
-                if ($met_criteria == count($skillBaseUnlock)){
+                if ($met_criteria == count($skillBaseUnlock)) {
                     $skill->unlock();
                 }
             }
@@ -335,6 +336,7 @@ class RPGPlayer extends Player
 
     public function savePlayerVariables(): void
     {
+        $playersConfig = RPGLike::getInstance()->getPlayers();
         $playerVars = [
             'attributes' => $this->getAttributes(),
             'skills' => $this->getSkillNames(),
@@ -342,23 +344,24 @@ class RPGPlayer extends Player
             'level' => $this->getXPLevel(),
             'blocks' => $this->getBrokenBlocks()
         ];
-        $players = $this->config->getNested('Players');
+        $players = $playersConfig->getAll();
         $players[$this->getName()] = $playerVars;
-        RPGLike::getInstance()->getPlayers()->setNested('Players', $players);
-        $this->config->save();
+        $playersConfig->setAll($players);
+        $playersConfig->save();
     }
-    public function getBrokenBlocks() : array
+
+    public function getBrokenBlocks(): array
     {
         $broken_blocks = [];
         foreach ($this->traits as $key => $trait) {
-            $broken_blocks[$key] =  $trait->getBlockBreaks();
+            $broken_blocks[$key] = $trait->getBlockBreaks();
         }
         return $broken_blocks;
     }
 
     public function restorePlayerVariables()
     {
-        $cachedPlayer = $this->getPlayerVariables($this->getName());
+        $cachedPlayer = $this->getPlayerVariables();
         if ($cachedPlayer != false) {
             $attributes = $cachedPlayer['attributes'];
             $this->setDEF($attributes['DEF']);
@@ -373,13 +376,16 @@ class RPGPlayer extends Player
             $this->calcVITBonus();
             $this->calcSTRBonus();
 
+            $this->applyDexterityBonus();
+            $this->applyVitalityBonus();
+
             $this->setSPleft($cachedPlayer['spleft']);
             if (!empty($cachedPlayer['skills'])) {
                 foreach ($cachedPlayer['skills'] as $skill) {
                     $this->getSkill($skill)->unlock(true);
                 }
             }
-            foreach ($this->skills as $skill){
+            foreach ($this->skills as $skill) {
                 $skill->checkLevel(true);
             }
             foreach ($cachedPlayer['blocks'] as $trait => $block_count) {
@@ -388,18 +394,15 @@ class RPGPlayer extends Player
         }
     }
 
-    public function getPlayerVariables(string $playerName)
+    public function getPlayerVariables()
     {
-        $players = RPGLike::getInstance()->getPlayers()->getNested('Players');
-        if ($players != null) {
-            if (array_key_exists($playerName, $players)) {
-                return $players[$playerName];
-            } else {
-                return false;
-            }
+        $players = RPGLike::getInstance()->getPlayers()->getAll();
+        if (array_key_exists($this->getName(), $players)) {
+            return $players[$this->getName()];
         } else {
             return false;
         }
+
     }
 
     /* @return string[] */
@@ -433,10 +436,13 @@ class RPGPlayer extends Player
     {
         return $this->lastZ;
     }
-    public function setExperienceLevel(int $level){
+
+    public function setExperienceLevel(int $level)
+    {
         $this->xplevel = $level;
         $this->setXpLevel($level);
     }
+
     public function getXpLvl(): int
     {
         return $this->xplevel;
@@ -446,6 +452,7 @@ class RPGPlayer extends Player
     {
         return $this->traits;
     }
+
     public function getConfig(): Config
     {
         return $this->config;
