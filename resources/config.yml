@@ -170,5 +170,14 @@ Traits:
       2:
         requirement: 50
         drop_chance: 30
-
+  MonsterHunter:
+    blocks: ["Zombie", "Skeleton"]
+    action: 'kill'
+    levels:
+      1:
+        requirment: 20
+        drop_chance: 20
+      2:
+        requirment: 100
+        drop_chance: 40
 ...

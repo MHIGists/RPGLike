@@ -15,10 +15,10 @@ class BaseTrait
     private array $levels;
     private int $count = 0;
     private int $currentLevel = 0;
-    private string $trait_action ;
+    private string $trait_action;
     private bool $unlocked = false;
 
-    public function __construct(string $name, array $blocks, array $levels, string $trait_action, int $blockBreaks = 0)
+    public function __construct(string $name, array $blocks, array $levels, string $trait_action = 'none', int $blockBreaks = 0)
     {
         $this->name = $name;
         $this->blocks = $blocks;

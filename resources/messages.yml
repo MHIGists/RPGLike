@@ -45,18 +45,16 @@ Skills:
       back_button: 'Back to main menu'
     prefix: '{AQUA}[Tank]'
     description: 'The "Tank" skill increases your max HP by 10 percent.'
-    unlocks: 'You can unlock the tank skill once your Vitality (VIT) has reached level 10'
     unlock_message: ' skill just got unlocked use /rpg to find out more!'
     proc_message: ''
     level_up: ' skill just leveled up!'
   Coinflip:
     SkillHelpForm:
       title: 'Coinflip skill info'
-      content: 'The "Coinflip" skill increases your HP by 10%'
+      content: 'The "Coinflip" skill has a percent chance to deal 1.5x damage'
       back_button: 'Back to main menu'
     prefix: '{AQUA}[Coinflip]'
     description: 'The "Coinflip" skill gives you a percent chance to deal 1.5x damage'
-    unlocks: 'You can unlock the "Coinflip" skill once your Strength (STR) has reached level 10'
     unlock_message: 'Coinflip skill just got unlocked use /rpg to find out more!'
     proc_message: ' just proced for 50% more damage!'
     level_up: ' skill just leveled up!'
@@ -67,7 +65,6 @@ Skills:
       back_button: 'Back to main menu'
     prefix: '{AQUA}[DoubleStrike]'
     description: 'The "Double Strike" skill has a 15 percent chance to reset your attack cool-down'
-    unlocks: 'You can unlock the double strike skill once your Dexterity (DEX) has reached level 10'
     unlock_message: '"Double Strike" skill just got unlocked use /rpg to find out more!'
     proc_message: ' Attack cooldown got reset'
     level_up: ' just leveled up!'
@@ -78,7 +75,6 @@ Skills:
       back_button: 'Back to main menu'
     prefix: '{AQUA}[Fortress]'
     description: 'The "Fortress" skill increases your damage absorption by 20 percent.'
-    unlocks: 'You can unlock the tank skill once your Defense (DEF) has reached level 10'
     unlock_message: '"Fortress" skill just got unlocked use /rpg to find out more!'
     proc_message: ''
     level_up: '"Fortress" skill just leveled up!'
@@ -89,7 +85,6 @@ Skills:
       back_button: 'Back to main menu'
     prefix: '{AQUA}[Health regen]'
     description: '"Health Regen" is an AOE skill which constantly heals party members'
-    unlocks: 'You can unlock the "Health Regen" skill once your dexterity and vitality has reached respectively 20 and 10'
     unlock_message: '"Health Regen" skill just got unlocked use /rpg to find out more!'
     proc_message: ''
     level_up: ' skill just leveled up!'
@@ -100,8 +95,32 @@ Skills:
       back_button: 'Back to main menu'
     prefix: '{AQUA}[Explosion]'
     description: 'Creates explosion on arrow hit'
-    unlocks: 'You can unlock the "Explosion" skill once you have your strength on lvl 20 and your dexterity on lvl 10'
     unlock_message: ' skill just got unlocked use /rpg to find out more!'
     proc_message: ''
     level_up: ' skill just leveled up!'
-Traits: []
+Traits:
+  WoodCutter:
+    title: 'Wood Cutter Trait'
+    content: 'The wood cutter trait gives you bonus drops on wood block that has been broken'
+    buttons:
+      back: 'Back'
+  Miner:
+    title: 'Miner Trait'
+    content: 'The miner trait gives you bonus drops on broken ores and stone'
+    buttons:
+      back: 'Back'
+  PreciousMaterialsHunter:
+    title: 'Precious Materials Hunter'
+    content: 'The precious materials hunter trait gives you bonus drops from valuable ores'
+    buttons:
+      back: 'Back'
+  DiamondHunter:
+    title: 'Diamond Hunter'
+    content: 'The diamond hunter trait give you bonus drops from diamond ores'
+    buttons:
+      back: 'Back'
+  MonsterHunter:
+    title: 'Monster hunter'
+    content: 'The Monster hunter trait has a percent chance to give you bonus skill point on monster killed'
+    buttons:
+      back: 'Back'
