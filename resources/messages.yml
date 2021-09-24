@@ -1,3 +1,4 @@
+level_up_message: "You just leveled up use /rpg to find out more!"
 Forms:
   UpgradeForm:
     title: 'Click to upgrade'

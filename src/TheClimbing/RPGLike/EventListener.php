@@ -140,7 +140,9 @@ class EventListener implements Listener
                     $player->setHealth($player->getMaxHealth());
                     $player->setFood($player->getMaxFood());
                     $player->setAirSupplyTicks($player->getMaxAirSupplyTicks());
-                    $player->sendMessage(TextFormat::GREEN . "You just leveled up and got 1 skill point, use /rpg to use it.");
+                    if ($player->xplevel ==  1){
+                        $player->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, RPGLike::getInstance()->getMessages()->get('level_up_message')));
+                    }
                 }
             }
         }
