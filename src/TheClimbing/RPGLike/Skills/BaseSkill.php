@@ -65,7 +65,7 @@ class BaseSkill
      */
     public function __construct(RPGPlayer $owner, string $name, $effect = null)
     {
-        $messages = RPGLike::getInstance()->getMessages()['Skills'];
+        $messages = RPGLike::getInstance()->getMessages()->get('Skills');
         $this->owner = $owner;
         $this->name = $name;
         $this->effect = $effect;

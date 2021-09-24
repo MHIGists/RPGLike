@@ -19,7 +19,6 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 
-use pocketmine\utils\TextFormat;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 

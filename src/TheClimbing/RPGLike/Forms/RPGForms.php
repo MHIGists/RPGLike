@@ -211,7 +211,7 @@ class RPGForms
 
     public static function parseMessages(RPGPlayer $player, string $type, int $spleft = 0): array
     {
-        $messages = self::$main->getMessages()['Forms'][$type];
+        $messages = self::$main->getMessages()->get('Forms')[$type];
         $stats = $player->getAttributes();
         $stats['PLAYER'] = $player->getName();
         $stats['SPLEFT'] = $spleft;
