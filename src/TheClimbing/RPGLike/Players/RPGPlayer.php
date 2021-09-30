@@ -8,8 +8,11 @@ namespace TheClimbing\RPGLike\Players;
 use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\Player;
 use pocketmine\utils\Config;
+use pocketmine\level\Position;
 
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
@@ -79,6 +82,63 @@ class RPGPlayer extends Player
         }
 
     }
+    
+    protected function onDeath(): void
+    {
+		$this->doCloseInventory();
+		$ev = new PlayerDeathEvent($this, $this->getDrops(), null, $this->getXpDropAmount());
+		$ev->call();
+		if(!$ev->getKeepInventory()){
+			foreach($ev->getDrops() as $item){
+				$this->level->dropItem($this, $item);
+            }
+			if($this->inventory !== null){
+				$this->inventory->setHeldItemIndex(0);
+				$this->inventory->clearAll();
+			}
+			if($this->armorInventory !== null){
+				$this->armorInventory->clearAll();
+			}
+		}
+		if($ev->getDeathMessage() != ""){
+			$this->server->broadcastMessage($ev->getDeathMessage());
+		}
+	}
+
+	protected function respawn(): void
+    {
+		if($this->server->isHardcore()){
+			$this->setBanned(true);
+			return;
+		}
+		$ev = new PlayerRespawnEvent($this, $this->getSpawn());
+		$ev->call();
+		$realSpawn = Position::fromObject($ev->getRespawnPosition()->add(0.5, 0, 0.5), $ev->getRespawnPosition()->getLevelNonNull());
+		$this->teleport($realSpawn);
+		$this->setSprinting(false);
+		$this->setSneaking(false);
+		$this->extinguish();
+		$this->setAirSupplyTicks($this->getMaxAirSupplyTicks());
+		$this->deadTicks = 0;
+		$this->noDamageTicks = 60;
+		$this->removeAllEffects();
+		$this->setHealth($this->getMaxHealth());
+		foreach($this->attributeMap->getAll() as $attr){
+            if ($this->config['keep-xp'] === true) {
+                if($attr->getId() === Attribute::EXPERIENCE or $attr->getId() === Attribute::EXPERIENCE_LEVEL){
+				    $attr->markSynchronized(false);
+				    continue;
+			    }
+            }
+			$attr->resetToDefault();
+		}
+		$this->sendData($this);
+		$this->sendData($this->getViewers());
+		$this->sendSettings();
+		$this->sendAllInventories();
+		$this->spawnToAll();
+		$this->scheduleUpdate();
+	}
 
     public function getModifiers()
     {
