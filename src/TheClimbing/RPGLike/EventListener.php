@@ -76,12 +76,16 @@ class EventListener implements Listener
     {
         $player = $event->getPlayer();
         if ($player instanceof RPGPlayer) {
-            $player->setDEX(1);
-            $player->setSTR(1);
-            $player->setVIT(1);
-            $player->setDEF(1);
-            $player->resetSkills();
-            $player->setExperienceLevel(0);
+			if ($this->main->config['keep-xp'] === true) {
+                $event->setXpDropAmount(0);
+            } else {
+				$player->setDEX(1);
+				$player->setSTR(1);
+				$player->setVIT(1);
+				$player->setDEF(1);
+				$player->resetSkills();
+				$player->setExperienceLevel(0);
+			}
         }
     }
 
