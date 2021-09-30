@@ -83,29 +83,7 @@ class RPGPlayer extends Player
 
     }
     
-    protected function onDeath(): void
-    {
-		$this->doCloseInventory();
-		$ev = new PlayerDeathEvent($this, $this->getDrops(), null, $this->getXpDropAmount());
-		$ev->call();
-		if(!$ev->getKeepInventory()){
-			foreach($ev->getDrops() as $item){
-				$this->level->dropItem($this, $item);
-            }
-			if($this->inventory !== null){
-				$this->inventory->setHeldItemIndex(0);
-				$this->inventory->clearAll();
-			}
-			if($this->armorInventory !== null){
-				$this->armorInventory->clearAll();
-			}
-		}
-		if($ev->getDeathMessage() != ""){
-			$this->server->broadcastMessage($ev->getDeathMessage());
-		}
-	}
-
-	protected function respawn(): void
+    protected function respawn(): void
     {
 		if($this->server->isHardcore()){
 			$this->setBanned(true);
@@ -124,9 +102,10 @@ class RPGPlayer extends Player
 		$this->removeAllEffects();
 		$this->setHealth($this->getMaxHealth());
 		foreach($this->attributeMap->getAll() as $attr){
-            if ($this->config['keep-xp'] === true) {
+            if ($this->config->getNested('keep-xp') === true) {
                 if($attr->getId() === Attribute::EXPERIENCE or $attr->getId() === Attribute::EXPERIENCE_LEVEL){
 				    $attr->markSynchronized(false);
+					echo 1;
 				    continue;
 			    }
             }
