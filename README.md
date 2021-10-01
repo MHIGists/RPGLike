@@ -1,8 +1,6 @@
+<div>
 <br />
 <p align="center">
-  <a href="https://github.com/MHIGists/RPGLike">
-  </a>
-
 <h3 align="center">RPGLike</h3>
 
   <p align="center">
@@ -15,6 +13,7 @@
     <a href="https://github.com/MHIGists/RPGLike/issues">Request Feature</a>
   </p>
 </p>
+</div>
 
 
 
@@ -42,6 +41,11 @@
 <div id="about-the-project">
 
 ## About The Project
+Started this as a side project. I'm currently working full time so update frequency may vary<br>
+depending on my workload. My aspirations for this project is ultimately creating a mini-game<br>
+with as much as storyline and quests so that's something to look forward.Until then <br>
+we have something that slightly enhances player in-game experience but it's still fun.<br>
+I'm grateful for every contribution you make. Even as much as testing takes a lot of my time which I don't have.
 
 </div>
 
@@ -65,23 +69,23 @@ Just open the releases tab and download one of the official releases, then place
 Aftrer installation and initial start you can check the plugin data folder of the plugin<br>
 to configure the plugin to your liking.<br>
 
-###messages.yml:<br>
+### messages.yml:<br>
 Here you can change every string that's displayed to the player.
-###players.yml
+###  players.yml
 Here are all the players that've connected to the server with all their attributes.
-###config.yml
+### config.yml
 Here are all the settings of the plugin. Here is a quick rundown of the settings you'll need.<br>
-####keep-xp:<br>
+#### keep-xp:<br>
 Pretty self-explanatory this setting has 2 values. true or false. Controls whether the player<br>
 loses all attributes,skills,traits and levels when they've died.
-####discovery:
+#### discovery:
 This setting has 2 values true or false. When set to true it will hide every skill and trait until the<br>
 player have unlocked it.<br>
 When set to false all skills and traits will be visible in the /rpg menu.
-####Hud
+#### Hud
 Here you can turn on or off the included HUD. Change the message it transmits, its period in which its transmitted<br>
 and the timezone of the server.
-####Skills
+#### Skills
 Here are all the skills the plugin has. Here is the Tank skills for example.<br>
 If you look at [levels]() you will see under it all the available levels for this particular skill.<br>
 You are free to add new levels to your liking. Just be sure to keep the spacing of it. As a hint you can copy level 2<br>
@@ -104,16 +108,34 @@ by the effect of the skill. The value is an integer.<br>
 [is_active]() has 2 values true and false, when set to true the skill is considered active and should have a [cooldown]().<br>
 <br>
 
-####Modifiers
+#### Modifiers
 Those are used to modify how much a player gains per point in an attribute. For example DEX with a value of 0.005 will be multiplied by the points in DEX.
 Try experimenting with these to achieve the desired strength of attributes.
+
+
 </div>
 
-####Traits
-... TO BE ADDED INFO
-
+#### Traits
+Here you can create whatever player traits you want! The constraints however are<br>
+that you the counter of each trait is connected to the 3 types of [action]() a trait currently<br>
+support. Those are "break", "kill", "pickup". "break" counts each block that's been broken<br>
+by the player. Those blocks can be set from the [blocks]() option which takes values separated by a comma.
+Same with the others "pickup" counts blocks or any items picked up. And kill counts entity killed<br>
+that includes players.
+[levels]() is the same as in the skills [section]().
 
 <!-- ROADMAP -->
 ## Roadmap
+
+<div id="roadmap">
+  
+### Current objectives:
+* Finishing the trait system with the 3 included actions.<br>
+* Active bug hunting
+* More configuration for settings (there is still some hard coded stuff)
+* Adding permissions and more control from in-game commands or maybe an admin form?
+* Party system<br>
+After this have been completed an official release will be made until then every release should be considered a heavy WIP. 
+</div>
 
 See the [open issues](https://github.com/MHIGists/RPGLike/issues) for a list of proposed features (and known issues).
