@@ -78,7 +78,7 @@ Skills:
     unlock_message: '"Fortress" skill just got unlocked use /rpg to find out more!'
     proc_message: ''
     level_up: '"Fortress" skill just leveled up!'
-  HealthRegen:
+  HealingAura:
     SkillHelpForm:
       title: 'Health Regen skill info'
       content: 'The "Health Regen" skill is an AOE constantly healing party members in range'

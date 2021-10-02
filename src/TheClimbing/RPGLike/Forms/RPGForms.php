@@ -30,10 +30,10 @@ class RPGForms
             self::statsForm($player);
             $player->checkForSkills();
             if ($player->getSkill('Tank')->isUnlocked()) {
-                $player->getSkill('Tank')->setPlayerHealth($player);
+                $player->getSkill('Tank')->passiveEffect($player);
             }
             if ($player->getSkill('Fortress')->isUnlocked()) {
-                $player->getSkill('Fortress')->setDefense($player);
+                $player->getSkill('Fortress')->passiveEffect($player);
             }
             $player->checkSkillLevel();
             $player->setSPleft($player->spleft);

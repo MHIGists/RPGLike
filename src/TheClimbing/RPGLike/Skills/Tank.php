@@ -19,4 +19,9 @@ class Tank extends BaseSkill implements PassiveSkill
         $health = $player->getMaxHealth();
         $player->setMaxHealth((int)($health * 1.15));
     }
+
+    public function passiveEffect(mixed $mixed)
+    {
+        $this->setPlayerHealth($mixed);
+    }
 }

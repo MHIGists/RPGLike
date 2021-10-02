@@ -26,4 +26,9 @@ class DoubleStrike extends BaseSkill implements PassiveSkill
             }
         }
     }
+
+    public function passiveEffect(mixed $mixed)
+    {
+        $this->setPlayerAttackCD($mixed);
+    }
 }

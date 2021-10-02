@@ -107,7 +107,7 @@ Skills:
     is_aoe: false
     cooldown: 10
     is_active: true
-  HealthRegen:
+  HealingAura:
     levels:
       1:
         unlock:

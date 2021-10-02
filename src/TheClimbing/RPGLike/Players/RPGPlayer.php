@@ -20,7 +20,7 @@ use TheClimbing\RPGLike\Skills\Coinflip;
 use TheClimbing\RPGLike\Skills\DoubleStrike;
 use TheClimbing\RPGLike\Skills\Explosion;
 use TheClimbing\RPGLike\Skills\Fortress;
-use TheClimbing\RPGLike\Skills\HealthRegen;
+use TheClimbing\RPGLike\Skills\HealingAura;
 use TheClimbing\RPGLike\Skills\Tank;
 use TheClimbing\RPGLike\Traits\BaseTrait;
 
@@ -211,7 +211,7 @@ class RPGPlayer extends Player
             new DoubleStrike($this),
             new Explosion($this),
             new Fortress($this),
-            new HealthRegen($this),
+            new HealingAura($this),
             new Tank($this)
         ];
         foreach ($skills as $skill) {

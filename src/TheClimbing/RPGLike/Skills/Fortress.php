@@ -18,4 +18,9 @@ class Fortress extends BaseSkill implements PassiveSkill
     {
         $player->setAbsorption($player->getAbsorption() * 1.2);
     }
+
+    public function passiveEffect(mixed $mixed)
+    {
+        $this->setDefense($mixed);
+    }
 }

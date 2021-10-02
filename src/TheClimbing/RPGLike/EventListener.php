@@ -110,10 +110,10 @@ class EventListener implements Listener
             $player->applyDamageBonus($event);
             $player->applyDefenseBonus($event);
             if ($coinflip->isUnlocked()) {
-                $coinflip->setCritChance($event);
+                $coinflip->passiveEffect($event);
             }
             if ($doublestrike->isUnlocked()) {
-                $doublestrike->setPlayerAttackCD($event);
+                $doublestrike->passiveEffect($event);
             }
             foreach ($player->getTraits() as $trait) {
                 $trait->entityKill($event);
@@ -143,17 +143,6 @@ class EventListener implements Listener
             }
         }
 
-    }
-
-    public function healthRegen(EntityRegainHealthEvent $event)
-    {
-        $player = $event->getEntity();
-        if ($player instanceof RPGPlayer) {
-            $healthRegen = $player->getSkill('HealthRegen');
-            if ($healthRegen->isUnlocked()) {
-                $healthRegen->healthRegen($event);
-            }
-        }
     }
 
     public function onRespawn(PlayerRespawnEvent $event)

@@ -12,13 +12,16 @@ use TheClimbing\RPGLike\Players\RPGPlayer;
 use function rand;
 
 
-
 class Coinflip extends BaseSkill implements PassiveSkill
 {
 
     public function __construct(RPGPlayer $owner)
     {
         parent::__construct($owner, "Coinflip");
+    }
+    public function passiveEffect(mixed $mixed)
+    {
+        $this->setCritChance($mixed);
     }
 
     public function setCritChance(EntityDamageByEntityEvent $event)

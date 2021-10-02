@@ -77,8 +77,8 @@ class BaseSkill
     public function unlock(bool $restore = false): void
     {
         $this->unlocked = true;
-        if(!$restore){
-            $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts,$this->getSkillPrefix() . $this->getUnlockMessage()));
+        if (!$restore) {
+            $this->owner->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, $this->getSkillPrefix() . $this->getUnlockMessage()));
         }
     }
 
@@ -151,6 +151,9 @@ class BaseSkill
     public function setOnCooldown(): void
     {
         $this->onCooldown = true;
+    }
+    public function setCooldownTask()
+    {
         RPGLike::getInstance()->getScheduler()->scheduleDelayedTask(new CooldownTask($this->owner, $this->getName()), $this->getCooldownTime());
         $this->cdStartTime = time();
     }
@@ -240,27 +243,6 @@ class BaseSkill
         return $this->skillLevel;
     }
 
-
-    /**
-     * @param array $func
-     */
-    public function checkRange(array $func = []): void
-    {
-        if ($this->range > 0) {
-            $level = $this->owner->getLevel();
-            $players = $this->getNearestEntities($this->owner->getPosition()->asVector3(), $this->range, $level, $this->getMaximumEntitiesInRange());
-            if (!empty($players)) {
-                foreach ($players as $player) {
-                    if (!empty($func)) {
-                        $this->setPlayerEffect($func);
-                    } else {
-                        $this->setPlayerEffect($this->getEffect());
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Basically taken from source.
      *
@@ -290,7 +272,7 @@ class BaseSkill
                     $entities = array_slice($entities, 0, $maxEntities);
                 }
                 foreach ($entities as $entity) {
-                    if (!($entity instanceof Player) or $entity->isClosed() or $entity->isFlaggedForDespawn() or (!$includeDead and !$entity->isAlive())) {
+                    if (!($entity instanceof RPGPlayer) or $entity->isClosed() or $entity->isFlaggedForDespawn() or (!$includeDead and !$entity->isAlive())) {
                         continue;
                     }
                     $distSq = $entity->distanceSquared($pos);
@@ -314,7 +296,7 @@ class BaseSkill
     {
         if (!$this->onCooldown) {
             if (is_callable($effect)) {
-                call_user_func($effect['objAndFunc'], $effect['params']);
+                call_user_func($effect);
             } else {
                 $effect = new EffectInstance(Effect::getEffect($effect), 2, $this->getSkillLevel());
                 $this->owner->addEffect($effect);
@@ -361,11 +343,13 @@ class BaseSkill
     {
         return 1 + $this->skillConfig['max_entities_in_range'];
     }
-    public function getMessages() : array
+
+    public function getMessages(): array
     {
         return $this->messages;
     }
-    public function getUnlockMessage() : string
+
+    public function getUnlockMessage(): string
     {
         return $this->messages['unlock_message'];
     }
