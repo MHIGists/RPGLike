@@ -2,34 +2,45 @@
 
 namespace TheClimbing\RPGLike\Systems;
 
-use TheClimbing\RPGLike\Players\RPGPlayer;
+use TheClimbing\RPGLike\RPGLike;
 
 class PartySystem
 {
-    private int $party_size = 0;
-    private array $party_players = [];
-
-    /**
-     * @param array $party_players
-     * @param int $party_size
-     */
-    public function __construct(array $party_players, int $party_size)
+    private $parties = [];
+    private $plugin;
+    public function __construct(RPGLike $plugin)
     {
-        $this->party_players = $party_players;
-        $this->party_size = $party_size;
+        $this->plugin = $plugin;
     }
-    public function getPartyMembers(): array
+    public function createParty(array $pending_party)
     {
-        return $this->party_players;
+        $this->parties[] = $pending_party;
     }
-    public function playerInThisParty(string $player): bool
-    {
-        return array_key_exists($player, $this->party_players);
+    public function isPlayerInParty(string $playerName){
+        foreach ($this->parties as $party) {
+            if (array_search($playerName, $party) != false){
+                return true;
+            }
+        }
+        return false;
     }
-    public function propagatePartyToMembers(){
-        foreach ($this->party_players as $party_player) {
-            $party_player->registerParty($this->party_players);
+    public function removePlayerFromParty(string $playerName){
+        foreach ($this->parties as $party) {
+            $result = array_search($playerName, $party);
+            if ($result != false){
+                unset($party[$result]);
+                return true;
+            }
+        }
+        return false;
+    }
+    public function addPlayerInParty(string $sourcePlayer, string $targetPlayer){
+        foreach ($this->parties as $party) {
+            $result = array_search($sourcePlayer, $party);
+            if ($result != false){
+                $party[] = $targetPlayer;
+            }
         }
     }
-
+    //TODO use this only as a manager for parties move this to Base Party
 }

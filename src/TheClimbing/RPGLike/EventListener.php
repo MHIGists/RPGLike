@@ -107,7 +107,7 @@ class EventListener implements Listener
         if ($player instanceof RPGPlayer) {
             if ($player->hasParty()){
                 if($player->targetInParty($event->getEntity())){
-
+                    $event->setCancelled(true);
                 }
             }
             $coinflip = $player->getSkill('Coinflip');
