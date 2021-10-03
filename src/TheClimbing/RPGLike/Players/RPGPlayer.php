@@ -50,6 +50,11 @@ class RPGPlayer extends Player
     private float $dexModifier = 0.005;
     private $dexBonus = 1;
 
+    /**
+     * @var RPGPlayer[]
+     */
+    private array $party = [];
+
     private Config $config;
 
     public function __construct($interface, $ip, $port)
@@ -515,6 +520,22 @@ class RPGPlayer extends Player
     public function getConfig(): Config
     {
         return $this->config;
+    }
+    public function registerParty(array $party){
+        $this->party = $party;
+    }
+    public function hasParty(): bool
+    {
+        if(!empty($this->party)){
+            return true;
+        }
+        return false;
+    }
+    public function targetInParty(string $player_name){
+        if (array_search($player_name, $this->party) != false){
+            return true;
+        }
+        return false;
     }
 }
     

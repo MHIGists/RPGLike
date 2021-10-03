@@ -105,6 +105,11 @@ class EventListener implements Listener
     {
         $player = $event->getDamager();
         if ($player instanceof RPGPlayer) {
+            if ($player->hasParty()){
+                if($player->targetInParty($event->getEntity())){
+
+                }
+            }
             $coinflip = $player->getSkill('Coinflip');
             $doublestrike = $player->getSkill('DoubleStrike');
             $player->applyDamageBonus($event);
