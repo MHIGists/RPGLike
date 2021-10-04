@@ -2,45 +2,33 @@
 
 namespace TheClimbing\RPGLike\Systems;
 
+use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 
 class PartySystem
 {
-    private $parties = [];
-    private $plugin;
+    /**
+     * @var BaseParty[]
+     */
+    private static array $parties = [];
+    private static RPGLike $plugin;
+
     public function __construct(RPGLike $plugin)
     {
-        $this->plugin = $plugin;
+        self::$plugin = $plugin;
     }
-    public function createParty(array $pending_party)
+    public static function createParty(string $name, RPGPlayer $owner, int $party_size)
     {
-        $this->parties[] = $pending_party;
+        self::$parties[$name][] = new BaseParty($name, $owner, $party_size );
     }
-    public function isPlayerInParty(string $playerName){
-        foreach ($this->parties as $party) {
-            if (array_search($playerName, $party) != false){
-                return true;
-            }
-        }
-        return false;
+    public static function removeParty(string $partyName){
+        unset(self::$parties[$partyName]);
     }
-    public function removePlayerFromParty(string $playerName){
-        foreach ($this->parties as $party) {
-            $result = array_search($playerName, $party);
-            if ($result != false){
-                unset($party[$result]);
-                return true;
-            }
-        }
-        return false;
-    }
-    public function addPlayerInParty(string $sourcePlayer, string $targetPlayer){
-        foreach ($this->parties as $party) {
-            $result = array_search($sourcePlayer, $party);
-            if ($result != false){
-                $party[] = $targetPlayer;
+    public static function getPlayerParty(string $playerName){
+        foreach (self::$parties as $party) {
+            if ($party->playerInThisParty($playerName)){
+                return $party;
             }
         }
     }
-    //TODO use this only as a manager for parties move this to Base Party
 }

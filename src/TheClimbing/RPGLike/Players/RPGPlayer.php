@@ -22,6 +22,7 @@ use TheClimbing\RPGLike\Skills\Explosion;
 use TheClimbing\RPGLike\Skills\Fortress;
 use TheClimbing\RPGLike\Skills\HealingAura;
 use TheClimbing\RPGLike\Skills\Tank;
+use TheClimbing\RPGLike\Systems\PartySystem;
 use TheClimbing\RPGLike\Traits\BaseTrait;
 
 class RPGPlayer extends Player
@@ -51,9 +52,10 @@ class RPGPlayer extends Player
     private $dexBonus = 1;
 
     /**
-     * @var RPGPlayer[]
+     * @var array
      */
-    private array $party = [];
+    public array $invites = [];
+    public string $partyName = '';
 
     private Config $config;
 
@@ -521,9 +523,6 @@ class RPGPlayer extends Player
     {
         return $this->config;
     }
-    public function registerParty(array $party){
-        $this->party = $party;
-    }
     public function hasParty(): bool
     {
         if(!empty($this->party)){
@@ -531,11 +530,25 @@ class RPGPlayer extends Player
         }
         return false;
     }
-    public function targetInParty(string $player_name){
-        if (array_search($player_name, $this->party) != false){
+    public function hasPartyInvite(){
+        if ($this->invites['party'] != ''){
             return true;
         }
         return false;
+    }
+    public function sendPartyInvite(string $party_key){
+        $this->invites['party'] = $party_key;
+        $this->sendMessage("You've been invited to join into party: " . $party_key . ". You can accept or decline using /party accept|decline");
+    }
+    public function removePartyInvite(){
+        $this->invites['party'] = '';
+    }
+    public function getParty(){
+        return PartySystem::getPlayerParty($this->partyName);
+    }
+    public function getPartyInvite(): string
+    {
+        return $this->invites['party'];
     }
 }
     

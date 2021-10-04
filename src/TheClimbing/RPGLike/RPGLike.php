@@ -13,6 +13,7 @@ use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\Players\RPGPlayer;
+use TheClimbing\RPGLike\Systems\PartySystem;
 use TheClimbing\RPGLike\Tasks\HudTask;
 
 
@@ -26,7 +27,7 @@ class RPGLike extends PluginBase
 
     public $config;
     public array $consts = [];
-
+    public $partySystem;
     public function onLoad()
     {
         $this->saveDefaultConfig();
@@ -43,6 +44,7 @@ class RPGLike extends PluginBase
         $this->config = $this->getConfig()->getAll();
         date_default_timezone_set($this->config['Hud']['timezone']);
         new RPGForms($this);
+        $this->partySystem = new PartySystem($this);
     }
 
     public function onEnable()

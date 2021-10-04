@@ -103,24 +103,25 @@ class EventListener implements Listener
 
     public function dealDamageEvent(EntityDamageByEntityEvent $event)
     {
-        $player = $event->getDamager();
-        if ($player instanceof RPGPlayer) {
-            if ($player->hasParty()){
-                if($player->targetInParty($event->getEntity())){
+        $damager = $event->getDamager();
+        $receiver = $event->getEntity();
+        if ($damager instanceof RPGPlayer) {
+            if ($damager->hasParty() && $receiver instanceof RPGPlayer){
+                if($damager->getParty()->playerInThisParty($receiver->getName())){
                     $event->setCancelled(true);
                 }
             }
-            $coinflip = $player->getSkill('Coinflip');
-            $doublestrike = $player->getSkill('DoubleStrike');
-            $player->applyDamageBonus($event);
-            $player->applyDefenseBonus($event);
+            $coinflip = $damager->getSkill('Coinflip');
+            $doublestrike = $damager->getSkill('DoubleStrike');
+            $damager->applyDamageBonus($event);
+            $damager->applyDefenseBonus($event);
             if ($coinflip->isUnlocked()) {
                 $coinflip->passiveEffect($event);
             }
             if ($doublestrike->isUnlocked()) {
                 $doublestrike->passiveEffect($event);
             }
-            foreach ($player->getTraits() as $trait) {
+            foreach ($damager->getTraits() as $trait) {
                 $trait->entityKill($event);
             }
         }
