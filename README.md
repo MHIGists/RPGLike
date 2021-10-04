@@ -137,5 +137,6 @@ that includes players.
 * Party system<br>
 After this have been completed an official release will be made until then every release should be considered a heavy WIP. 
 </div>
+You can contact me any time on Discord StrawberryMilk#3229
 
 See the [open issues](https://github.com/MHIGists/RPGLike/issues) for a list of proposed features (and known issues).
