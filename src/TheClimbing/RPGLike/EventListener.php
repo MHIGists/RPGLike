@@ -105,8 +105,8 @@ class EventListener implements Listener
     {
         $damager = $event->getDamager();
         $receiver = $event->getEntity();
-        if ($damager instanceof RPGPlayer) {
-            if ($damager->hasParty() && $receiver instanceof RPGPlayer){
+        if ($damager instanceof RPGPlayer && $receiver instanceof RPGPlayer) {
+            if (($damager->getParty() != false)){
                 if($damager->getParty()->playerInThisParty($receiver->getName())){
                     $event->setCancelled(true);
                 }

@@ -20,12 +20,13 @@ class BaseParty
      */
     public function __construct(string $partyName, RPGPlayer $party_owner, int $party_size)
     {
-        $this->party_players[] = $party_owner;
+        $this->party_players[$party_owner->getName()] = $party_owner;
         for($i = 1;$i<$party_size;$i++) {
             $party_players[] = '';
         }
         $this->party_owner = $party_owner;
         $this->partyName = $partyName;
+        $party_owner->partyName = $partyName;
     }
     public function getPartyMembers(): array
     {
