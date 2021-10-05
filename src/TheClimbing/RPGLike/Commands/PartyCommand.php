@@ -35,7 +35,7 @@ class PartyCommand extends Command
                     if (!empty($args[1])){
                         PartySystem::createParty($args[1], $sender);
                     }else{
-                        PartySystem::createParty($sender->getName(), $sender);
+                        PartySystem::createParty($sender->getName(), $sender, 4); //TODO add configuration for party size
                     }
                     break;
                 default:
