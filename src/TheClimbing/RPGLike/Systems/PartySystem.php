@@ -30,5 +30,6 @@ class PartySystem
                 return $party;
             }
         }
+        return false;
     }
 }

@@ -523,13 +523,6 @@ class RPGPlayer extends Player
     {
         return $this->config;
     }
-    public function hasParty(): bool
-    {
-        if(!empty($this->party)){
-            return true;
-        }
-        return false;
-    }
     public function hasPartyInvite(){
         if ($this->invites['party'] != ''){
             return true;

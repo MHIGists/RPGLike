@@ -41,8 +41,8 @@ class PartyCommand extends Command
                 default:
                     $targetPlayer = $this->source->getServer()->getPlayer($args[0]);
                     if ($targetPlayer != null){
-                        if ($targetPlayer->hasParty() == false){
-                            if ($sender->hasParty()){
+                        if ($targetPlayer->getParty() == false){
+                            if ($sender->getParty()){
                                 $targetPlayer->sendPartyInvite($sender->getParty());
                             }else{
                                 $sender->sendMessage('You need to be in a party to send invites.');
