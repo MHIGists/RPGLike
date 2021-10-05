@@ -42,7 +42,7 @@ class PartyCommand extends Command
                     $targetPlayer = $this->source->getServer()->getPlayer($args[0]);
                     if ($targetPlayer != null){
                         if ($targetPlayer->getParty() == false){
-                            if ($sender->getParty()){
+                            if ($sender->getParty() != false){
                                 $targetPlayer->sendPartyInvite($sender->getParty());
                             }else{
                                 $sender->sendMessage('You need to be in a party to send invites.');
