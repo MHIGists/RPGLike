@@ -40,9 +40,16 @@ class PartyCommand extends Command
                     break;
                 default:
                     $targetPlayer = $this->source->getServer()->getPlayer($args[0]);
-                    if (($targetPlayer != null) && !$targetPlayer->hasParty() && $sender->hasParty()){
-                        $targetPlayer->sendPartyInvite($sender->getParty());
-                        // TODO This if statement should be split to send different error messages
+                    if ($targetPlayer != null){
+                        if ($targetPlayer->hasParty() == false){
+                            if ($sender->hasParty()){
+                                $targetPlayer->sendPartyInvite($sender->getParty());
+                            }else{
+                                $sender->sendMessage('You need to be in a party to send invites.');
+                            }
+                        }else{
+                            $sender->sendMessage('Player already in a party');
+                        }
                     }else{
                         $sender->sendMessage('The player is offline or is already in party');
                     }
