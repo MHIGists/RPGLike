@@ -31,7 +31,7 @@ class RPGCommand extends Command implements PluginIdentifiableCommand
                 RPGForms::menuForm($sender);
             } else {
                 $args = array_map('strtolower', $args);
-                switch ($args) {
+                switch ($args[0]) {
                     case "stats":
                         RPGForms::statsForm($sender);
                         break;

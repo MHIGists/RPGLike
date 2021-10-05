@@ -22,7 +22,7 @@ class PartyCommand extends Command
             $sender->sendMessage($this->getUsage());
         } else {
             $args = array_map('strtolower', $args);
-            switch ($args) {
+            switch ($args[0]) {
                 case 'accept':
                     if ($sender->hasPartyInvite()){
                         PartySystem::getPlayerParty($sender->getPartyInvite())->addPlayerInParty($sender);
