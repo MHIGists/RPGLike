@@ -10,6 +10,7 @@ use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 
 use TheClimbing\RPGLike\Commands\LevelUpCommand;
+use TheClimbing\RPGLike\Commands\PartyCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
 use TheClimbing\RPGLike\Players\RPGPlayer;
@@ -54,6 +55,9 @@ class RPGLike extends PluginBase
 
         $lvl = new LevelUpCommand();
         $this->getServer()->getCommandMap()->register('lvlup', $lvl);
+
+        $party = new PartyCommand($this);
+        $this->getServer()->getCommandMap()->register('party', $party);
 
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 
