@@ -19,7 +19,7 @@ class PartySystem
     }
     public static function createParty(string $name, RPGPlayer $owner, int $party_size)
     {
-        self::$parties[$name][] = new BaseParty($name, $owner, $party_size );
+        self::$parties[$name] = new BaseParty($name, $owner, $party_size );
     }
     public static function removeParty(string $partyName){
         unset(self::$parties[$partyName]);
