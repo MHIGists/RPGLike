@@ -2,6 +2,7 @@
 
 namespace TheClimbing\RPGLike\Systems;
 
+use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class BaseParty
@@ -11,7 +12,7 @@ class BaseParty
      */
     private array $party_players;
     private string $party_owner;
-    private $partyName;
+    private string $partyName;
 
     /**
      * @param string $partyName
@@ -24,7 +25,7 @@ class BaseParty
         for($i = 1;$i<$party_size;$i++) {
             $party_players[] = '';
         }
-        $this->party_owner = $party_owner;
+        $this->party_owner = $party_owner->getName();
         $this->partyName = $partyName;
         $party_owner->partyName = $partyName;
     }
