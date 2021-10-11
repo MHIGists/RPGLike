@@ -132,6 +132,7 @@ class EventListener implements Listener
     {
         $player = $event->getEntity();
         if ($player instanceof RPGPlayer) {
+            $player->shareEXP($event);
             $new_lvl = $event->getNewLevel();
             $old_level = $player->getXpLvl();
             if ($new_lvl !== null) {

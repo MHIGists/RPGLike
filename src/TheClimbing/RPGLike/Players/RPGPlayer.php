@@ -9,6 +9,7 @@ use pocketmine\entity\Attribute;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\player\PlayerExperienceChangeEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\Player;
 use pocketmine\utils\Config;
@@ -542,6 +543,22 @@ class RPGPlayer extends Player
     public function getPartyInvite(): string
     {
         return $this->invites['party'];
+    }
+    public function shareEXP(PlayerExperienceChangeEvent $event){
+        $party = $this->getParty();
+        if ($party != false){
+            $members = $party->getPartyMembers();
+            foreach ($members as $member) {
+                if ($member == $this){
+                    continue;
+                }else{
+                    $member->getBonusExp($event->getNewProgress() - $event->getOldProgress());
+                }
+            }
+        }
+    }
+    public function getBonusExp(float $progress){
+        $this->setXpProgress($this->getXpProgress() + $progress);//Not sure if this won't cause any issues
     }
 }
     
