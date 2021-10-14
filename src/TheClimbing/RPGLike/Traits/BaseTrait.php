@@ -6,6 +6,9 @@ namespace TheClimbing\RPGLike\Traits;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\player\PlayerBlockPickEvent;
+use pocketmine\level\sound\PopSound;
+use pocketmine\level\sound\Sound;
+use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class BaseTrait
@@ -18,7 +21,7 @@ class BaseTrait
     private string $trait_action;
     private bool $unlocked = false;
 
-    public function __construct(string $name, array $blocks, array $levels, string $trait_action = 'none', int $blockBreaks = 0)
+    public function __construct(string $name, array $blocks, array $levels, string $trait_action , int $blockBreaks = 0)
     {
         $this->name = $name;
         $this->blocks = $blocks;
@@ -66,10 +69,11 @@ class BaseTrait
                 $drops = $event->getDrops();
                 $drop_chance = $this->getBlockDropChance();
                 if ($drop_chance > 0 && $this->tryChance($drop_chance)){
-
                         $drops[] = $drops[0];
                         $event->setDrops($drops);
-                        $event->getPlayer()->sendMessage('You just got 1 additional drop!');
+                        $player = $event->getPlayer();
+                        $position = $player->getPosition();
+                        $player->getLevel()->broadcastLevelSoundEvent($position, LevelEventPacket::EVENT_SOUND_POP);
 
                 }
             }
