@@ -20,6 +20,7 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 
 use TheClimbing\RPGLike\Forms\RPGForms;
+use TheClimbing\RPGLike\Items\UncommonTierSword;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class EventListener implements Listener
@@ -45,6 +46,7 @@ class EventListener implements Listener
                 RPGForms::welcomeForm($player);
             }
             $player->restorePlayerVariables();
+            $player->getInventory()->addItem(new UncommonTierSword());
         }
     }
 

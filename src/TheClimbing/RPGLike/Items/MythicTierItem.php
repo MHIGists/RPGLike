@@ -2,7 +2,7 @@
 
 namespace TheClimbing\RPGLike\Items;
 
-interface UncommonItem
+class MythicTierItem
 {
 
 }

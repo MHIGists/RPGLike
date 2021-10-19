@@ -2,7 +2,6 @@
 
 namespace TheClimbing\RPGLike\ItemSets;
 
-interface JuggernautSet
+trait JuggernautSet
 {
-
 }
