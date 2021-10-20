@@ -86,58 +86,57 @@ class RPGPlayer extends Player
             } else {
                 $this->traits[$key] = new BaseTrait($key, $value['blocks'], $value['levels'], $value['action']);
             }
-
         }
-
     }
+
     protected function onDeath(): void
     {
-	$this->doCloseInventory();
-	$ev = new PlayerDeathEvent($this, $this->getDrops(), null, $this->getXpDropAmount());
-	$ev->call();
-	if(!$ev->getKeepInventory()){
-	    foreach($ev->getDrops() as $item){
-	        $this->level->dropItem($this, $item);
+        $this->doCloseInventory();
+        $ev = new PlayerDeathEvent($this, $this->getDrops(), null, $this->getXpDropAmount());
+        $ev->call();
+        if (!$ev->getKeepInventory()) {
+            foreach ($ev->getDrops() as $item) {
+                $this->level->dropItem($this, $item);
             }
-	    if($this->inventory !== null){
-	        $this->inventory->setHeldItemIndex(0);
-	        $this->inventory->clearAll();
-	    }
-	    if($this->armorInventory !== null){
-	        $this->armorInventory->clearAll();
-	    }
-	}
-	if($ev->getDeathMessage() != ""){
-	    $this->server->broadcastMessage($ev->getDeathMessage());
-	}
+            if ($this->inventory !== null) {
+                $this->inventory->setHeldItemIndex(0);
+                $this->inventory->clearAll();
+            }
+            if ($this->armorInventory !== null) {
+                $this->armorInventory->clearAll();
+            }
+        }
+        if ($ev->getDeathMessage() != "") {
+            $this->server->broadcastMessage($ev->getDeathMessage());
+        }
     }
-    
+
     protected function respawn(): void
     {
-	if($this->server->isHardcore()){
-	    $this->setBanned(true);
-	    return;
-	}
-	$ev = new PlayerRespawnEvent($this, $this->getSpawn());
-	$ev->call();
-	$realSpawn = Position::fromObject($ev->getRespawnPosition()->add(0.5, 0, 0.5), $ev->getRespawnPosition()->getLevelNonNull());
-	$this->teleport($realSpawn);
-	$this->setSprinting(false);
-	$this->setSneaking(false);
-	$this->extinguish();
-	$this->setAirSupplyTicks($this->getMaxAirSupplyTicks());
-	$this->deadTicks = 0;
-	$this->noDamageTicks = 60;
-	$this->removeAllEffects();
-	$this->setHealth($this->getMaxHealth());
-	foreach($this->attributeMap->getAll() as $attr){
+        if ($this->server->isHardcore()) {
+            $this->setBanned(true);
+            return;
+        }
+        $ev = new PlayerRespawnEvent($this, $this->getSpawn());
+        $ev->call();
+        $realSpawn = Position::fromObject($ev->getRespawnPosition()->add(0.5, 0, 0.5), $ev->getRespawnPosition()->getLevelNonNull());
+        $this->teleport($realSpawn);
+        $this->setSprinting(false);
+        $this->setSneaking(false);
+        $this->extinguish();
+        $this->setAirSupplyTicks($this->getMaxAirSupplyTicks());
+        $this->deadTicks = 0;
+        $this->noDamageTicks = 60;
+        $this->removeAllEffects();
+        $this->setHealth($this->getMaxHealth());
+        foreach ($this->attributeMap->getAll() as $attr) {
             if ($this->config->getNested('keep-xp') === true) {
-                if($attr->getId() === Attribute::EXPERIENCE or $attr->getId() === Attribute::EXPERIENCE_LEVEL){
-	            $attr->markSynchronized(false);
-	            continue;
+                if ($attr->getId() === Attribute::EXPERIENCE or $attr->getId() === Attribute::EXPERIENCE_LEVEL) {
+                    $attr->markSynchronized(false);
+                    continue;
                 }
             }
-        $attr->resetToDefault();
+            $attr->resetToDefault();
         }
         $this->sendData($this);
         $this->sendData($this->getViewers());
@@ -155,7 +154,6 @@ class RPGPlayer extends Player
         } else {
             return false;
         }
-
     }
 
     public function calcVITBonus(): void
@@ -524,40 +522,53 @@ class RPGPlayer extends Player
     {
         return $this->config;
     }
-    public function hasPartyInvite(){
-        if ($this->invites['party'] != ''){
+
+    public function hasPartyInvite()
+    {
+        if ($this->invites['party'] != '') {
             return true;
         }
         return false;
     }
-    public function sendPartyInvite(string $party_key){
+
+    public function sendPartyInvite(string $party_key)
+    {
         $this->invites['party'] = $party_key;
         $this->sendMessage("You've been invited to join into party: " . $party_key . ". You can accept or decline using /party accept|decline");
     }
-    public function removePartyInvite(){
+
+    public function removePartyInvite()
+    {
         $this->invites['party'] = '';
     }
-    public function getParty(){
+
+    public function getParty()
+    {
         return PartySystem::getPlayerParty($this->partyName);
     }
+
     public function getPartyInvite(): string
     {
         return $this->invites['party'];
     }
-    public function shareEXP(PlayerExperienceChangeEvent $event){
+
+    public function shareEXP(PlayerExperienceChangeEvent $event)
+    {
         $party = $this->getParty();
-        if ($party != false){
+        if ($party != false) {
             $members = $party->getPartyMembers();
             foreach ($members as $member) {
-                if ($member == $this){
+                if ($member == $this) {
                     continue;
-                }else{
+                } else {
                     $member->getBonusExp($event->getNewProgress() - $event->getOldProgress());
                 }
             }
         }
     }
-    public function getBonusExp(float $progress){
+
+    public function getBonusExp(float $progress)
+    {
         $this->setXpProgress($this->getXpProgress() + $progress);//Not sure if this won't cause any issues
     }
 }

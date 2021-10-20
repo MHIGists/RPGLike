@@ -2,11 +2,13 @@
 
 namespace TheClimbing\RPGLike\Items;
 
-use pocketmine\item\Item;
+use pocketmine\nbt\NBT;
+use pocketmine\nbt\tag\ListTag;
+use pocketmine\nbt\tag\CompoundTag;
 
-abstract class BaseTieredItem extends Item
+trait BaseTieredItem
 {
-    public string $tier;
+    public  $tier;
     public array $lore;
     public string $glow_colour;
     public array $available_bonuses = [
@@ -21,5 +23,9 @@ abstract class BaseTieredItem extends Item
     public function __construct()
     {
 
+    }
+    public function setEnchantGlow(){
+        $ench = new ListTag(self::TAG_ENCH, [], NBT::TAG_Compound);
+        $this->setNamedTagEntry($ench);
     }
 }
