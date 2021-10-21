@@ -2,13 +2,10 @@
 
 namespace TheClimbing\RPGLike\Items;
 
-class UncommonTierItem extends BaseTieredItem
+class UncommonTierItem extends BaseTierItem
 {
-    public function __construct(array $uncommon_items)
+    public function __construct(array $bonus)
     {
-        parent::__construct();
-        foreach ($uncommon_items as $item) {
-
-        }
+        parent::__construct('uncommon', $bonus);
     }
 }

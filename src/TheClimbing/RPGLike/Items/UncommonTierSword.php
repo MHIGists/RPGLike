@@ -12,7 +12,9 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\utils\TextFormat;
 
 class UncommonTierSword extends Sword{
-    use BaseTieredItem;
+
+    use BaseTierItem;
+
     public function __construct(array $uncommon_items)
     {
         parent::__construct(Item::IRON_SWORD, 0, 'Iron Sword', TieredTool::TIER_IRON);
@@ -29,6 +31,5 @@ class UncommonTierSword extends Sword{
             TextFormat::AQUA . 'Health +1',
         ]);
         $this->setCustomName(TextFormat::GREEN . 'Uncommon Sword');
-
     }
 }

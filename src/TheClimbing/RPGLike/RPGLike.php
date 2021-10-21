@@ -13,6 +13,8 @@ use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Commands\PartyCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
+use TheClimbing\RPGLike\Items\ItemFactory;
+use TheClimbing\RPGLike\Items\UncommonTierItem;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\Systems\PartySystem;
 use TheClimbing\RPGLike\Tasks\HudTask;
@@ -29,6 +31,7 @@ class RPGLike extends PluginBase
     public $config;
     public array $consts = [];
     public $partySystem;
+    public string $currentItemClass;
     public function onLoad()
     {
         $this->saveDefaultConfig();
@@ -46,6 +49,13 @@ class RPGLike extends PluginBase
         date_default_timezone_set($this->config['Hud']['timezone']);
         new RPGForms($this);
         $this->partySystem = new PartySystem($this);
+
+        foreach ($this->config['ItemTiers'] as $key => $itemTier) {
+            foreach ($itemTier['items'] as $itemKey => $item) {
+                $this->currentItemClass = $itemKey;
+                ItemFactory::addItem(new UncommonTierItem($item['bonuses']));
+            }
+        }
     }
 
     public function onEnable()
@@ -135,6 +145,9 @@ class RPGLike extends PluginBase
     }
     public function getDiscovery() : bool{
         return $this->discovery;
+    }
+    public function getTieredItems(){
+        return $this->config['ItemTiers'];
     }
     public static function getInstance(): RPGLike
     {
