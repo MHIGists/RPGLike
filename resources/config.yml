@@ -185,32 +185,32 @@ ItemTiers:
     colour: green
     level_cap: 10
     items:
-      Sword:
-        type: stone
+      stone_sword:
+        name: 'Training Sword'
         bonuses:
           damage: 1
   Rare:
     colour: blue
     level_cap: 20
     items:
-      Sword:
-        type: iron
+      iron_sword:
+        name: 'Silver Sword'
         bonuses:
-        damage: 1
+          damage: 1
   Epic:
     colour: purple
     level_cap: 30
     items:
-      Sword:
-        type: diamond
+      diamond_sword:
+        name: 'Greatsword'
         bonuses:
           damage: 1
   Mythic:
     colour: red
     level_cap: 40
     items:
-      Sword:
-        type: gold
+      gold_sword:
+        name: 'Special Sword'
         bonuses:
           damage: 1
 ...
