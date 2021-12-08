@@ -13,8 +13,6 @@ use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Commands\PartyCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
-use TheClimbing\RPGLike\Items\ItemFactory;
-use TheClimbing\RPGLike\Items\UncommonTierItem;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\Systems\PartySystem;
 use TheClimbing\RPGLike\Tasks\HudTask;
@@ -31,9 +29,9 @@ class RPGLike extends PluginBase
     public $config;
     public array $consts = [];
     public $partySystem;
-    public string $currentItemClass;
-    public function onLoad()
+    public function onLoad() : void
     {
+        self::$instance = $this;
         $this->saveDefaultConfig();
         $this->saveResource('messages.yml');
         $this->setConsts();
@@ -50,15 +48,14 @@ class RPGLike extends PluginBase
         new RPGForms($this);
         $this->partySystem = new PartySystem($this);
 
-        foreach ($this->config['ItemTiers'] as $key => $itemTier) {
+        /*foreach ($this->config['ItemTiers'] as $key => $itemTier) {
             foreach ($itemTier['items'] as $itemKey => $item) {
-                $this->currentItemClass = $itemKey;
-                ItemFactory::addItem(new UncommonTierItem($item['bonuses']));
+                ItemFactory::addItem(new UncommonTierItem($itemKey, 0, $item['name'], $item['bonuses']));
             }
-        }
+        }*/
     }
 
-    public function onEnable()
+    public function onEnable() : void
     {
         $rpg = new RPGCommand($this);
         $this->getServer()->getCommandMap()->register('rpg', $rpg);
@@ -126,8 +123,8 @@ class RPGLike extends PluginBase
             'MOVEMENTSPEED' => round($player->getMovementSpeed(), 4, PHP_ROUND_HALF_UP),
             'DEFENSE' => $player->getArmorPoints() + $player->getDEFBonus(),
             'TICKS' => $player->getServer()->getTicksPerSecondAverage(),
-            'LEVEL' => $player->getLevel()->getName(),
-            'XPLEVEL' => $player->getXpLevel(),
+            'LEVEL' => $player->getWorld()->getDisplayName(),
+            'XPLEVEL' => $player->getXpManager()->getXpLevel(),
             'TIME' => date('h:i')
         ];
         $keywords = array_merge($playerSpecific, $playerSpecific);

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Forms;
 
-use pocketmine\Player;
-
 use jojoe77777\FormAPI\SimpleForm;
 
 use TheClimbing\RPGLike\Players\RPGPlayer;
@@ -41,7 +39,7 @@ class RPGForms
         }
         $messages = self::parseMessages($player, 'UpgradeForm', $player->spleft);
 
-        $form = new SimpleForm(function (Player $pl, $data) use ($player) {
+        $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($player) {
             switch ($data) {
                 case "strength":
                     $player->setSTR($player->getSTR() + 1);
@@ -79,7 +77,7 @@ class RPGForms
     public static function skillHelpForm(RPGPlayer $player, ?BaseSkill $skill)
     {
         $messages = $skill->getMessages()['SkillHelpForm'];
-        $form = new SimpleForm(function (Player $pl, $data) use ($player) {
+        $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($player) {
             switch ($data) {
                 case 'Back':
                     self::skillsHelpForm($player);
@@ -96,7 +94,7 @@ class RPGForms
     {
         $messages = self::parseMessages(($player), 'StatsForm');
 
-        $form = new SimpleForm(function (Player $p, $data) use ($player) {
+        $form = new SimpleForm(function (RPGPlayer $p, $data) use ($player) {
             if ($data == 'back') {
                 self::menuForm($player);
             }
@@ -116,7 +114,7 @@ class RPGForms
     public static function menuForm(RPGPlayer $player)
     {
         $menuStrings = self::parseMessages($player, 'MenuForm');
-        $form = new SimpleForm(function (Player $pl, $data) use ($player) {
+        $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($player) {
             switch ($data) {
                 case "skills":
                     self::skillsHelpForm($player);
@@ -145,7 +143,7 @@ class RPGForms
     {
         $skills = $player->getSkills();
         $messages = self::parseMessages($player, 'SkillsHelpForm');
-        $form = new SimpleForm(function (Player $pl, $data) use ($skills, $player) {
+        $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($skills, $player) {
             foreach ($skills as $key => $skill) {
                 if ($key == $data) {
                     self::skillHelpForm($player, $skill);
@@ -167,7 +165,7 @@ class RPGForms
     }
     public static function welcomeForm(RPGPLayer $player){
         $messages = self::parseMessages($player, 'WelcomeForm');
-        $form = new SimpleForm(function (Player $pl, $data) use ($player){});
+        $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($player){});
         $form->setTitle($messages['title']);
         $form->setContent($messages['content']);
         $player->sendForm($form);
@@ -175,7 +173,7 @@ class RPGForms
     public static function traitsForm(RPGPlayer $player){
         $traits = $player->getTraits();
         $messages = self::parseMessages($player, 'TraitsForm');
-        $form = new SimpleForm(function (Player $pl, $data) use ($traits, $player){
+        $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($traits, $player){
             foreach ($traits as $key => $trait) {
                 if ($key == $data){
                     self::traitHelpForm($player, $trait);
@@ -196,7 +194,7 @@ class RPGForms
     }
     public static function traitHelpForm(RPGPlayer $player, BaseTrait $trait){
         $messages = self::parseMessages($player,'TraitHelpForm');
-        $form = new SimpleForm(function (Player $pl, $data) use ($player) {
+        $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($player) {
             switch ($data) {
                 case 'Back':
                     self::traitsForm($player);

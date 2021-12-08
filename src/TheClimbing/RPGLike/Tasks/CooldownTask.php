@@ -18,7 +18,7 @@ class CooldownTask extends Task
         $this->skillName = $skillName;
     }
 
-    public function onRun(int $currentTick)
+    public function onRun() : void
     {
         $this->player->getSkill($this->skillName)->removeCooldown();
         $this->player->sendMessage($this->skillName . ' off cooldown');

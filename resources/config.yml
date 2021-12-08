@@ -185,7 +185,7 @@ ItemTiers:
     colour: green
     level_cap: 10
     items:
-      stone_sword:
+      272:
         name: 'Training Sword'
         bonuses:
           damage: 1
@@ -193,7 +193,7 @@ ItemTiers:
     colour: blue
     level_cap: 20
     items:
-      iron_sword:
+      267:
         name: 'Silver Sword'
         bonuses:
           damage: 1
@@ -201,7 +201,7 @@ ItemTiers:
     colour: purple
     level_cap: 30
     items:
-      diamond_sword:
+      276:
         name: 'Greatsword'
         bonuses:
           damage: 1
@@ -209,7 +209,7 @@ ItemTiers:
     colour: red
     level_cap: 40
     items:
-      gold_sword:
+      283:
         name: 'Special Sword'
         bonuses:
           damage: 1

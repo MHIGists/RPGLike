@@ -6,15 +6,21 @@ namespace TheClimbing\RPGLike\Players;
 
 
 use pocketmine\entity\Attribute;
+use pocketmine\entity\Location;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerExperienceChangeEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
-use pocketmine\Player;
+use pocketmine\network\mcpe\NetworkSession;
+use pocketmine\player\Player;
+use pocketmine\player\PlayerInfo;
+use pocketmine\Server;
 use pocketmine\utils\Config;
-use pocketmine\level\Position;
+use pocketmine\nbt\tag\CompoundTag;
 
+use pocketmine\world\format\Chunk;
+use pocketmine\world\Position;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
 use TheClimbing\RPGLike\Skills\Coinflip;
@@ -60,9 +66,9 @@ class RPGPlayer extends Player
 
     private Config $config;
 
-    public function __construct($interface, $ip, $port)
+    public function __construct(Server $server, NetworkSession $session, PlayerInfo $playerInfo, bool $authenticated, Location $spawnLocation, ?CompoundTag $namedtag)
     {
-        parent::__construct($interface, $ip, $port);
+        parent::__construct($server, $session, $playerInfo, $authenticated, $spawnLocation, $namedtag);
         $this->config = RPGLike::getInstance()->getConfig();
         $modifiers = $this->getModifiers();
         if ($modifiers != false) {
@@ -91,13 +97,18 @@ class RPGPlayer extends Player
 
     protected function onDeath(): void
     {
-        $this->doCloseInventory();
-        $ev = new PlayerDeathEvent($this, $this->getDrops(), null, $this->getXpDropAmount());
+        if ($this->getConfig()->get('keep-xp')) {
+            $ev = new PlayerDeathEvent($this, $this->getDrops(), 0, null);
+        } else {
+            $ev = new PlayerDeathEvent($this, $this->getDrops(), $this->getXpDropAmount(), null);
+        }
         $ev->call();
+
         if (!$ev->getKeepInventory()) {
             foreach ($ev->getDrops() as $item) {
-                $this->level->dropItem($this, $item);
+                $this->getWorld()->dropItem($this->location, $item);
             }
+
             if ($this->inventory !== null) {
                 $this->inventory->setHeldItemIndex(0);
                 $this->inventory->clearAll();
@@ -105,47 +116,78 @@ class RPGPlayer extends Player
             if ($this->armorInventory !== null) {
                 $this->armorInventory->clearAll();
             }
+            if ($this->offHandInventory !== null) {
+                $this->offHandInventory->clearAll();
+            }
+        }
+        if (!$this->getConfig()->get('keep-xp')) {
+            $this->getWorld()->dropExperience($this->location, $ev->getXpDropAmount());
+            $this->xpManager->setXpAndProgress(0, 0.0);
         }
         if ($ev->getDeathMessage() != "") {
             $this->server->broadcastMessage($ev->getDeathMessage());
         }
+
+        $this->startDeathAnimation();
+
+        $this->getNetworkSession()->onServerDeath();
     }
 
-    protected function respawn(): void
+    protected function actuallyRespawn(): void
     {
-        if ($this->server->isHardcore()) {
-            $this->setBanned(true);
+        if ($this->respawnLocked) {
             return;
         }
-        $ev = new PlayerRespawnEvent($this, $this->getSpawn());
-        $ev->call();
-        $realSpawn = Position::fromObject($ev->getRespawnPosition()->add(0.5, 0, 0.5), $ev->getRespawnPosition()->getLevelNonNull());
-        $this->teleport($realSpawn);
-        $this->setSprinting(false);
-        $this->setSneaking(false);
-        $this->extinguish();
-        $this->setAirSupplyTicks($this->getMaxAirSupplyTicks());
-        $this->deadTicks = 0;
-        $this->noDamageTicks = 60;
-        $this->removeAllEffects();
-        $this->setHealth($this->getMaxHealth());
-        foreach ($this->attributeMap->getAll() as $attr) {
-            if ($this->config->getNested('keep-xp') === true) {
-                if ($attr->getId() === Attribute::EXPERIENCE or $attr->getId() === Attribute::EXPERIENCE_LEVEL) {
-                    $attr->markSynchronized(false);
-                    continue;
+        $this->respawnLocked = true;
+
+        $this->logger->debug("Waiting for spawn terrain generation for respawn");
+        $spawn = $this->getSpawn();
+        $spawn->getWorld()->orderChunkPopulation($spawn->getFloorX() >> Chunk::COORD_BIT_SIZE, $spawn->getFloorZ() >> Chunk::COORD_BIT_SIZE, null)->onCompletion(
+            function () use ($spawn): void {
+                if (!$this->isConnected()) {
+                    return;
+                }
+                $this->logger->debug("Spawn terrain generation done, completing respawn");
+                $spawn = $spawn->getWorld()->getSafeSpawn($spawn);
+                $ev = new PlayerRespawnEvent($this, $spawn);
+                $ev->call();
+
+                $realSpawn = Position::fromObject($ev->getRespawnPosition()->add(0.5, 0, 0.5), $ev->getRespawnPosition()->getWorld());
+                $this->teleport($realSpawn);
+
+                $this->setSprinting(false);
+                $this->setSneaking(false);
+                $this->setFlying(false);
+
+                $this->extinguish();
+                $this->setAirSupplyTicks($this->getMaxAirSupplyTicks());
+                $this->deadTicks = 0;
+                $this->noDamageTicks = 60;
+
+                $this->effectManager->clear();
+                $this->setHealth($this->getMaxHealth());
+
+                foreach ($this->attributeMap->getAll() as $attr) {
+                    if ($attr->getId() === Attribute::EXPERIENCE or $attr->getId() === Attribute::EXPERIENCE_LEVEL) {
+                        $attr->markSynchronized(false);
+                        continue;
+                    }
+                    $attr->resetToDefault();
+                }
+
+                $this->spawnToAll();
+                $this->scheduleUpdate();
+
+                $this->getNetworkSession()->onServerRespawn();
+                $this->respawnLocked = false;
+            },
+            function (): void {
+                if ($this->isConnected()) {
+                    $this->disconnect("Unable to find a respawn position");
                 }
             }
-            $attr->resetToDefault();
-        }
-        $this->sendData($this);
-        $this->sendData($this->getViewers());
-        $this->sendSettings();
-        $this->sendAllInventories();
-        $this->spawnToAll();
-        $this->scheduleUpdate();
+        );
     }
-
     public function getModifiers()
     {
         $modifiers = $this->config->getNested('modifiers');
@@ -233,7 +275,7 @@ class RPGPlayer extends Player
     public function applyDexterityBonus()
     {
         $dex = $this->getDEXBonus();
-        $movement = $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+        $movement = $this->getAttributeMap()->get(Attribute::MOVEMENT_SPEED);
         $movement->setValue($movement->getValue() * (1 + $dex));
     }
 
@@ -244,7 +286,7 @@ class RPGPlayer extends Player
 
     public function getMovementSpeed(): float
     {
-        return $this->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED)->getValue();
+        return $this->getAttributeMap()->get(Attribute::MOVEMENT_SPEED)->getValue();
     }
 
     public function checkSkillLevel()
@@ -406,7 +448,7 @@ class RPGPlayer extends Player
             'attributes' => $this->getAttributes(),
             'skills' => $this->getSkillNames(),
             'spleft' => $this->getSPleft(),
-            'level' => $this->getXPLevel(),
+            'level' => $this->getXpLvl(),
             'blocks' => $this->getBrokenBlocks()
         ];
         $players = $playersConfig->getAll();
@@ -505,7 +547,7 @@ class RPGPlayer extends Player
     public function setExperienceLevel(int $level)
     {
         $this->xplevel = $level;
-        $this->setXpLevel($level);
+        $this->getXpManager()->setXpLevel($level);
     }
 
     public function getXpLvl(): int
@@ -569,7 +611,7 @@ class RPGPlayer extends Player
 
     public function getBonusExp(float $progress)
     {
-        $this->setXpProgress($this->getXpProgress() + $progress);//Not sure if this won't cause any issues
+        $this->getXpManager()->setXpProgress($this->getXpManager()->getXpProgress() + $progress);//Not sure if this won't cause any issues
     }
 }
     

@@ -7,7 +7,6 @@ namespace TheClimbing\RPGLike;
 
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\entity\ProjectileHitEntityEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerBlockPickEvent;
@@ -19,8 +18,11 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 
+use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
+use pocketmine\item\TieredTool;
 use TheClimbing\RPGLike\Forms\RPGForms;
-use TheClimbing\RPGLike\Items\UncommonTierSword;
+use TheClimbing\RPGLike\Items\UncommonTierItem;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class EventListener implements Listener
@@ -46,7 +48,7 @@ class EventListener implements Listener
                 RPGForms::welcomeForm($player);
             }
             $player->restorePlayerVariables();
-            $player->getInventory()->addItem(new UncommonTierSword());
+            $player->getInventory()->addItem(new UncommonTierItem(ItemIds::STONE_SWORD, 0, 'Uncommon Sword', ['damage' => 1]));
         }
     }
 
@@ -111,7 +113,7 @@ class EventListener implements Listener
         if ($damager instanceof RPGPlayer && $receiver instanceof RPGPlayer) {
             if (($damager->getParty() != false)){
                 if($damager->getParty()->playerInThisParty($receiver->getName())){
-                    $event->setCancelled(true);
+                    $event->cancel();
                 }
             }
             $coinflip = $damager->getSkill('Coinflip');
@@ -144,7 +146,7 @@ class EventListener implements Listener
                     $spleft = $new_lvl - $old_level;
                     $player->setSPleft($player->getSPleft() + $spleft);
                     $player->setHealth($player->getMaxHealth());
-                    $player->setFood($player->getMaxFood());
+                    $player->getHungerManager()->setFood($player->getHungerManager()->getMaxFood());
                     $player->setAirSupplyTicks($player->getMaxAirSupplyTicks());
                     if ($player->xplevel ==  1){
                         $player->sendMessage(Utils::parseKeywords(RPGLike::getInstance()->consts, RPGLike::getInstance()->getMessages()->get('level_up_message')));
