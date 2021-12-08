@@ -7,6 +7,7 @@ namespace TheClimbing\RPGLike\Commands;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
+use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class LevelUpCommand extends Command
 {
@@ -17,11 +18,12 @@ class LevelUpCommand extends Command
 
     public function execute(CommandSender $sender, string $commandLabel, array $args)
     {
-        if ($sender instanceof Player) {
+        if ($sender instanceof RPGPlayer) {
+            $xpmanager = $sender->getXpManager();
             if (empty($args)) {
-                $sender->setXpLevel($sender->getXpLevel() + 1);
+                $xpmanager->setXpLevel($xpmanager->getXpLevel() + 1);
             } else {
-                $sender->setXpLevel($args[0]);
+                $xpmanager->setXpLevel($args[0]);
             }
         }
     }

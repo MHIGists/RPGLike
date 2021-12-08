@@ -5,11 +5,10 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Skills;
 
-use pocketmine\entity\Effect;
-use pocketmine\entity\EffectInstance;
-use pocketmine\level\Level;
+use pocketmine\entity\effect\EffectInstance;
+use pocketmine\entity\effect\Effect;
+use pocketmine\world\World;
 use pocketmine\math\Vector3;
-use pocketmine\Player;
 
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
@@ -248,13 +247,13 @@ class BaseSkill
      *
      * @param Vector3 $pos
      * @param int|null $maxDistance
-     * @param Level $level
+     * @param World $level
      * @param int $maxEntities
      * @param bool $includeDead
      *
      * @return array
      */
-    public function getNearestEntities(Vector3 $pos, ?int $maxDistance, Level $level, int $maxEntities, bool $includeDead = false): array
+    public function getNearestEntities(Vector3 $pos, ?int $maxDistance, World $level, int $maxEntities, bool $includeDead = false): array
     {
         $nearby = [];
 
@@ -284,26 +283,8 @@ class BaseSkill
             }
         }
         return $nearby;
+        //TODO whole function probably needs a rewrite
     }
-
-    /**
-     * Sets vanilla effects or applies a callable.
-     * Needs testing!
-     *
-     * @param callable|int $effect
-     */
-    public function setPlayerEffect($effect): void
-    {
-        if (!$this->onCooldown) {
-            if (is_callable($effect)) {
-                call_user_func($effect);
-            } else {
-                $effect = new EffectInstance(Effect::getEffect($effect), 2, $this->getSkillLevel());
-                $this->owner->addEffect($effect);
-            }
-        }
-    }
-
     public function getSkillDescription(): string
     {
         return $this->messages['description'];

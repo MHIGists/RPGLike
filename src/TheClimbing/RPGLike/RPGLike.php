@@ -29,8 +29,9 @@ class RPGLike extends PluginBase
     public $config;
     public array $consts = [];
     public $partySystem;
-    public function onLoad()
+    public function onLoad() : void
     {
+        self::$instance = $this;
         $this->saveDefaultConfig();
         $this->saveResource('messages.yml');
         $this->setConsts();
@@ -46,9 +47,15 @@ class RPGLike extends PluginBase
         date_default_timezone_set($this->config['Hud']['timezone']);
         new RPGForms($this);
         $this->partySystem = new PartySystem($this);
+
+        /*foreach ($this->config['ItemTiers'] as $key => $itemTier) {
+            foreach ($itemTier['items'] as $itemKey => $item) {
+                ItemFactory::addItem(new UncommonTierItem($itemKey, 0, $item['name'], $item['bonuses']));
+            }
+        }*/
     }
 
-    public function onEnable()
+    public function onEnable() : void
     {
         $rpg = new RPGCommand($this);
         $this->getServer()->getCommandMap()->register('rpg', $rpg);
@@ -116,8 +123,8 @@ class RPGLike extends PluginBase
             'MOVEMENTSPEED' => round($player->getMovementSpeed(), 4, PHP_ROUND_HALF_UP),
             'DEFENSE' => $player->getArmorPoints() + $player->getDEFBonus(),
             'TICKS' => $player->getServer()->getTicksPerSecondAverage(),
-            'LEVEL' => $player->getLevel()->getName(),
-            'XPLEVEL' => $player->getXpLevel(),
+            'LEVEL' => $player->getWorld()->getDisplayName(),
+            'XPLEVEL' => $player->getXpManager()->getXpLevel(),
             'TIME' => date('h:i')
         ];
         $keywords = array_merge($playerSpecific, $playerSpecific);
@@ -135,6 +142,9 @@ class RPGLike extends PluginBase
     }
     public function getDiscovery() : bool{
         return $this->discovery;
+    }
+    public function getTieredItems(){
+        return $this->config['ItemTiers'];
     }
     public static function getInstance(): RPGLike
     {

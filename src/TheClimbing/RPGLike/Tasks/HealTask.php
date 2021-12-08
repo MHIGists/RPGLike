@@ -15,7 +15,7 @@ class HealTask extends \pocketmine\scheduler\Task
         $this->target = $target;
     }
 
-    public function onRun(int $currentTick)
+    public function onRun() : void
     {
         $this->source->removeCooldown();
         $target = $this->target;

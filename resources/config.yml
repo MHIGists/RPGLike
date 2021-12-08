@@ -171,7 +171,7 @@ Traits:
         requirement: 50
         drop_chance: 30
   MonsterHunter:
-    blocks: ["Zombie", "Skeleton"]
+    blocks: [ "Zombie", "Skeleton" ]
     action: 'kill'
     levels:
       1:
@@ -180,4 +180,37 @@ Traits:
       2:
         requirement: 100
         drop_chance: 40
+ItemTiers:
+  Uncommon:
+    colour: green
+    level_cap: 10
+    items:
+      272:
+        name: 'Training Sword'
+        bonuses:
+          damage: 1
+  Rare:
+    colour: blue
+    level_cap: 20
+    items:
+      267:
+        name: 'Silver Sword'
+        bonuses:
+          damage: 1
+  Epic:
+    colour: purple
+    level_cap: 30
+    items:
+      276:
+        name: 'Greatsword'
+        bonuses:
+          damage: 1
+  Mythic:
+    colour: red
+    level_cap: 40
+    items:
+      283:
+        name: 'Special Sword'
+        bonuses:
+          damage: 1
 ...
