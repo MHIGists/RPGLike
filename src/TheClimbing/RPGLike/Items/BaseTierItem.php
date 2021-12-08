@@ -2,6 +2,10 @@
 
 namespace TheClimbing\RPGLike\Items;
 
+use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\enchantment\EnchantmentInstance;
+use pocketmine\item\enchantment\ItemFlags;
+use pocketmine\item\enchantment\Rarity;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIdentifier;
 use pocketmine\item\TieredTool;
@@ -36,15 +40,17 @@ class BaseTierItem extends TieredTool
             RPGLike::getInstance()->getLogger()->alert('All available bonuses are: damage, health, defense, movement_speed, mining_speed, jump_power, mana');
             $this->bonus = ['damage' => 1];
         }
-        $this->setEnchantGlow();
+        $this->addEnchantment(new EnchantmentInstance(new Enchantment('Glow', Rarity::UNCOMMON, ItemFlags::NONE, ItemFlags::NONE, 1), 1));
     }
 
+    /*
     public function setEnchantGlow()
     {
         $this->getNamedTag()->setTag(Item::TAG_ENCH, new ListTag());
         /*$ench = new ListTag([], Item::TAG_ENCH);
-        $this->setNamedTag($ench);*/
+        $this->setNamedTag($ench);
     }
+    */
 
     public function getItemBonus(): array
     {
