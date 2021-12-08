@@ -41,7 +41,7 @@ class BaseTierItem extends TieredTool
 
     public function setEnchantGlow()
     {
-        $this->getCustomBlockData()->setTag(Item::TAG_ENCH, new ListTag());
+        $this->getNamedTag()->setTag(Item::TAG_ENCH, new ListTag());
         /*$ench = new ListTag([], Item::TAG_ENCH);
         $this->setNamedTag($ench);*/
     }
