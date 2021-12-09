@@ -36,7 +36,7 @@ class BaseTierItem extends TieredTool
     {
         parent::__construct(new ItemIdentifier($id, $meta), $name, $tier);
         $this->item_tier = $item_tier;
-        if (array_search($bonus[array_key_first($bonus)], $this->available_bonuses) != false) {
+        if (array_search(array_key_first($bonus), $this->available_bonuses) != false) {
             $this->bonus = $bonus;
         } else {
             RPGLike::getInstance()->getLogger()->alert('All available bonuses are: damage, health, defense, movement_speed, mining_speed, jump_power, mana');
