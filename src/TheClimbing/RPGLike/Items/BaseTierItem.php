@@ -60,6 +60,5 @@ class BaseTierItem extends TieredTool
     public function setCustomLore(string $tier)
     {
         $original_lore = $this->getLore();
-        $
     }
 }
