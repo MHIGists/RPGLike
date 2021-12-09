@@ -48,7 +48,7 @@ class EventListener implements Listener
                 RPGForms::welcomeForm($player);
             }
             $player->restorePlayerVariables();
-            $player->getInventory()->addItem(new UncommonTierItem(ItemIds::STONE_SWORD, 0, 'Uncommon Sword', ['damage' => 1]));
+            $player->getInventory()->addItem(new UncommonTierItem(ItemIds::STONE_SWORD, 1, 'Uncommon Sword', ['damage' => 1]));
         }
     }
 

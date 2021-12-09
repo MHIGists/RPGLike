@@ -33,9 +33,7 @@ class ItemFactory
                 if (array_key_exists($key1, $tiered)){
                     self::addItem(new UncommonTierItem($tiered[$key1][0], 0, $item['name'], $tiered[$key1][1], $item['bonuses']));
                 }
-                if (array_key_exists($key1, $armor)){
-                    self::addItem($item);
-                }
+
             }
         }
     }

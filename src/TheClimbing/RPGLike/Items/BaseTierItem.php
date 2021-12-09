@@ -48,8 +48,8 @@ class BaseTierItem extends TieredTool
 
     public function setEnchantGlow()
     {
-        $comp = new CompoundTag();
-        $this->setNamedTag($comp->setTag(self::TAG_ENCH, new ListTag()));
+//        $comp = new ListTag();
+//        $this->setNamedTag($this->getNamedTag()->setTag($comp->));
     }
 
     public function getItemBonus(): array
@@ -59,7 +59,7 @@ class BaseTierItem extends TieredTool
 
     public function setCustomLore(string $tier)
     {
-        $this->custom_lore = RPGLike::getInstance()->getTieredItems()[$tier][$this->getCustomName()];
-        $this->setLore($this->custom_lore);
+        $original_lore = $this->getLore();
+        $
     }
 }
