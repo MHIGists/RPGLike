@@ -47,11 +47,9 @@ class BaseTierItem extends TieredTool
 
     public function setEnchantGlow()
     {
-        $ench = new ListTag([], NBT::TAG_End);
-        $compound = $this->getNamedTag()->setTag(Item::TAG_ENCH, $ench);
-        $this->setNamedTag($compound);
+        $ench = new ListTag([Item::TAG_ENCH], NBT::TAG_Compound);
+        $this->setNamedTag($ench);
     }
-
 
     public function getItemBonus(): array
     {
