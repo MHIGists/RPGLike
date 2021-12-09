@@ -40,17 +40,17 @@ class BaseTierItem extends TieredTool
             RPGLike::getInstance()->getLogger()->alert('All available bonuses are: damage, health, defense, movement_speed, mining_speed, jump_power, mana');
             $this->bonus = ['damage' => 1];
         }
-        $this->addEnchantment(new EnchantmentInstance(new Enchantment('Glow', Rarity::UNCOMMON, ItemFlags::NONE, ItemFlags::NONE, 1), 1));
+        $this->setEnchantGlow();
     }
 
-    /*
+
     public function setEnchantGlow()
     {
-        $this->getNamedTag()->setTag(Item::TAG_ENCH, new ListTag());
-        /*$ench = new ListTag([], Item::TAG_ENCH);
-        $this->setNamedTag($ench);
+        $ench = new ListTag([], Item::TAG_ENCH);
+        $compound = $this->getNamedTag()->setTag(Item::TAG_ENCH, $ench);
+        $this->setNamedTag($compound);
     }
-    */
+
 
     public function getItemBonus(): array
     {
