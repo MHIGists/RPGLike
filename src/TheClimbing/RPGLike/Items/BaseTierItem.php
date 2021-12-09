@@ -10,6 +10,7 @@ use pocketmine\item\Item;
 use pocketmine\item\ItemIdentifier;
 use pocketmine\item\TieredTool;
 use pocketmine\item\ToolTier;
+use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ListTag;
 use TheClimbing\RPGLike\RPGLike;
 
@@ -46,7 +47,7 @@ class BaseTierItem extends TieredTool
 
     public function setEnchantGlow()
     {
-        $ench = new ListTag([], Item::TAG_ENCH);
+        $ench = new ListTag([], NBT::TAG_End);
         $compound = $this->getNamedTag()->setTag(Item::TAG_ENCH, $ench);
         $this->setNamedTag($compound);
     }
