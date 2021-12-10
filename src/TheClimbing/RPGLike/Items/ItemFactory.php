@@ -26,7 +26,7 @@ class ItemFactory
     public static function createItems(array $tiers)
     {
         foreach (Utils::getItems() as $item) {
-            self::addItem($item);
+            self::addItem();
         }
     }
 }

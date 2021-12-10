@@ -22,7 +22,7 @@ class RPGCommand extends Command
 
     public function execute(CommandSender $sender, string $commandLabel, array $args)
     {
-        if ($sender instanceof RPGPlayer && $sender->hasPermission($this->getPermission()) || $sender->isOp()) {
+        if ($sender instanceof RPGPlayer && $sender->hasPermission($this->getPermission())) {
             if (empty($args) || $args[0] == '' || $args[0] == ' ') {
                 RPGForms::menuForm($sender);
             } else {

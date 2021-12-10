@@ -2,21 +2,15 @@
 
 namespace TheClimbing\RPGLike\Items;
 
-use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\enchantment\EnchantmentInstance;
-use pocketmine\item\enchantment\ItemFlags;
-use pocketmine\item\enchantment\Rarity;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIdentifier;
 use pocketmine\item\TieredTool;
 use pocketmine\item\ToolTier;
-use pocketmine\nbt\NBT;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\ListTag;
+
 use TheClimbing\RPGLike\RPGLike;
 
 
-class BaseTierItem extends TieredTool
+trait BaseItem
 {
     public string $item_tier;
     public array $custom_lore;
@@ -32,10 +26,9 @@ class BaseTierItem extends TieredTool
         'mana' //add mana for active skills??
     ];
 
-    public function __construct(int $id, int $meta, string $name, ToolTier $tier, string $item_tier, array $bonus)
+    public function init(string $item_tier, array $bonus)
     {
-        parent::__construct(new ItemIdentifier($id, $meta), $name, $tier);
-        $this->item_tier = $item_tier;
+        $this->item_tier = 'temp';
         if (array_search(array_key_first($bonus), $this->available_bonuses) != false) {
             $this->bonus = $bonus;
         } else {
