@@ -13,6 +13,7 @@ use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Commands\PartyCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
+use TheClimbing\RPGLike\Items\ItemFactory;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\Systems\PartySystem;
 use TheClimbing\RPGLike\Tasks\HudTask;
@@ -47,12 +48,7 @@ class RPGLike extends PluginBase
         date_default_timezone_set($this->config['Hud']['timezone']);
         new RPGForms($this);
         $this->partySystem = new PartySystem($this);
-
-        /*foreach ($this->config['ItemTiers'] as $key => $itemTier) {
-            foreach ($itemTier['items'] as $itemKey => $item) {
-                ItemFactory::addItem(new UncommonTierItem($itemKey, 0, $item['name'], $item['bonuses']));
-            }
-        }*/
+        ItemFactory::createItems([]);
     }
 
     public function onEnable() : void

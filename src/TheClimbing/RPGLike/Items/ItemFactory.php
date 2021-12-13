@@ -2,8 +2,10 @@
 
 namespace TheClimbing\RPGLike\Items;
 
+use pocketmine\item\Armor;
 use pocketmine\item\Item;
 
+use pocketmine\item\ItemIdentifier;
 use TheClimbing\RPGLike\Utils;
 
 class ItemFactory
@@ -25,8 +27,14 @@ class ItemFactory
     }
     public static function createItems(array $tiers)
     {
-        foreach (Utils::getItems() as $item) {
-            self::addItem();
+        $item_arrays = Utils::getItems();
+        $items = [];
+        foreach ($item_arrays as $key => $item) {
+            switch ($key){
+                case 'stone_sword':
+                    new BaseSword(new ItemIdentifier($item[0], $item[1]),$item[2], $item[3], $item[4]);
+                    new Armor();
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ namespace TheClimbing\RPGLike;
 
 
 use pocketmine\item\ItemIds;
+use pocketmine\item\TieredTool;
+use pocketmine\item\ToolTier;
 
 class Utils
 {
@@ -38,22 +40,22 @@ class Utils
             return self::$items;
         }else{
             $items = [
-                'stone_sword' => [ItemIds::STONE_SWORD, 0, 'Uncommon Sword', ['damage' => 1]],
-                'stone_axe' => [ItemIds::STONE_AXE, 0, 'Uncommon Axe', ['damage' => 1]],
-                'stone_pickaxe' => [ItemIds::STONE_PICKAXE, 0, 'Uncommon Pickaxe', ['damage' => 1]],
-                'stone_shovel' => [ItemIds::STONE_SHOVEL, 0, 'Uncommon Shovel', ['damage' => 1]],
-                'iron_sword' => [ItemIds::IRON_SWORD,0,'Rare Sword',['damage' => 1]],
-                'iron_axe' => [ItemIds::IRON_AXE,0,'Rare Axe', ['damage' => 1]],
-                'iron_pickaxe' => [ItemIds::IRON_PICKAXE,0,'Rare Pickaxe'.['damage' => 1]],
-                'iron_shovel' => [ItemIds::IRON_SHOVEL,0,'Rare Shovel',['damage' => 1]],
-                'gold_sword' => [ItemIds::GOLD_SWORD,0,'Mythic Sword',['damage' => 1]],
-                'gold_axe' => [ItemIds::GOLD_AXE,0,'Mythic Axe',['damage' => 1]],
-                'gold_pickaxe' => [ItemIds::GOLD_PICKAXE,0,'Mythic Pickaxe',['damage' => 1]],
-                'gold_shovel' => [ItemIds::GOLD_SHOVEL,0,'Mythic Shovel',['damage' => 1]],
-                'diamond_sword' => [ItemIds::DIAMOND_SWORD,0,'Epic Sword',['damage' =>1]],
-                'diamond_axe' => [ItemIds::DIAMOND_AXE,0,'Epic Axe',['damage' =>1]],
-                'diamond_pickaxe' => [ItemIds::DIAMOND_PICKAXE,0,'Epic Pickaxe',['damage' =>1]],
-                'diamond_shovel' => [ItemIds::DIAMOND_SHOVEL,0,'Epic Shovel',['damage' =>1]],
+                'stone_sword' => [ItemIds::STONE_SWORD, 0, 'Uncommon Sword', ToolTier::STONE() ,['damage' => 1]],
+                'stone_axe' => [ItemIds::STONE_AXE, 0, 'Uncommon Axe', ToolTier::STONE() ,['damage' => 1]],
+                'stone_pickaxe' => [ItemIds::STONE_PICKAXE, 0, 'Uncommon Pickaxe', ToolTier::STONE() ,['damage' => 1]],
+                'stone_shovel' => [ItemIds::STONE_SHOVEL, 0, 'Uncommon Shovel', ToolTier::STONE() ,['damage' => 1]],
+                'iron_sword' => [ItemIds::IRON_SWORD,0,'Rare Sword', ToolTier::IRON() ,['damage' => 1]],
+                'iron_axe' => [ItemIds::IRON_AXE,0,'Rare Axe', ToolTier::IRON() ,['damage' => 1]],
+                'iron_pickaxe' => [ItemIds::IRON_PICKAXE,0,'Rare Pickaxe', ToolTier::IRON() ,['damage' => 1]],
+                'iron_shovel' => [ItemIds::IRON_SHOVEL,0,'Rare Shovel', ToolTier::IRON() ,['damage' => 1]],
+                'gold_sword' => [ItemIds::GOLD_SWORD,0,'Mythic Sword', ToolTier::GOLD() ,['damage' => 1]],
+                'gold_axe' => [ItemIds::GOLD_AXE,0,'Mythic Axe', ToolTier::GOLD() ,['damage' => 1]],
+                'gold_pickaxe' => [ItemIds::GOLD_PICKAXE,0,'Mythic Pickaxe', ToolTier::GOLD() ,['damage' => 1]],
+                'gold_shovel' => [ItemIds::GOLD_SHOVEL,0,'Mythic Shovel', ToolTier::GOLD() ,['damage' => 1]],
+                'diamond_sword' => [ItemIds::DIAMOND_SWORD,0,'Epic Sword', ToolTier::DIAMOND() ,['damage' =>1]],
+                'diamond_axe' => [ItemIds::DIAMOND_AXE,0,'Epic Axe', ToolTier::DIAMOND() ,['damage' =>1]],
+                'diamond_pickaxe' => [ItemIds::DIAMOND_PICKAXE,0,'Epic Pickaxe', ToolTier::DIAMOND() ,['damage' =>1]],
+                'diamond_shovel' => [ItemIds::DIAMOND_SHOVEL,0,'Epic Shovel', ToolTier::DIAMOND() ,['damage' =>1]],
                 'iron_helmet' => [ItemIds::IRON_HELMET,0,'Uncommon Helmet',['defense' => 1]],
                 'iron_chestplate' => [ItemIds::IRON_CHESTPLATE,0,'Uncommon Chestplate',['defense' => 1]],
                 'iron_leggings' => [ItemIds::IRON_LEGGINGS,0,'Uncommon Leggings',['defense' => 1]],

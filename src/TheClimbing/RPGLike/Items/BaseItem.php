@@ -39,11 +39,7 @@ trait BaseItem
     }
 
 
-    public function setEnchantGlow()
-    {
-//        $comp = new ListTag();
-//        $this->setNamedTag($this->getNamedTag()->setTag($comp->));
-    }
+    public function setEnchantGlow(){}
 
     public function getItemBonus(): array
     {
