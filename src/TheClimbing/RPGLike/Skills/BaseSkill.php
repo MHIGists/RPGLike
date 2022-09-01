@@ -213,10 +213,6 @@ class BaseSkill
     {
         return $this->skillLevels[1]['unlock'];
     }
-
-    /**
-     * @param $id int
-     */
     protected function setEffect(int $id): void
     {
         $this->effect = $id;
@@ -243,13 +239,13 @@ class BaseSkill
      *
      * @param Vector3 $pos
      * @param int|null $maxDistance
-     * @param World $level
+     * @param World $world
      * @param int $maxEntities
      * @param bool $includeDead
      *
      * @return array
      */
-    public function getNearestEntities(Vector3 $pos, ?int $maxDistance, World $level, int $maxEntities, bool $includeDead = false): array
+    public function getNearestEntities(Vector3 $pos, ?int $maxDistance, World $world, int $maxEntities, bool $includeDead = false): array
     {
         $nearby = [];
 
@@ -262,7 +258,7 @@ class BaseSkill
 
         for ($x = $minX; $x <= $maxX; ++$x) {
             for ($z = $minZ; $z <= $maxZ; ++$z) {
-                $entities = ($chunk = $level->getChunk($x, $z)) !== null ? $chunk->getEntities() : [];
+                $entities = ($chunk = $world->getChunk($x, $z)) !== null ? $world->getChunkEntities($x, $z) : [];
                 if (count($entities) > $maxEntities) {
                     $entities = array_slice($entities, 0, $maxEntities);
                 }
@@ -270,7 +266,7 @@ class BaseSkill
                     if (!($entity instanceof RPGPlayer) or $entity->isClosed() or $entity->isFlaggedForDespawn() or (!$includeDead and !$entity->isAlive())) {
                         continue;
                     }
-                    $distSq = $entity->distanceSquared($pos);
+                    $distSq = $entity->getDirectionVector()->distanceSquared($pos);
                     if ($distSq < $currentTargetDistSq) {
                         $currentTargetDistSq = $distSq;
                         $nearby[] = $entity;
@@ -279,7 +275,6 @@ class BaseSkill
             }
         }
         return $nearby;
-        //TODO whole function probably needs a rewrite
     }
     public function getSkillDescription(): string
     {

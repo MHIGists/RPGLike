@@ -18,8 +18,8 @@ class HealingAura extends BaseSkill implements AreaOfEffect, PassiveSkill
     {
         if (!$this->isOnCooldown()){
             if ($this->getRange() > 0) {
-                $level = $this->owner->getLevel();
-                $players = $this->getNearestEntities($this->owner->getPosition(), $this->getRange(), $level, $this->getMaximumEntitiesInRange());
+                $world = $this->owner->getWorld();
+                $players = $this->getNearestEntities($this->owner->getPosition(), $this->getRange(), $world, $this->getMaximumEntitiesInRange());
                 if (!empty($players)) {
                     foreach ($players as $key => $player) {
                         if ($key == 0) {
