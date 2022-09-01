@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace TheClimbing\RPGLike;
+namespace TheClimbing\RPGLike\Items;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -13,7 +13,6 @@ use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Commands\PartyCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
-use TheClimbing\RPGLike\Items\ItemFactory;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\Systems\PartySystem;
 use TheClimbing\RPGLike\Tasks\HudTask;

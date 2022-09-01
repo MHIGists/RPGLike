@@ -17,11 +17,11 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
-
 use pocketmine\item\ItemIds;
+
 use TheClimbing\RPGLike\Forms\RPGForms;
-use TheClimbing\RPGLike\Items\UncommonTierItem;
 use TheClimbing\RPGLike\Players\RPGPlayer;
+use TheClimbing\RPGLike\Items\UncommonTierItem;
 
 class EventListener implements Listener
 {
