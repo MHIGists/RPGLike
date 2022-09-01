@@ -2,11 +2,6 @@
 
 namespace TheClimbing\RPGLike\Items;
 
-use pocketmine\item\Item;
-use pocketmine\item\ItemIdentifier;
-use pocketmine\item\TieredTool;
-use pocketmine\item\ToolTier;
-
 use TheClimbing\RPGLike\RPGLike;
 
 

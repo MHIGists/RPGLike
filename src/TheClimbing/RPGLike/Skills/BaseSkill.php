@@ -5,8 +5,6 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Skills;
 
-use pocketmine\entity\effect\EffectInstance;
-use pocketmine\entity\effect\Effect;
 use pocketmine\world\World;
 use pocketmine\math\Vector3;
 
@@ -16,9 +14,7 @@ use TheClimbing\RPGLike\Tasks\CooldownTask;
 use TheClimbing\RPGLike\Utils;
 
 use function array_slice;
-use function call_user_func;
 use function floor;
-use function is_callable;
 
 /**
  * Class BaseSkill
@@ -28,7 +24,7 @@ class BaseSkill
 {
     protected RPGPlayer $owner;
 
-    protected $skillConfig = [];
+    protected mixed $skillConfig = [];
 
     private string $name;
 
@@ -221,7 +217,7 @@ class BaseSkill
     /**
      * @param $id int
      */
-    protected function setEffect($id): void
+    protected function setEffect(int $id): void
     {
         $this->effect = $id;
     }

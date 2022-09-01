@@ -5,7 +5,6 @@ namespace TheClimbing\RPGLike;
 
 
 use pocketmine\item\ItemIds;
-use pocketmine\item\TieredTool;
 use pocketmine\item\ToolTier;
 
 class Utils

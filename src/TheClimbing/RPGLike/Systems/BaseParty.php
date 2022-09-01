@@ -2,7 +2,6 @@
 
 namespace TheClimbing\RPGLike\Systems;
 
-use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class BaseParty

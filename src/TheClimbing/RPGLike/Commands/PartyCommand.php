@@ -34,11 +34,7 @@ class PartyCommand extends Command
                         $sender->removePartyInvite();
                         break;
                     case 'create':
-                        if (!empty($args[1])){
-                            PartySystem::createParty($args[1], $sender, 4);
-                        }else{
-                            PartySystem::createParty($sender->getName(), $sender, 4); //TODO add configuration for party size
-                        }
+                        PartySystem::createParty($args[1], $sender, 4);
                         break;
                     default:
                         $targetPlayer = $this->source->getServer()->getPlayerExact($args[0]);

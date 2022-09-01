@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TheClimbing\RPGLike\Players;
 
 
+use JetBrains\PhpStorm\ArrayShape;
 use pocketmine\entity\Attribute;
 use pocketmine\entity\Location;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -56,7 +57,7 @@ class RPGPlayer extends Player
     private int $defBonus = 1;
     private int $dex = 1;
     private float $dexModifier = 0.005;
-    private $dexBonus = 1;
+    private int $dexBonus = 1;
 
     /**
      * @var array
@@ -113,12 +114,8 @@ class RPGPlayer extends Player
                 $this->inventory->setHeldItemIndex(0);
                 $this->inventory->clearAll();
             }
-            if ($this->armorInventory !== null) {
-                $this->armorInventory->clearAll();
-            }
-            if ($this->offHandInventory !== null) {
-                $this->offHandInventory->clearAll();
-            }
+            $this->armorInventory?->clearAll();
+            $this->offHandInventory?->clearAll();
         }
         if (!$this->getConfig()->get('keep-xp')) {
             $this->getWorld()->dropExperience($this->location, $ev->getXpDropAmount());
@@ -327,6 +324,7 @@ class RPGPlayer extends Player
     }
 
 
+    #[ArrayShape(['STR' => "int", 'VIT' => "int", 'DEF' => "int", 'DEX' => "int"])]
     public function getAttributes(): array
     {
         return [
@@ -532,16 +530,6 @@ class RPGPlayer extends Player
     public function setSPleft(int $spleft)
     {
         $this->spleft = $spleft;
-    }
-
-    public function getX(): float
-    {
-        return $this->lastX;
-    }
-
-    public function getZ(): float
-    {
-        return $this->lastZ;
     }
 
     public function setExperienceLevel(int $level)

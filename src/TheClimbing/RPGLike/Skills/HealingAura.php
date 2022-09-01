@@ -4,7 +4,6 @@
 namespace TheClimbing\RPGLike\Skills;
 
 
-use pocketmine\event\entity\EntityRegainHealthEvent;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Tasks\HealTask;

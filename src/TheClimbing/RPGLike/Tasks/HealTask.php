@@ -2,10 +2,11 @@
 
 namespace TheClimbing\RPGLike\Tasks;
 
+use pocketmine\scheduler\Task;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\Skills\BaseSkill;
 
-class HealTask extends \pocketmine\scheduler\Task
+class HealTask extends Task
 {
     private BaseSkill $source;
     private RPGPlayer $target;

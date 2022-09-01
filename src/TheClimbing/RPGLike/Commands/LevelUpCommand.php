@@ -6,7 +6,6 @@ namespace TheClimbing\RPGLike\Commands;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\Player;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class LevelUpCommand extends Command

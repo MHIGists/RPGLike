@@ -1,6 +1,6 @@
 <div>
 <br />
-<p align="center">
+<div align="center">
 <h3 align="center">RPGLike</h3>
 
   <p align="center">
@@ -12,7 +12,7 @@
     ·
     <a href="https://github.com/MHIGists/RPGLike/issues">Request Feature</a>
   </p>
-</p>
+</div>
 </div>
 
 
