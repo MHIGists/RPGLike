@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace TheClimbing\RPGLike\Items;
+namespace TheClimbing\RPGLike;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
