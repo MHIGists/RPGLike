@@ -132,11 +132,6 @@ class RPGPlayer extends Player
 
     protected function actuallyRespawn(): void
     {
-        if ($this->respawnLocked) {
-            return;
-        }
-        $this->respawnLocked = true;
-
         $this->logger->debug("Waiting for spawn terrain generation for respawn");
         $spawn = $this->getSpawn();
         $spawn->getWorld()->orderChunkPopulation($spawn->getFloorX() >> Chunk::COORD_BIT_SIZE, $spawn->getFloorZ() >> Chunk::COORD_BIT_SIZE, null)->onCompletion(
@@ -176,7 +171,6 @@ class RPGPlayer extends Player
                 $this->scheduleUpdate();
 
                 $this->getNetworkSession()->onServerRespawn();
-                $this->respawnLocked = false;
             },
             function (): void {
                 if ($this->isConnected()) {
@@ -197,7 +191,7 @@ class RPGPlayer extends Player
 
     public function calcVITBonus(): void
     {
-        $this->vitBonus = (int)($this->getVIT() * $this->getVITModifier());
+        $this->vitBonus = (int)round($this->getVIT() * $this->getVITModifier(), 1, PHP_ROUND_HALF_UP);
     }
 
     public function getVIT(): int
@@ -223,7 +217,7 @@ class RPGPlayer extends Player
 
     public function calcDEXBonus(): void
     {
-        $this->dexBonus = $this->getDex() * $this->getDEXModifier();
+        $this->dexBonus = (int)round($this->getDex() * $this->getDEXModifier(),1,PHP_ROUND_HALF_UP);
     }
 
     public function getDEX(): int
@@ -348,7 +342,7 @@ class RPGPlayer extends Player
 
     public function calcSTRBonus(): void
     {
-        $this->strBonus = (int)($this->getSTR() * $this->getSTRModifier());
+        $this->strBonus = (int)round($this->getSTR() * $this->getSTRModifier(), 1, PHP_ROUND_HALF_UP);
     }
 
     public function getSTRModifier(): float
@@ -374,7 +368,7 @@ class RPGPlayer extends Player
 
     public function calcDEFBonus(): void
     {
-        $this->defBonus = (int)($this->getDEF() * $this->getDEFModifier());
+        $this->defBonus = (int)round($this->getDEF() * $this->getDEFModifier(),1,PHP_ROUND_HALF_UP);
     }
 
     public function getDEFModifier(): float
@@ -402,7 +396,6 @@ class RPGPlayer extends Player
             $event->setModifier($this->getSTRBonus() + $event->getBaseDamage(), EntityDamageEvent::CAUSE_ENTITY_ATTACK);
         }
         $event->setKnockBack($origial_knockback);
-
     }
 
     public function getSTRBonus(): float
