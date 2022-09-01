@@ -25,7 +25,7 @@ class Explosion extends BaseSkill implements ActiveSkill
                     return;
                 }
                 $pos = $hit_entity->getPosition();
-                $explosion = new \pocketmine\level\Explosion($pos, 2 + $this->getSkillLevel());
+                $explosion = new \pocketmine\world\Explosion($pos, 2 + $this->getSkillLevel());
                 $explosion->explodeB();
                 $this->setOnCooldown();
 

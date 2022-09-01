@@ -6,9 +6,8 @@ namespace TheClimbing\RPGLike\Traits;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\player\PlayerBlockPickEvent;
-use pocketmine\level\sound\PopSound;
-use pocketmine\level\sound\Sound;
-use pocketmine\network\mcpe\protocol\LevelEventPacket;
+use pocketmine\world\sound\PopSound;
+
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class BaseTrait
@@ -73,8 +72,7 @@ class BaseTrait
                         $event->setDrops($drops);
                         $player = $event->getPlayer();
                         $position = $player->getPosition();
-                        $player->getLevel()->broadcastLevelSoundEvent($position, LevelEventPacket::EVENT_SOUND_POP);
-
+                        $player->getWorld()->addSound($position, new PopSound);
                 }
             }
         }
