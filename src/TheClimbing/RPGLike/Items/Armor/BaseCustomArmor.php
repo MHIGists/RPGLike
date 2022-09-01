@@ -2,7 +2,6 @@
 
 namespace TheClimbing\RPGLike\Items\Armor;
 
-use pocketmine\item\Item;
 use TheClimbing\RPGLike\RPGLike;
 
 trait BaseCustomArmor
@@ -29,10 +28,6 @@ trait BaseCustomArmor
             $this->bonus = ['damage' => 1];
         }
     }
-    public function setEnchantGlow(){
-        $ench = new ListTag(Item::TAG_ENCH, [], NBT::TAG_Compound);
-        $this->setNamedTagEntry($ench);
-    }
     public function getItemBonus(): array
     {
         return $this->bonus;
@@ -40,6 +35,6 @@ trait BaseCustomArmor
     public function setCustomLore(string $tier)
     {
         $lore = RPGLike::getInstance()->getTieredItems()[$tier][$this->getCustomName()];
-
     }
+    //todo
 }
