@@ -33,7 +33,6 @@ class ItemFactory
             switch ($key){
                 case 'stone_sword':
                     new BaseSword(new ItemIdentifier($item[0], $item[1]),$item[2], $item[3], $item[4]);
-                    new Armor();
             }
         }
     }
