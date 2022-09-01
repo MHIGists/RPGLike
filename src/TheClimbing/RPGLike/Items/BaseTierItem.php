@@ -2,14 +2,13 @@
 
 namespace TheClimbing\RPGLike\Items;
 
-use pocketmine\item\Item;
 use pocketmine\item\ItemIdentifier;
 use pocketmine\item\TieredTool;
 use pocketmine\item\ToolTier;
-use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
-use TheClimbing\RPGLike\Items\RPGLike;
+
+use TheClimbing\RPGLike\RPGLike;
 
 class BaseTierItem extends TieredTool
 {

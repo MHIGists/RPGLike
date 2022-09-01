@@ -13,6 +13,7 @@ use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Commands\PartyCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
 use TheClimbing\RPGLike\Forms\RPGForms;
+use TheClimbing\RPGLike\Items\ItemFactory;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\Systems\PartySystem;
 use TheClimbing\RPGLike\Tasks\HudTask;
