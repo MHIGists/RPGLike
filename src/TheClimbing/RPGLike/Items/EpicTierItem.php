@@ -2,7 +2,7 @@
 
 namespace TheClimbing\RPGLike\Items;
 
-class Epic
+class EpicTierItem
 {
 
 }
