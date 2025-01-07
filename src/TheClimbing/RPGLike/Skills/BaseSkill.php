@@ -5,14 +5,12 @@ declare(strict_types=1);
 
 namespace TheClimbing\RPGLike\Skills;
 
-use pocketmine\world\World;
 use pocketmine\math\Vector3;
-
+use pocketmine\world\World;
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Tasks\CooldownTask;
 use TheClimbing\RPGLike\Utils;
-
 use function array_slice;
 use function floor;
 

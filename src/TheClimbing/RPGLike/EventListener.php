@@ -18,10 +18,9 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\item\ItemIds;
-
 use TheClimbing\RPGLike\Forms\RPGForms;
-use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\Items\UncommonTierItem;
+use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class EventListener implements Listener
 {
@@ -109,7 +108,7 @@ class EventListener implements Listener
         $damager = $event->getDamager();
         $receiver = $event->getEntity();
         if ($damager instanceof RPGPlayer && $receiver instanceof RPGPlayer) {
-            if (($damager->getParty() != false)){
+            if ($damager->getParty()){
                 if($damager->getParty()->playerInThisParty($receiver->getName())){
                     $event->cancel();
                 }

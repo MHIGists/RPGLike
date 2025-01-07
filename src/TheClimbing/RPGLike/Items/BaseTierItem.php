@@ -7,7 +7,6 @@ use pocketmine\item\TieredTool;
 use pocketmine\item\ToolTier;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
-
 use TheClimbing\RPGLike\RPGLike;
 
 class BaseTierItem extends TieredTool
@@ -30,7 +29,7 @@ class BaseTierItem extends TieredTool
     {
         parent::__construct(new ItemIdentifier($id, $meta), $name, $tier);
         $this->item_tier = $item_tier;
-        if (array_search($bonus[array_key_first($bonus)], $this->available_bonuses) != false) {
+        if (array_search($bonus[array_key_first($bonus)], $this->available_bonuses)) {
             $this->bonus = $bonus;
         } else {
             RPGLike::getInstance()->getLogger()->alert('All available bonuses are: damage, health, defense, movement_speed, mining_speed, jump_power, mana');
@@ -39,7 +38,7 @@ class BaseTierItem extends TieredTool
         $this->setEnchantGlow();
     }
 
-    public function setEnchantGlow()
+    public function setEnchantGlow(): void
     {
         $this->setNamedTag((new CompoundTag())->setTag(self::TAG_ENCH, new ListTag()));
     }

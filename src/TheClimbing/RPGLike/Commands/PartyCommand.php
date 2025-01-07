@@ -39,8 +39,8 @@ class PartyCommand extends Command
                     default:
                         $targetPlayer = $this->source->getServer()->getPlayerExact($args[0]);
                         if ($targetPlayer instanceof RPGPlayer){
-                            if ($targetPlayer->getParty() == false){
-                                if ($sender->getParty() != false){
+                            if (!$targetPlayer->getParty()){
+                                if ($sender->getParty()){
                                     $targetPlayer->sendPartyInvite($sender->getParty());
                                 }else{
                                     $sender->sendMessage('You need to be in a party to send invites.');

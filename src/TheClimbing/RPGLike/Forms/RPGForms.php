@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TheClimbing\RPGLike\Forms;
 
 use jojoe77777\FormAPI\SimpleForm;
-
 use TheClimbing\RPGLike\Players\RPGPlayer;
 use TheClimbing\RPGLike\RPGLike;
 use TheClimbing\RPGLike\Skills\BaseSkill;
@@ -78,10 +77,8 @@ class RPGForms
     {
         $messages = $skill->getMessages()['SkillHelpForm'];
         $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($player) {
-            switch ($data) {
-                case 'Back':
-                    self::skillsHelpForm($player);
-                    break;
+            if ($data == 'Back') {
+                self::skillsHelpForm($player);
             }
         });
         $form->setTitle($skill->getName() . $messages['title']);
@@ -195,10 +192,8 @@ class RPGForms
     public static function traitHelpForm(RPGPlayer $player, BaseTrait $trait){
         $messages = self::parseMessages($player,'TraitHelpForm');
         $form = new SimpleForm(function (RPGPlayer $pl, $data) use ($player) {
-            switch ($data) {
-                case 'Back':
-                    self::traitsForm($player);
-                    break;
+            if ($data == 'Back') {
+                self::traitsForm($player);
             }
         });
         $form->setTitle($trait->getName() . $messages['title']);

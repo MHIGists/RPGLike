@@ -11,6 +11,8 @@ use TheClimbing\RPGLike\RPGLike;
 class RPGCommand extends Command
 {
 
+    private RPGLike $loader;
+
     public function __construct(RPGLike $rpg)
     {
         parent::__construct('rpg');

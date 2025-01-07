@@ -24,7 +24,7 @@ trait BaseItem
     public function init(string $item_tier, array $bonus)
     {
         $this->item_tier = 'temp';
-        if (array_search(array_key_first($bonus), $this->available_bonuses) != false) {
+        if (array_search(array_key_first($bonus), $this->available_bonuses)) {
             $this->bonus = $bonus;
         } else {
             RPGLike::getInstance()->getLogger()->alert('All available bonuses are: damage, health, defense, movement_speed, mining_speed, jump_power, mana');

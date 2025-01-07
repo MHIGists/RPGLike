@@ -7,7 +7,6 @@ use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\player\PlayerBlockPickEvent;
 use pocketmine\world\sound\PopSound;
-
 use TheClimbing\RPGLike\Players\RPGPlayer;
 
 class BaseTrait
@@ -62,7 +61,7 @@ class BaseTrait
     public function blockBreak(BlockBreakEvent $event)
     {
         if ($this->trait_action == 'break'){
-            if (array_search($event->getBlock()->getName(), $this->blocks) !== false) {
+            if (in_array($event->getBlock()->getName(), $this->blocks)) {
                 $this->count += 1;
                 $this->checkLevel();
                 $drops = $event->getDrops();
@@ -81,7 +80,7 @@ class BaseTrait
         if ($this->trait_action == "pickup"){
             $player = $event->getPlayer();
             if ($player instanceof RPGPlayer){
-                if (array_search($event->getBlock()->getName(), $this->blocks) !== false) {
+                if (in_array($event->getBlock()->getName(), $this->blocks)) {
                     $this->count += 1;
                     $this->checkLevel();
                     $drop_chance = $this->getBlockDropChance();

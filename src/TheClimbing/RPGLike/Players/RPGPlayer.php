@@ -13,13 +13,12 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerExperienceChangeEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\player\Player;
 use pocketmine\player\PlayerInfo;
 use pocketmine\Server;
 use pocketmine\utils\Config;
-use pocketmine\nbt\tag\CompoundTag;
-
 use pocketmine\world\format\Chunk;
 use pocketmine\world\Position;
 use TheClimbing\RPGLike\RPGLike;
@@ -72,7 +71,7 @@ class RPGPlayer extends Player
         parent::__construct($server, $session, $playerInfo, $authenticated, $spawnLocation, $namedtag);
         $this->config = RPGLike::getInstance()->getConfig();
         $modifiers = $this->getModifiers();
-        if ($modifiers != false) {
+        if ($modifiers) {
             $this->setDEFModifier($modifiers['DEF']);
             $this->setVITModifier($modifiers['VIT']);
             $this->setSTRModifier($modifiers['STR']);
@@ -191,7 +190,7 @@ class RPGPlayer extends Player
 
     public function calcVITBonus(): void
     {
-        $this->vitBonus = (int)round($this->getVIT() * $this->getVITModifier(), 1, PHP_ROUND_HALF_UP);
+        $this->vitBonus = (int)round($this->getVIT() * $this->getVITModifier(), 1);
     }
 
     public function getVIT(): int
@@ -217,7 +216,7 @@ class RPGPlayer extends Player
 
     public function calcDEXBonus(): void
     {
-        $this->dexBonus = (int)round($this->getDex() * $this->getDEXModifier(),1,PHP_ROUND_HALF_UP);
+        $this->dexBonus = (int)round($this->getDex() * $this->getDEXModifier(),1);
     }
 
     public function getDEX(): int
@@ -342,7 +341,7 @@ class RPGPlayer extends Player
 
     public function calcSTRBonus(): void
     {
-        $this->strBonus = (int)round($this->getSTR() * $this->getSTRModifier(), 1, PHP_ROUND_HALF_UP);
+        $this->strBonus = (int)round($this->getSTR() * $this->getSTRModifier(), 1);
     }
 
     public function getSTRModifier(): float
@@ -368,7 +367,7 @@ class RPGPlayer extends Player
 
     public function calcDEFBonus(): void
     {
-        $this->defBonus = (int)round($this->getDEF() * $this->getDEFModifier(),1,PHP_ROUND_HALF_UP);
+        $this->defBonus = (int)round($this->getDEF() * $this->getDEFModifier(),1);
     }
 
     public function getDEFModifier(): float
@@ -460,7 +459,7 @@ class RPGPlayer extends Player
     public function restorePlayerVariables()
     {
         $cachedPlayer = $this->getPlayerVariables();
-        if ($cachedPlayer != false) {
+        if ($cachedPlayer) {
             $attributes = $cachedPlayer['attributes'];
             $this->setDEF($attributes['DEF']);
             $this->setDEX($attributes['DEX']);
@@ -578,7 +577,7 @@ class RPGPlayer extends Player
     public function shareEXP(PlayerExperienceChangeEvent $event)
     {
         $party = $this->getParty();
-        if ($party != false) {
+        if ($party) {
             $members = $party->getPartyMembers();
             foreach ($members as $member) {
                 if ($member == $this) {

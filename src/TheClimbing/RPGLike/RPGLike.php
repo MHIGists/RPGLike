@@ -8,7 +8,6 @@ namespace TheClimbing\RPGLike;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
-
 use TheClimbing\RPGLike\Commands\LevelUpCommand;
 use TheClimbing\RPGLike\Commands\PartyCommand;
 use TheClimbing\RPGLike\Commands\RPGCommand;
@@ -66,7 +65,7 @@ class RPGLike extends PluginBase
 
         self::$instance = $this;
 
-        if ($this->config['Hud']['on'] == true) {
+        if ($this->config['Hud']['on']) {
             $this->getScheduler()->scheduleRepeatingTask(new HudTask($this), $this->config['Hud']['period'] * 20);
         }
     }
@@ -115,8 +114,8 @@ class RPGLike extends PluginBase
             'NAME' => $player->getName(),
             'HEALTH' => $player->getHealth(),
             'MAXHP' => $player->getMaxHealth(),
-            'DAMAGE' => $item->getAttackPoints() + round($player->getSTRBonus(), 0, PHP_ROUND_HALF_UP),
-            'MOVEMENTSPEED' => round($player->getMovementSpeed(), 4, PHP_ROUND_HALF_UP),
+            'DAMAGE' => $item->getAttackPoints() + round($player->getSTRBonus()),
+            'MOVEMENTSPEED' => round($player->getMovementSpeed(), 4),
             'DEFENSE' => $player->getArmorPoints() + $player->getDEFBonus(),
             'TICKS' => $player->getServer()->getTicksPerSecondAverage(),
             'LEVEL' => $player->getWorld()->getDisplayName(),

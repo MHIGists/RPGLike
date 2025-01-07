@@ -2,9 +2,7 @@
 
 namespace TheClimbing\RPGLike\Items;
 
-use pocketmine\item\Armor;
 use pocketmine\item\Item;
-
 use pocketmine\item\ItemIdentifier;
 use TheClimbing\RPGLike\Utils;
 
@@ -30,9 +28,8 @@ class ItemFactory
         $item_arrays = Utils::getItems();
         $items = [];
         foreach ($item_arrays as $key => $item) {
-            switch ($key){
-                case 'stone_sword':
-                    new BaseSword(new ItemIdentifier($item[0], $item[1]),$item[2], $item[3], $item[4]);
+            if ($key == 'stone_sword') {
+                new BaseSword(new ItemIdentifier($item[0], $item[1]), $item[2], $item[3], $item[4]);
             }
         }
     }
